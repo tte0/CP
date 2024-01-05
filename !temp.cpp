@@ -51,13 +51,5 @@ vii adj[1005];
 str s,q;
 
 int32_t main(void){
-    cin>>s>>q>>n;
-    cout<<"Ist das ein";
-    if(n&1)cout<<"e";
-    cout<<" "<<s<<"?\nNein, das ist kein";
-    if(n&1)cout<<"e";
-    cout<<" "<<s<<". Das ist ein";
-    if(n&2)cout<<"e";
-    cout<<" "<<q<<".";
     
 }
