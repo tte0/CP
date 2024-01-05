@@ -51,5 +51,5 @@ vii adj[1005];
 str s,q;
 
 int32_t main(void){
-    
+    cin>>n;
 }
