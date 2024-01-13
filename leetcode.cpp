@@ -48,21 +48,11 @@ int n,m,k,t,q,x,y,ans;
 
 class Solution {
 public:
-    vector<vector<int>> findMatrix(vector<int>& v) {
-        n=V.size();
-        vvi ans;
-        vi cnt(n+1,0);
-        for(int i=0;i<n;i++)cnt[v[i]]++;
-        vi t;
-        while(true){
-            for(int i=1;i<=n;i++){
-                if(cnt[i]){
-                    t.pb(i);
-                    cnt[i]--;
-                }
-            }
-            if(t.size())ans.pb(t);
-            else return ans;
-        }
+    int minSteps(string s, string t) {
+        mci mp,mp2;
+        for(int i=0;i<s.size();i++)mp[s[i]]++;
+        for(int i=0;i<s.size();i++)mp2[t[i]]++;
+        for(char c='a';c<='z';c++)
+        return cnt;
     }
 };
