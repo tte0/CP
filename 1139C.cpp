@@ -1,4 +1,6 @@
 #pragma GCC optimize("O3,fast-math")
+#include <bits/stdc++.h>
+#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -8,7 +10,7 @@
 #define MOD (int(1e9)+7)
 #define MOD2 (998244353)
 #define MODL (int(1e9)+21)
-#define INF (MOD)
+#define INF (int(4e18))
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
 #define lcm(x,y) ((x*y)/gcd(x,y))
@@ -43,16 +45,31 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-//////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
+/////////////////////////////////////////////////////////////
+int n,m,k,t,q,x,y,w,ans;
+vi adj[N],comp;
 
-class Solution {
-public:
-    int minSteps(string s, string t) {
-        mci mp,mp2;
-        for(int i=0;i<s.size();i++)mp[s[i]]++;
-        for(int i=0;i<s.size();i++)mp2[t[i]]++;
-        for(char c='a';c<='z';c++)cnt+=abs(mp[c]-mp2[c]);
-        return cnt/2;
+int fp(int b,int p){
+    int ans=1;
+    while(p){
+        if(p&1)ans=(ans*b)%MOD;
+        b=(b*b)%MOD;
+        p>>=1;
     }
-};
+    return ans;
+}
+
+int32_t main(void){
+    cin>>n>>k;
+    for(int i=1;i<n;i++){
+        cin>>x>>y>>w;
+        if(w){
+            adj[x].pb(y);
+            adj[y].pb(x);
+        }
+    }
+    ans=fp(n,k);
+    for(int i=1;i<=n;i++){
+        dsf(i);
+    }
+}
