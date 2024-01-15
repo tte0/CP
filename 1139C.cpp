@@ -46,7 +46,7 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,w,ans;
+int n,m,k,t,q,x,y,w,ans,vis[N];
 vi adj[N],comp;
 
 int fp(int b,int p){
@@ -59,17 +59,25 @@ int fp(int b,int p){
     return ans;
 }
 
+int dfs(int node){
+    if(vis[node]++)return 0;
+    int t=1;
+    for(auto i:adj[node])t+=dfs(i);
+    return t;
+}
+
 int32_t main(void){
     cin>>n>>k;
     for(int i=1;i<n;i++){
         cin>>x>>y>>w;
-        if(w){
+        if(w==0){
             adj[x].pb(y);
             adj[y].pb(x);
         }
     }
     ans=fp(n,k);
     for(int i=1;i<=n;i++){
-        dsf(i);
+        ans=(ans-fp(dfs(i),k)+MOD)%MOD;
     }
+    cout<<ans;
 }
