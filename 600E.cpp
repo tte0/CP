@@ -40,17 +40,29 @@ typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
 typedef set<int> sti;
+typedef set<ii> stii;
 typedef set<char> stc;
 typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
-vi v;
+int n,color[N];
+vi adj[N];
+mii mp[20];
+stii st[20];
 
+inline void dfs(int node,int p){
+    
+}
 
 int32_t main(void){
     cin>>n;
-    for(int i=0;)
+    for(int i=1;i<=n;i++)cin>>color[i];
+    for(int i=1;i<n;i++){
+        cin>>x>>y;
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+    dfs(1,-1);
 }
