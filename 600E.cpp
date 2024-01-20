@@ -47,13 +47,68 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,color[N];
+int n,x,y,color[N],mpindex[N],sz[N],mpindexcnt,sum[N];
 vi adj[N];
-mii mp[20];
-stii st[20];
+mii mp[32];
+stii st[32];
 
-inline void dfs(int node,int p){
-    
+inline void dfs1(int node,int p){
+    sz[node]=1;
+    if(!adj[node].size() || (adj[node].size()==1 && node!=1)){
+        mpindex[node]=++mpindexcnt;
+        return;
+    }
+    int mx=0;
+    for(auto i:adj[node]){
+        if(i==p)continue;
+        dfs1(i,node);
+        sz[node]+=sz[i];
+        if(sz[i]>sz[mx])mx=i;
+    }
+    mpindex[node]=mpindex[mx];
+    return;
+}
+
+inline void mrg(int base,int added){
+
+    for(auto i:mp[added]){
+        int x=i.ff,cnt=i.ss;
+        if(mp[base][x]!=0)st[base].erase(st[base].find({mp[base][x],x}));
+        mp[base][x]+=cnt;
+        st[base].insert({mp[base][x],x});
+    }
+    return;
+}
+
+inline void dfs2(int node,int p){
+    //cerr<<">>dfs2 = "<<node<<endl;
+    if(!adj[node].size() || (adj[node].size()==1 && node!=1)){
+        mp[mpindex[node]][color[node]]=-1;
+        st[mpindex[node]].insert({mp[mpindex[node]][color[node]],color[node]});
+        sum[node]=color[node];
+        //cerr<<"leaf ok"<<endl;
+        return;
+    }
+    for(auto i:adj[node]){
+        if(i==p)continue;
+        dfs2(i,node);
+        if(mpindex[i]==mpindex[node])continue;
+        //cerr<<">>mrg = "<<node<<","<<i<<endl;
+        mrg(mpindex[node],mpindex[i]);
+        //cerr<<"merge ok"<<endl;
+    }
+
+    mp[31].clear();st[31].clear();
+    mp[31][color[node]]=-1;
+    st[31].insert({-1,color[node]});
+    mrg(mpindex[node],31);
+
+    auto it=st[mpindex[node]].begin();
+    while(it!=st[mpindex[node]].end() && (*it).ff==(*st[mpindex[node]].begin()).ff){
+        sum[node]+=(*it).ss;
+        it++;
+    }
+    return;
 }
 
 int32_t main(void){
@@ -64,5 +119,13 @@ int32_t main(void){
         adj[x].pb(y);
         adj[y].pb(x);
     }
-    dfs(1,-1);
+    dfs1(1,-1);
+    cout<<mpindexcnt;
+    //cerr<<"sz: ";for(int i=1;i<=n;i++)cerr<<sz[i]<<",";cerr<<endl;
+    //cerr<<"mpindex: ";for(int i=1;i<=n;i++)cerr<<mpindex[i]<<",";cerr<<endl;
+
+    dfs2(1,-1);
+    //cerr<<endl<<"dfs2 ok"<<endl<<endl;
+    for(int i=1;i<=n;i++)cout<<sum[i]<<" ";
+    //cerr<<endl<<"output ok"<<endl<<endl;
 }
