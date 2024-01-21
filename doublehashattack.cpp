@@ -48,7 +48,7 @@ typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
 int n=8,m,k,t,x,y,ans;//449*445
-int base=19,base2=277,mod=MOD,mod2=987654319;
+int base=999999937,base2=999999929,mod=MOD,mod2=MOD;
 int ahash=0,bhash=0;
 str a,b,c,d;
 mis mp,mp2;

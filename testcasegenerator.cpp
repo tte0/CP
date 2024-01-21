@@ -47,18 +47,40 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n=100000,m,k,t=100,q=199805,x,y,ans;//449*445
-int base=37,mod=1000000021;
+int n=8;
+int base=57,mod=e2(32);
+str a,b;
 mis mp;
 
-
+int fp(int b,int p,int mod){
+    if(p==0)return 1;
+    int t=fp(b,p/2,mod);
+    t=(t*t)%mod;
+    if(p%2)t=(t*b)%mod;
+    return t;
+}
 
 int32_t main(void){
-    freopen("testcase.txt","w",stdout);
-    cout<<n<<endl;
-    for(int i=1;i<=n;i++)cout<<i<<" ";
-    cendl;
-    for(int i=2;i<=n;i++){
-        cout<<i/2<<" "<<i<<endl;
+    srand(time(NULL));
+    while(true){
+        str s;
+        for(int i=0;i<n;i++){
+            s.pb(rand()%26+'a');
+        }
+        int hash=0;
+        for(int i=0;i<n;i++){
+            hash+=(fp(base,i,mod)*(s[i]-'a'+1))%mod;
+            hash=hash%mod;
+        }
+        if(mp[hash]!="" && mp[hash]!=s){
+            a=s;
+            b=mp[hash];
+            break;
+        }
+        mp[hash]=s;
     }
+    cout<<a<<endl<<b<<endl<<endl;
+    reverse(all(a));
+    reverse(all(b));
+    cout<<a<<endl<<b<<endl<<endl;
 }
