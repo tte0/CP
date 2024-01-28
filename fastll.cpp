@@ -1,4 +1,3 @@
-#pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
 #define int ll
 #define ff first
@@ -46,12 +45,32 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
+int m,k,t,q,x,y,ans;
 vi v;
+int64_t n;
 
 
 int32_t main(void){
-    int_fast64_t n;
-    cin>>n;
-    cout<<n*n;
+    int_fast64_t m;
+    cin>>n;m=n;
+    auto start=clock();
+    while(n>0){
+        x=n*n+2*n-1;
+        n-=2;
+        n*=2;
+        n+=2;
+        n/=2;
+    }
+    auto end=clock();
+    cout<<(double(end-start))/double(CLOCKS_PER_SEC)<<endl;
+    start=clock();
+    while(m>0){
+        x=m*m+2*m-1;
+        m-=2;
+        m*=2;
+        m+=2;
+        m/=2;
+    }
+    end=clock();
+    cout<<(double(end-start))/double(CLOCKS_PER_SEC)<<endl;
 }
