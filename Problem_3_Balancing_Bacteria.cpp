@@ -46,30 +46,19 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans,power[N],state[N];
+int n,m,k,t,q,x,y,ans,change,changechange;
 vi v;
 
 
 int32_t main(void){
-    cin>>n>>x;
-    for(int i=0;i<n;i++)cin>>state[i+1]>>power[i+1];
-    int p=1,flag=10000000;
-    while(1<=x && x<=n && flag){
-        //cerr<<x<<endl;
-        //cerr<<"state: ";for(int i=1;i<=n;i++)cerr<<state[i]<<",";cerr<<endl;
-        if(state[x]==1){
-            if(abs(p)>=power[x]){
-                ans++;
-                state[x]=2;
-            }
-        }
-        else if(state[x]==0){
-            if(p<0)p-=power[x];
-            else p+=power[x];
-            p*=-1;
-        }
-        x+=p;
-        flag--;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        x+=change;
+        ans+=abs(x);
+        changechange-=x;
+        change+=changechange;
+        change-=x;
     }
     cout<<ans;
 }
