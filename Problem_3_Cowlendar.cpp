@@ -1,5 +1,6 @@
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
+#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -45,49 +46,40 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans[N],color[N];
-vi v,adj[N];
-sti st[N];
+int n,m,k,t,q,x,y,ans;
+vi v;
 
-inline void merge(int base,int added){
-    for(auto i:st[added])st[base].insert(i);
-    st[added].clear();
-}
-
-inline void dfs(int node,int p){
-    st[node].insert(color[node]);
-    if(adj[node].size()==0 || (adj[node].size()==1 && node!=1)){
-        ans[node]=st[node].size();
-        return;
-    }
-    int mxvalue=0,mxind=-59;
-    for(int i:adj[node]){
-        if(i==p)continue;
-        dfs(i,node);
-        if(st[i].size()>mxvalue){mxvalue=st[i].size();mxind=i;}
-    }
-    swap(st[mxind],st[node]);
-    for(int i:adj[node]){
-        if(i==p)continue;
-        merge(node,i);
-    }
-    ans[node]=st[node].size();
-}
 
 int32_t main(void){
     fastio;
     cin>>n;
-    for(int i=1;i<=n;i++)cin>>color[i];
-    for(int i=1;i<n;i++){
-        cin>>x>>y;
-        adj[x].pb(y);
-        adj[y].pb(x);
+    sti st;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        st.insert(x);
     }
-    dfs(1,-1);
-    for(int i=1;i<=n;i++)cout<<ans[i]<<" ";
-    /*for(int i=1;i<=n;i++){
-        cerr<<"st["<<i<<"]: ";
-        for(int j:st[i])cerr<<j<<" ";
-        cerr<<endl;
-    }*/
+    for(auto i:st)v.pb(i);
+    n=v.size();
+    int mn=v[0];
+    for(int i=0;i+4<n;i++){
+        mn=min(mn,v[i+4]-v[i]);
+    }
+    int maxl=min(v[0]/4,mn);
+    for(int l=1;l<=maxl;l++){
+        bool ok=true;
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            if(cnt%l==v[i]%l || (cnt/l)%l==v[i]%l || (cnt/(l*l))%l==v[i]%l)continue;
+            else{
+                cnt*=l;
+                cnt+=v[i]%l;
+            }
+            if(cnt>l*l*l){
+                ok=false;
+                break;
+            }
+        }
+        if(ok)ans+=l;
+    }
+    cout<<ans;
 }

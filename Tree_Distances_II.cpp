@@ -1,5 +1,6 @@
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
+#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -45,49 +46,50 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans[N],color[N];
+int n,m,k,t,q,x,y,ans[N],edg[N],st[N];
 vi v,adj[N];
-sti st[N];
-
-inline void merge(int base,int added){
-    for(auto i:st[added])st[base].insert(i);
-    st[added].clear();
-}
 
 inline void dfs(int node,int p){
-    st[node].insert(color[node]);
-    if(adj[node].size()==0 || (adj[node].size()==1 && node!=1)){
-        ans[node]=st[node].size();
-        return;
-    }
-    int mxvalue=0,mxind=-59;
-    for(int i:adj[node]){
-        if(i==p)continue;
-        dfs(i,node);
-        if(st[i].size()>mxvalue){mxvalue=st[i].size();mxind=i;}
-    }
-    swap(st[mxind],st[node]);
-    for(int i:adj[node]){
-        if(i==p)continue;
-        merge(node,i);
-    }
-    ans[node]=st[node].size();
+	st[node]=1;
+	if(adj[node].size()==0 || (adj[node].size()==1 && node!=1))return;
+	for(auto i:adj[node]){
+		if(i==p)continue;
+		dfs(i,node);
+		st[node]+=st[i];
+	}
+	return;
+}
+inline void dfs2(int node,int p){
+	if(adj[node].size()==0 || (adj[node].size()==1 && node!=1))return;
+	for(auto i:adj[node]){
+		if(i==p)continue;
+		dfs2(i,node);
+		edg[node]+=edg[i]+st[i];
+	}
+	return;
+}
+
+inline void dfs3(int node,int p){
+	if(node==1)ans[node]=edg[node];
+	else{
+		ans[node]=ans[p];
+		ans[node]+=n-2*st[node];
+	}
+	for(auto i:adj[node]){
+		if(i==p)continue;
+		dfs3(i,node);
+	}
 }
 
 int32_t main(void){
-    fastio;
-    cin>>n;
-    for(int i=1;i<=n;i++)cin>>color[i];
-    for(int i=1;i<n;i++){
-        cin>>x>>y;
-        adj[x].pb(y);
-        adj[y].pb(x);
-    }
-    dfs(1,-1);
-    for(int i=1;i<=n;i++)cout<<ans[i]<<" ";
-    /*for(int i=1;i<=n;i++){
-        cerr<<"st["<<i<<"]: ";
-        for(int j:st[i])cerr<<j<<" ";
-        cerr<<endl;
-    }*/
+	cin>>n;
+	for(int i=1;i<n;i++){
+		cin>>x>>y;
+		adj[x].pb(y);
+		adj[y].pb(x);
+	}
+	dfs(1,-1);
+	dfs2(1,-1);
+	dfs3(1,-1);
+	for(int i=0;i<n;i++)cout<<ans[i+1]<<" ";
 }
