@@ -1,27 +1,27 @@
 /*
 MIT License with Attribution and Non-Commercial Use Restriction
-
+ 
 Copyright (c) 2024 tte0 (aka. teomana,teoata17)
-
+ 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
 deal in the Software without restriction, including without limitation
 the rights to use, copy, modify, merge, publish, distribute, sublicense,
 and/or sell copies of the Software, and to permit persons to whom the Software
 is furnished to do so, subject to the following conditions:
-
+ 
 1. The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
+ 
 2. If you use this Software, you must give appropriate attribution by
 prominently displaying the original author's name.
-
+ 
 3. If you modify the Software, you must clearly indicate that you have
 modified the Software and include the original author's name.
-
+ 
 4. This Software may not be used for commercial purposes, including, but
 not limited to, selling the Software or using the Software in a way that generates income.
-
+ 
 THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
@@ -77,60 +77,30 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,w,ans,dist[2505],bt[2505],vis[N];
-vi v,radj[N],adj[N];
-viii edges;
-
+int n,m,k,t,q,x,y,w,ans,adj[505][505],vis[N];
+vi v;
+ 
 int32_t main(void){
     fastio;
-    cin>>n>>m;
-    for(int i=1;i<=n;i++)dist[i]=(n==i?0:INF);
+    cin>>n>>m; 
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=n;j++){
+            adj[i][j]=(i==j?0:INF);
+        }
+    }
     for(int i=0;i<m;i++){
         cin>>x>>y>>w;
-        adj[x].pb(y);
-        radj[y].pb(x);
-        edges.pb({w,{x,y}});
+        adj[x][y]=min(adj[x][y],w);
     }
-    for(int i=0;i<n-1;i++){
-        for(auto i:edges){
-            w=i.ff;
-            x=i.ss.ff;
-            y=i.ss.ss;
-            if(dist[y]>dist[x]+w){
-                dist[y]=dist[x]+w;
-                bt[y]=x;
+    vis[1]=1;
+    for(int mid=1;mid<=n;mid++){
+        for(int x=1;x<=n;x++){
+            if(vis[x]==0)continue;
+            for(int y=1;y<=n;y++){
+                vis[y]=1;
+                adj[x][y]=min(adj[x][y],adj[x][mid]+adj[mid][y]);
             }
         }
-        //cerr<<"dist: ";for(int i=1;i<=n;i++)cerr<<dist[i]<<" ";cerr<<endl;
     }
-    int startnode=-1;
-    for(auto i:edges){
-        w=i.ff;
-        x=i.ss.ff;
-        y=i.ss.ss;
-        if(dist[y]>dist[x]+w){
-            dist[y]=dist[x]+w;
-            startnode=y;
-            bt[y]=x;
-        }
-        //cerr<<"dist2: ";for(int i=1;i<=n;i++)cerr<<dist[i]<<" ";cerr<<endl;
-    }
-    if(startnode==-1){
-        no;
-        return 0;
-    }
-    yes;
-    for(int i=0;i<n;i++)startnode=bt[startnode];
-    vi v;
-    v.pb(startnode);
-    //cerr<<"startnode: "<<startnode<<endl;
-    x=bt[startnode];
-    while(x!=startnode){
-        //cerr<<"x: "<<x<<endl;
-        v.pb(x);
-        x=bt[x];
-    }
-    v.pb(startnode);
-    reverse(all(v));
-    for(int i:v)cout<<i<<" ";
+    for(int i=1;i<=n;i++)cout<<(adj[1][i]>30000?30000:adj[1][i])<<" ";
 }
