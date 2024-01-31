@@ -25,6 +25,7 @@
 #define rall(x) x.rbegin(),x.rend()
 #define dbg(x) cdebug()<<debug(x)
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
+#define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
 using namespace std;
 typedef long long ll;
 typedef long double ldouble;
@@ -47,40 +48,21 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n=8;
-int base=57,mod=e2(32);
-str a,b;
-mis mp;
-
-int fp(int b,int p,int mod){
-    if(p==0)return 1;
-    int t=fp(b,p/2,mod);
-    t=(t*t)%mod;
-    if(p%2)t=(t*b)%mod;
-    return t;
-}
+int n,m,a,b,k,l,x,y,w,t;
 
 int32_t main(void){
     srand(time(NULL));
-    while(true){
-        str s;
-        for(int i=0;i<n;i++){
-            s.pb(rand()%26+'a');
-        }
-        int hash=0;
-        for(int i=0;i<n;i++){
-            hash+=(fp(base,i,mod)*(s[i]-'a'+1))%mod;
-            hash=hash%mod;
-        }
-        if(mp[hash]!="" && mp[hash]!=s){
-            a=s;
-            b=mp[hash];
-            break;
-        }
-        mp[hash]=s;
-    }
-    cout<<a<<endl<<b<<endl<<endl;
-    reverse(all(a));
-    reverse(all(b));
-    cout<<a<<endl<<b<<endl<<endl;
+    fileio;
+    t=20;
+    cout<<t<<endl;
+    while(t--){    a=7,b=8,n=15,m=20;
+        k=rand()%5;
+        l=rand()%50;
+        cout<<a<<" "<<b<<" "<<m<<" "<<l<<" "<<k<<endl;
+        for(int i=0;i<m;i++){
+            x=rand()%n+1;
+            y=rand()%n+1;
+            w=rand()%40+1;
+            cout<<x<<" "<<y<<" "<<w<<endl;
+        }cendl;}
 }
