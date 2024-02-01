@@ -82,8 +82,24 @@ vi v;
 
 
 int32_t main(void){
-    for(int i=0;i<30;i++){//011010
-        if(i%6==1 || i%6==2 || i%6==4)cout<<1<<endl;
-        else cout<<0<<endl;
+    cin>>n;
+    switch (n)
+    {
+    case 0: cout<<15;break;
+    case 1: cout<<14;break;
+    case 2: cout<<12;break;
+    case 3: cout<<13;break;
+    case 4: cout<<8;break;
+    case 5: cout<<9;break;
+    case 6: cout<<10;break;
+    case 7: cout<<11;break;
+    case 8: cout<<0;break;
+    case 9: cout<<1;break;
+    case 10:cout<<2;break;
+    case 11:cout<<3;break;
+    case 12:cout<<4;break;
+    case 13:cout<<5;break;
+    case 14:cout<<6;break;
+    case 15:cout<<7;break;
     }
 }
