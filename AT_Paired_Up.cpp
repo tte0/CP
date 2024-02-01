@@ -29,7 +29,7 @@ OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT
 OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-#pragma GCC optimize ("Ofast")
+#pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
 #define int ll
 #define ff first
@@ -55,7 +55,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define dbg(x) cdebug()<<debug(x)
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(4)
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 using namespace std;
 typedef long long ll;
 typedef long double ldouble;
@@ -77,116 +77,36 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y;
-double brute_force_total,rk_total;
-vi v;
+int n,m,k,t,q,x,y,ans;
+vii v;
+deque<ii> dq;
 
-inline void brute_force(str a,str b){
-    clock_t start=clock();
-    n=a.size();
-    m=b.size();
-    int ans=0;
-    for(int i=0;i+m<n;i++){
-        bool flag=true;
-        for(int j=i;j<i+m;j++){
-            if(a[j]!=b[j]){flag=false;break;}
-        }
-        if(flag)ans++;
-    }
-    clock_t end=clock();
-    brute_force_total+=double(end-start)/double(CLOCKS_PER_SEC/1000);
-}
-
-int fp(int b,int p){
-    int ans=1;
-    while(p){
-        if(p&1)ans=(ans*b)%MOD;
-        p>>=1;
-        b=(b*b)%MOD;
-    }
-    return ans;
-}
-
-inline void rk(str a,str b){
-    clock_t start=clock();
-    n=a.size();
-    m=b.size();
-    int ans=0,hasha=0,hashb=0;
-    for(int i=0;i<m;i++){
-        hasha=(hasha+(a[i]-'a'+1)*fp(59,i))%MOD;
-        hashb=(hashb+(b[i]-'a'+1)*fp(59,i))%MOD;
-    }
-    if(hasha==hashb)ans++;
-    for(int i=0;i+m<n;i++){
-        hasha=((hasha-(a[i]-'a'+1)+(a[i+m]-'a'+1)*fp(59,m))*fp(59,MOD-2))%MOD;
-        if(hasha==hashb)ans++;
-    }
-    clock_t end=clock();
-    rk_total+=double(end-start)/double(CLOCKS_PER_SEC/1000);
-}
-
-inline void suffix_array(){
-    str a;
-    n=a.size();
-    for(int i=0;i<n;i++){
-        a.pb('a'+rand()%26);
-    }
-    
-    double sa_preprocess;
-    clock_t start=clock();
-    vector<str> v;
-    for(int i=0;i<=n;i++){
-        v.pb(a.substr(i,n-i));
-    }
-    sort(all(v));
-    clock_t end=clock();
-    sa_preprocess=double(end-start)/double(CLOCKS_PER_SEC/1000);
-
-    double sa_query_total=0;
-    int ans=0;
-    for(int i=0;i<t;i++){
-        str b;
-        for(int i=0;i<m;i++){
-            b.pb('a'+rand()%26);
-        }
-
-        start=clock();
-        int l=0,r=v.size()-1;
-        while(l<r){
-            int mid=(l+r)/2;
-            if(v[mid]<b)l=m+1;
-            else r=m;
-        }
-        l--;
-        if(v[l].substr(0,m)==b){
-            ans++;
-        }
-        end=clock();
-        sa_query_total+=double(end-start)/double(CLOCKS_PER_SEC/1000);
-    }
-    
-
-    cout<<"Suffix Array Preprocess : "<<(double(sa_preprocess))<<"ms"<<endl;
-    cout<<"Suffix Array Query  : "<<(double(sa_query_total)/double(t))<<"ms"<<endl;
-}
 
 int32_t main(void){
-    cout<<fixed<<setprecision(10);
-    srand(time(NULL));
-    cin>>t>>n>>m;
-    for(int i=0;i<t;i++){
-        str a,b;
-        for(int i=0;i<n;i++){
-            a.pb('a'+rand()%26);
-        }
-        for(int i=0;i<m;i++){
-            b.pb('a'+rand()%26);
-        }
-        brute_force(a,b);
-        
-        rk(a,b);
+    freopen("pairup.in","r",stdin);
+    freopen("pairup.out","w",stdout);
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>x>>y;
+        v.pb({y,x});
     }
-    cout<<"Brute Force : "<<(double(brute_force_total)/double(t))<<"ms"<<endl;
-    cout<<"Rabin-Karp  : "<<(double(rk_total)/double(t))<<"ms"<<endl;
-    suffix_array();
-}
+    sort(all(v));
+    for(auto i:v)dq.pb(i);
+    while(dq.size()){
+        ans=max(ans,dq.front().ff+dq.back().ff);
+        if(dq.size()==1)break;
+        if(dq.front().ss==dq.back().ss){
+            dq.pop_back();
+            dq.pop_front(); 
+        }
+        else if(dq.front().ss>dq.back().ss){
+            dq.front().ss-=dq.back().ss;
+            dq.pop_back();
+        }
+        else{
+            dq.back().ss-=dq.front().ss;
+            dq.pop_front();
+        }
+    }
+    cout<<ans;
+}   
