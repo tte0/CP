@@ -31,13 +31,13 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
+#define int int_fast64_t
 #define ff first
 #define ss second
 #define endl '\n'
 #define spc ' '
 #define pb push_back
-#define N (200005)
+#define N (100005)
 #define MOD (int(1e9)+7)
 #define MOD2 (998244353)
 #define MODL (int(1e9)+21)
@@ -55,7 +55,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define dbg(x) cdebug()<<debug(x)
-#define fastio if(n==5 && v[0]==2 && v[1]==5 && v[2]==6 && v[3]==7 && v[4]==8){cout<<"2\n2";return 0;}
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 using namespace std;
 typedef long long ll;
 typedef long double ldouble;
@@ -77,38 +77,30 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,min_ans=INF,max_ans;
+int n,m,k,t,q,x,y,ans,value[N],weight[N],dp[105][N];
 vi v;
 
-
 int32_t main(void){
-    //freopen("herding.in","r",stdin);
-    //freopen("herding.out","w",stdout);   
-    cin>>n;
+    for(int i=0;i<105;i++)for(int j=0;j<N;j++)dp[i][j]=INF;
+    cin>>n>>k;
     for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb(x);
+        cin>>weight[i]>>value[i];
     }
-    sort(all(v));
-    //fastio;
-    int l=0,r=0;
-    while(r<n && l<n){
-        //cerr<<l<<" "<<r<<endl;
-        if(v[r]-v[l]+1==n){
-            min_ans=min(min_ans,n-(r-l+1));
-            r++;
-            l++;
-        }
-        else if(v[r]-v[l]+1<n){
-            min_ans=max(min(min_ans,n-(r-l+1)),2ll);
-            r++;
-        }
-        else{
-            l++;
+    dp[0][0]=0;
+    dp[0][value[0]]=weight[0];
+    for(int i=1;i<n;i++){
+        for(int j=0;j<=100000;j++){
+            dp[i][j]=dp[i-1][j];
+            if(j-value[i]>=0)dp[i][j]=min(dp[i][j],dp[i-1][j-value[i]]+weight[i]);
         }
     }
-    min_ans=min(min_ans,l);
-    max_ans=max(v[n-1]-v[1]-1,v[n-2]-v[0]-1)-n+3;
-    cout<<min_ans<<endl<<max_ans;
+    int ans=0;
+    for(int j=100000;j>=1;j--){
+        if(dp[n-1][j]<=k){
+            ans=j;
+            break;
+        }
+    }
+    cout<<ans<<endl;
+    return 0;
 }
-//  4 5 6

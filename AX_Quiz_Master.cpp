@@ -79,8 +79,59 @@ typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
 int n,m,k,t,q,x,y,ans;
 vi v;
+vi factor[N];
 
+inline void preprocess(void){
+    for(int i=1;i<N;i++)for(int j=i;j<N;j+=i)factor[j].pb(i);
+    return;
+}
+
+inline void solve(void){
+    cin>>n>>m;
+    vi v,cnt(m+1,0);
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    sort(all(v));
+    int l=0,r=0,total=0,ans=INF;
+    while(l<n &&r<n){
+        
+        //cerr<<"l,r : "<<l<<" "<<r<<endl;
+
+        x=v[r];
+        for(auto f:factor[x]){
+            if(f>m)continue;
+            cnt[f]++;
+            if(cnt[f]==1)total++;
+        }
+
+        //cerr<<"total: "<<total<<endl;
+
+        while(total==m){
+
+            /*cerr<<">l,r : "<<l<<" "<<r<<endl;
+            cerr<<"cnt:";for(int i=1;i<=m;i++)cerr<<" "<<cnt[i];cerr<<endl;*/
+
+            ans=min(ans,v[r]-v[l]);
+            for(auto f:factor[v[l]]){
+                if(f>m)continue;
+                cnt[f]--;
+                if(cnt[f]==0)total--;
+            }
+            l++;
+        }
+
+        r++;
+    }
+    cout<<(ans==INF?-1:ans)<<endl;
+    //cerr<<"testcase ok"<<endl;
+    return;
+}
 
 int32_t main(void){
-    cin>>n;
+    preprocess();
+    cin>>t;
+    while(t--)solve();
+    return 0;
 }

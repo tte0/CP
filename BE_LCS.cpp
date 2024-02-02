@@ -31,7 +31,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
+#define int int_fast64_t
 #define ff first
 #define ss second
 #define endl '\n'
@@ -55,7 +55,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define dbg(x) cdebug()<<debug(x)
-#define fastio if(n==5 && v[0]==2 && v[1]==5 && v[2]==6 && v[3]==7 && v[4]==8){cout<<"2\n2";return 0;}
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 using namespace std;
 typedef long long ll;
 typedef long double ldouble;
@@ -77,38 +77,45 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,min_ans=INF,max_ans;
+int n,m,k,t,x,y,ans,best[3005][3005],dp[3005][3005];
 vi v;
+str s,q;
 
+int f(int sp,int qp){
+    if(sp==n||qp==m) return 0;
+    if(dp[sp][qp]!=-1) return dp[sp][qp];
+    if(s[sp]==q[qp]){
+        best[sp][qp]=59;
+        return dp[sp][qp]=1+f(sp+1,qp+1);
+    }
+    int t1=f(sp+1,qp);
+    int t2=f(sp,qp+1);
+    if(t1>=t2)best[sp][qp]=1;
+    else best[sp][qp]=2;
+    return dp[sp][qp]=max(t1,t2);
+}
 
 int32_t main(void){
-    //freopen("herding.in","r",stdin);
-    //freopen("herding.out","w",stdout);   
-    cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb(x);
-    }
-    sort(all(v));
-    //fastio;
-    int l=0,r=0;
-    while(r<n && l<n){
-        //cerr<<l<<" "<<r<<endl;
-        if(v[r]-v[l]+1==n){
-            min_ans=min(min_ans,n-(r-l+1));
-            r++;
-            l++;
+    mset(dp,-1);
+    cin>>s>>q;
+    n=s.size();
+    m=q.size();
+    cerr<<f(0,0);
+    int sp=0,qp=0;
+    while(sp<n&&qp<m){
+        if(best[sp][qp]==59){
+            if(s[sp]!=q[qp]){
+                cout<<endl<<"PATLADIN OGLUM!"<<endl;
+            }
+            cout<<s[sp];
+            sp++;
+            qp++;
         }
-        else if(v[r]-v[l]+1<n){
-            min_ans=max(min(min_ans,n-(r-l+1)),2ll);
-            r++;
+        else if(best[sp][qp]==1){
+            sp++;
         }
         else{
-            l++;
+            qp++;
         }
     }
-    min_ans=min(min_ans,l);
-    max_ans=max(v[n-1]-v[1]-1,v[n-2]-v[0]-1)-n+3;
-    cout<<min_ans<<endl<<max_ans;
 }
-//  4 5 6

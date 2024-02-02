@@ -31,7 +31,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
+#define int int_fast64_t
 #define ff first
 #define ss second
 #define endl '\n'
@@ -55,7 +55,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define dbg(x) cdebug()<<debug(x)
-#define fastio if(n==5 && v[0]==2 && v[1]==5 && v[2]==6 && v[3]==7 && v[4]==8){cout<<"2\n2";return 0;}
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 using namespace std;
 typedef long long ll;
 typedef long double ldouble;
@@ -77,38 +77,32 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,min_ans=INF,max_ans;
-vi v;
+int n,m,k,t,q,x,y,ans;
+vi v1,v2,v3;
 
 
 int32_t main(void){
-    //freopen("herding.in","r",stdin);
-    //freopen("herding.out","w",stdout);   
-    cin>>n;
+    freopen("bcount.in", "r", stdin);
+    freopen("bcount.out", "w", stdout);
+    cin>>n>>q;
     for(int i=0;i<n;i++){
         cin>>x;
-        v.pb(x);
+        v1.pb(x==1);
+        v2.pb(x==2);
+        v3.pb(x==3);
     }
-    sort(all(v));
-    //fastio;
-    int l=0,r=0;
-    while(r<n && l<n){
-        //cerr<<l<<" "<<r<<endl;
-        if(v[r]-v[l]+1==n){
-            min_ans=min(min_ans,n-(r-l+1));
-            r++;
-            l++;
-        }
-        else if(v[r]-v[l]+1<n){
-            min_ans=max(min(min_ans,n-(r-l+1)),2ll);
-            r++;
+    for(int i=1;i<n;i++){
+        v1[i]+=v1[i-1];
+        v2[i]+=v2[i-1];
+        v3[i]+=v3[i-1];
+    }
+    for(int i=0;i<q;i++){
+        cin>>x>>y;
+        if(x==1){
+            cout<<v1[y-1]<<" "<<v2[y-1]<<" "<<v3[y-1]<<endl;
         }
         else{
-            l++;
+            cout<<v1[y-1]-v1[x-2]<<" "<<v2[y-1]-v2[x-2]<<" "<<v3[y-1]-v3[x-2]<<endl;
         }
     }
-    min_ans=min(min_ans,l);
-    max_ans=max(v[n-1]-v[1]-1,v[n-2]-v[0]-1)-n+3;
-    cout<<min_ans<<endl<<max_ans;
 }
-//  4 5 6
