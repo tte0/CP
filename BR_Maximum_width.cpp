@@ -94,8 +94,8 @@ int32_t main(void){
     }
     for(int i=p;i<n;i++)prefix[i]=m;
 
-    reverse(all(s));
-    reverse(all(q));
+    //cerr<<"prefix: ";for(int i=0;i<n;i++)cerr<<prefix[i]<<",";cerr<<endl;
+
     p=n-1,p2=m-1,cnt=0;
     while(p>=0 && p2>=0){
         if(s[p]==q[p2]){
@@ -107,18 +107,19 @@ int32_t main(void){
     }
     for(int i=p;i>=0;i--)suffix[i]=m;
 
+    //cerr<<"suffix: ";for(int i=0;i<n;i++)cerr<<suffix[i]<<",";cerr<<endl;
+
     int l=0,r=1;
     while(l<n && r<n){
-        if(prefix[l]+suffix[r]==m){
+        if(l>=r){r++;continue;}
+        if(prefix[l]+suffix[r]>=m){
             ans=max(ans,r-l);
             r++;
         }
         else if(prefix[l]+suffix[r]<m){
             l++;
         }
-        else{
-            r++;
-        }
+        
     }
     cout<<ans;
     return 0;
