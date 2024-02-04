@@ -48,7 +48,6 @@ typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
 int n,m,k,t,x,y,ans,w;
 vii adj[1005];
-str s,q;
 
 int32_t main(void){
     cin>>n;
