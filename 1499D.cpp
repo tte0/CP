@@ -31,7 +31,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
+#define int int_fast64_t
 #define ff first
 #define ss second
 #define endl '\n'
@@ -77,89 +77,15 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
+int n,m,k,t,q,x,y,c,d,x,ans;
 vi v;
-str s;
+
+inline void solve(void){
+    cin>>c>>d>>x;
+    
+}
 
 int32_t main(void){
-    cout<<2<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<4<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<3<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<9<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<5<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<25<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<7<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<49<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<11<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<13<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<17<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<19<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<23<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<29<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<31<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<37<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<41<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<43<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<47<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    if(ans<=1)cout<<"prime"<<endl;
-    else cout<<"composite"<<endl;
-    cout.flush();
-    return 0;
+    cin>>t;
+    while(t--)solve();
 }

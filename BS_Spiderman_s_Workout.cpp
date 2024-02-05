@@ -31,7 +31,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
+#define int int_fast64_t
 #define ff first
 #define ss second
 #define endl '\n'
@@ -77,89 +77,60 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
+int n,m,k,t,q,x,y,ans,dp[50][1005],bt[50][1005];
 vi v;
-str s;
+
+inline int f(int ind,int h){
+    if(h<0)return INF;
+    if(ind==n){
+        if(h==0)return 0;
+        return INF;
+    }
+    if(dp[ind][h]!=-1)return dp[ind][h];
+    int t1=f(ind+1,h+v[ind]);
+    int t2=max(h,f(ind+1,h-v[ind]));
+    if(min(t1,t2)>=INF-10000000){bt[ind][h]=INF;return dp[ind][h]=INF;}
+    if(t1<=t2){
+        bt[ind][h]=1;
+        return dp[ind][h]=t1;
+    }
+    bt[ind][h]=2;
+    return dp[ind][h]=t2;
+
+}
+
+inline void solve(void){
+    cin>>n;
+    v.clear();
+    mset(dp,-1);
+    mset(bt,-1);
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    if(f(0,0)>=INF-100000000){
+        cout<<"IMPOSSIBLE"<<endl;
+        return;
+    }
+    int h=0;
+    for(int i=0;i<n;i++){
+        if(bt[i][h]==1){
+            h+=v[i];
+            cout<<"U";
+        }
+        else if(bt[i][h]==2){
+            h-=v[i];
+            cout<<"D";
+        }
+        else{
+            cout<<endl<<"PATLADIN OGLUM";
+            exit(0);
+        }
+    }
+    cendl;
+}
 
 int32_t main(void){
-    cout<<2<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<4<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<3<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<9<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<5<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<25<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<7<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<49<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<11<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<13<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<17<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<19<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<23<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<29<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<31<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<37<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<41<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<43<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    cout<<47<<endl;
-    cout.flush();
-    cin>>s;
-    ans+=(s=="yes");
-    if(ans<=1)cout<<"prime"<<endl;
-    else cout<<"composite"<<endl;
-    cout.flush();
-    return 0;
+    cin>>t;
+    while(t--)solve();
 }
