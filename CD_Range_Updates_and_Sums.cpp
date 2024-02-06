@@ -44,7 +44,7 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define INF (int(4e18))
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x/gcd(x,y))*y)
+#define lcm(x,y) ((x*y)/gcd(x,y))
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
@@ -77,29 +77,60 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
-vi sparse;
+int n,m,k,t,q,x,y,ans,st[4*N],lazy_set[4*N],lazy_add[4*N];
+vi v={0};
 
+inline int build(int node,int l,int r){
+    if(l==r)return st[node]=v[l];
+    int m=(l+r)/2;
+    return st[node]=build(2*node,l,m)+build(2*node+1,m+1,r);
+}
 
-inline void solve(void){
-    cin>>n;
-    sparse.assign(n,vi(lg(n)+1,0));
-    for(int i=0;i<n;i++){
-        cin>>sparse[i][0];
+inline void push(int node,int l,int r){
+    if(l==r){
+        if(lazy_set[node]==0){
+            st[node]+=lazy_add[node];
+        }
+        else{
+            st[node]=lazy_set[node]+lazy_add[node];
+        }
     }
-    calculate_sparse();
-    int max_ind=-1,max_val=0;
-    for(int i=0;i<n;i++){
-        if(lca(i,i)>max_val)max_ind=i;
+    else{
+        if(lazy_set[node]==0){
+            st[node]+=(r-l+1)*lazy_add[node];
+        }
+        else{
+            st[node]=(r-l+1)*(lazy_set[node]+lazy_add[node]);
+        }
     }
-    cout<<max_val<<" ";
-    for(int i=1;i<n;i++){
-        int mx=-INF;
-        if(max_ind+i<n)mx=max(mx,)
+}
+
+inline int update_add(int node,int l,int r){
+    if(r<x || y<l)return st[node];
+    if(x<=l && r<=y){
+        lazy_add[node]+=k;
+        push(node,l,r);
     }
 }
 
 int32_t main(void){
-    cin>>t;
-    while(t--)solve();
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    build(1,1,n);
+    while(m--){
+        cin>>x;
+        if(x==1){
+            cin>>x>>y>>k;
+            update_add(int node,int l,int r);
+        }
+        else if(x==2){
+
+        }
+        else{
+
+        }
+    }
 }

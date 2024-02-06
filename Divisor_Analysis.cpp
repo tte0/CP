@@ -39,12 +39,12 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define pb push_back
 #define N (200005)
 #define MOD (int(1e9)+7)
-#define MOD2 (998244353)
+#define MOD2 (MOD-1)
 #define MODL (int(1e9)+21)
 #define INF (int(4e18))
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x/gcd(x,y))*y)
+#define lcm(x,y) ((x*y)/gcd(x,y))
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
@@ -78,28 +78,51 @@ typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
 int n,m,k,t,q,x,y,ans;
-vi sparse;
+vii v;
 
+int fp(int b,int p){
+    int ans=1;
+    while(p){
+        if(p&1)ans=(ans*b)%MOD;
+        p>>=1;
+        b=(b*b)%MOD;
+    }
+    return ans;
+}
 
-inline void solve(void){
-    cin>>n;
-    sparse.assign(n,vi(lg(n)+1,0));
-    for(int i=0;i<n;i++){
-        cin>>sparse[i][0];
+int fp2(int b,int p){
+    int ans=1;
+    while(p){
+        if(p&1)ans=(ans*b)%MOD2;
+        p>>=1;
+        b=(b*b)%MOD2;
     }
-    calculate_sparse();
-    int max_ind=-1,max_val=0;
-    for(int i=0;i<n;i++){
-        if(lca(i,i)>max_val)max_ind=i;
-    }
-    cout<<max_val<<" ";
-    for(int i=1;i<n;i++){
-        int mx=-INF;
-        if(max_ind+i<n)mx=max(mx,)
-    }
+    return ans;
 }
 
 int32_t main(void){
-    cin>>t;
-    while(t--)solve();
+    fastio;
+    cin>>n;
+    int S=1,S2=1;
+    for(int i=0;i<n;i++){
+        cin>>x>>y;
+        v.pb({x,y});
+        S=(S*(y+1))%MOD;
+        S2=(S2*(y+1))%MOD2;
+    }
+    cout<<S<<" "; 
+    ans=1;
+    for(auto i:v){
+        ans*=((fp(i.ff,i.ss+1)-1)*fp(i.ff-1,MOD-2))%MOD;
+        ans%=MOD;
+    }
+    cout<<ans<<" ";
+    ans=1;
+    for(ii i:v){
+        int p=i.ff;
+        int n=i.ss;
+        ans*=fp(fp(p,n*(n+1)/2),(S2*fp2(n+1,500000002-1))%MOD);
+        ans%=MOD;
+    }
+    cout<<ans<<" ";
 }

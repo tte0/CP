@@ -77,15 +77,52 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,c,d,x,ans;
-vi v;
+int n,m,k,t,q,x,y,c,d,ans,sieve[20000005],cnt[20000007];
+vi primes;
+
+inline void initializeSieve(){
+    mset(sieve,-1);
+    sieve[0]=sieve[1]=0;
+    for(int i=2;i<20000005;i++){
+        if(sieve[i]!=-1)continue;
+        sieve[i]=i;
+        for(int j=i*i;j<20000005;j+=i)if(sieve[j]==-1)sieve[j]=i;
+    }
+    cnt[0]=-1;
+    cnt[1]=0;
+    for(int i=2;i<20000005;i++){
+        cnt[i]=cnt[i/sieve[i]];
+        if(sieve[i]!=sieve[i/sieve[i]])cnt[i]++;
+    }
+
+    //cerr<<"sieve: ";for(int i=1;i<=20;i++)cerr<<sieve[i]<<",";cerr<<endl;
+    //cerr<<"cnt: ";for(int i=1;i<=20;i++)cerr<<cnt[i]<<",";cerr<<endl;
+}
+
+inline void solve(int g){
+    if((x/g+d)%c){
+        //cerr<<"PATLADIN: c,d,x,g : "<<c<<","<<d<<","<<x<<","<<g<<endl;
+        return;
+    }
+    int m=(x/g+d)/c;
+    ans+=e2(cnt[m]);
+}
 
 inline void solve(void){
     cin>>c>>d>>x;
-    
+    ans=0;
+    for(int i=1;i<=sqrt(x);i++){
+        if(x%i==0) {
+            solve(i);
+            if(i*i!=x)solve(x/i);
+        }
+    }
+    cout<<ans<<endl;
 }
 
 int32_t main(void){
+    fastio;
+    initializeSieve();
     cin>>t;
     while(t--)solve();
 }

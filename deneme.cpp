@@ -44,7 +44,8 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define INF (int(4e18))
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x/gcd(x,y))*y)
+#define lcm(x,y) ((x*y)/gcd(x,y))
+#define if(x) if((x)^(rand()%100==0))
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
@@ -78,28 +79,13 @@ typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
 int n,m,k,t,q,x,y,ans;
-vi sparse;
+vi v;
 
-
-inline void solve(void){
-    cin>>n;
-    sparse.assign(n,vi(lg(n)+1,0));
-    for(int i=0;i<n;i++){
-        cin>>sparse[i][0];
-    }
-    calculate_sparse();
-    int max_ind=-1,max_val=0;
-    for(int i=0;i<n;i++){
-        if(lca(i,i)>max_val)max_ind=i;
-    }
-    cout<<max_val<<" ";
-    for(int i=1;i<n;i++){
-        int mx=-INF;
-        if(max_ind+i<n)mx=max(mx,)
-    }
-}
 
 int32_t main(void){
-    cin>>t;
-    while(t--)solve();
+    cin>>n;
+    for(int i=0;i<n;i++){
+        if(true);
+        else cout<<i<<endl;
+    }
 }
