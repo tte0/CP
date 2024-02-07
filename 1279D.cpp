@@ -38,8 +38,8 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define spc ' '
 #define pb push_back
 #define N (200005)
-#define MOD (int(1e9)+7)
-#define MOD2 (MOD-1)
+#define MOD2 (int(1e9)+7)
+#define MOD (998244353)
 #define MODL (int(1e9)+21)
 #define INF (int(4e18))
 #define e2(x) (1LL<<(x))
@@ -77,52 +77,42 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
-vii v;
+int n,m,k,t,q,x,y,ans,cnt[5*N],prob[5*N];
+vvi v;
 
-int fp(int b,int p){
+inline int fp(int b,int p){
     int ans=1;
     while(p){
         if(p&1)ans=(ans*b)%MOD;
-        p>>=1;
         b=(b*b)%MOD;
-    }
-    return ans;
-}
-
-int fp2(int b,int p){
-    int ans=1;
-    while(p){
-        if(p&1)ans=(ans*b)%MOD2;
         p>>=1;
-        b=(b*b)%MOD2;
     }
     return ans;
 }
 
 int32_t main(void){
-    fastio;
     cin>>n;
-    int S=1,S2=1;
     for(int i=0;i<n;i++){
-        cin>>x>>y;
-        v.pb({x,y});
-        S=(S*(y+1))%MOD;
-        S2=(S2*(y+1))%MOD2;
+        cin>>m;
+        v.pb({});
+        for(int i=0;i<m;i++){
+            cin>>x;
+            cnt[x]++;
+            v.back().pb(x);
+        }   
+        t+=m;
     }
-    cout<<S<<" "; 
-    ans=1;
-    for(auto i:v){
-        ans*=((fp(i.ff,i.ss+1)-1)*fp(i.ff-1,MOD-2))%MOD;
-        ans%=MOD;
+
+    for(auto t:v){
+        for(auto i:t){
+            prob[i]+=fp(int(t.size()),MOD-2);
+            prob[i]%=MOD;
+        }
     }
-    cout<<ans<<" ";
-    ans=1;
-    for(ii i:v){
-        int p=i.ff;
-        int n=i.ss;
-        ans*=fp(fp(p,n*(n+1)/2),(S2*fp2(n+1,500000002-1)%MOD2)%MOD);
-        ans%=MOD;
+
+    for(int i=1;i<=1000000;i++){
+        ans=(ans+cnt[i]*prob[i])%MOD;
     }
-    cout<<ans<<" ";
+    cerr<<ans<<"/"<<t*n;
+    cout<<(ans*fp((n)%MOD,MOD-2))%MOD;
 }
