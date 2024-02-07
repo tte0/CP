@@ -75,65 +75,71 @@ typedef set<char> stc;
 typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
-typedef multiset<str> msts; 
+typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-#define m (l+r)/2
-int n,k,t,q,x,y,ans,st[4*N],lazy[4*N],lazy2[4*N];
+int n,m,k,t,q,x,y,ans,sum[4*N],sub[4*N],leftt[4*N],rightt[4*N];
 vi v={0};
+#define m (l+r)/2
 
-inline int calc(int x,int y,int n){
-    return n*x+n*(n-1)/2*y;
+inline void merge(int node,int l,int r){
+    sum[node]=sum[2*node]+sum[2*node+1];
+    leftt[node]=max(leftt[2*node],sum[2*node]+leftt[2*node+1]);
+    rightt[node]=max(rightt[2*node+1],sum[2*node+1]+rightt[2*node]);
+    sub[node]=max({sub[2*node],sub[2*node+1],rightt[2*node]+leftt[2*node+1]});
 }
 
-inline int build(int node,int l,int r){return st[node]=l==r?v[l]:build(2*node,l,m)+build(2*node+1,m+1,r);}
-
-inline int push(int node,int l,int r){
-    st[node]+=calc(lazy[node],lazy2[node],r-l+1);
-    if(l<r){
-        lazy[2*node]+=lazy[node];
-        lazy[2*node+1]+=(m+1-l)*lazy2[node]+lazy[node];
-        lazy2[2*node]+=lazy2[node];
-        lazy2[2*node+1]+=lazy2[node];
+inline void build(int node=1,int l=1,int r=n){
+    if(l==r){
+        sum[node]=v[l],
+        sub[node]=max(int(0),v[l]);
+        leftt[node]=max(int(0),v[l]);
+        rightt[node]=max(int(0),v[l]);
+        return;
     }
-    lazy[node]=lazy2[node]=0;
-    return st[node];
+    build(2*node,l,m);
+    build(2*node+1,m+1,r);
+    merge(node,l,r);
 }
 
-inline int update(int node,int l,int r){
-    push(node,l,r);
-    if(r<x || y<l)return st[node];
-    if(x<=l && r<=y){
-        lazy[node]+=l-x+1;
-        lazy2[node]++;
-        return push(node,l,r);
+inline void query(int node=1,int l=1,int r=n){
+    if(r<x || x<l)return;
+    //cerr<<">query: "<<node<<","<<l<<","<<r<<endl;
+    if(l==r){
+        if(l!=x)cout<<"PATLADIN!!"<<endl;
+        sum[node]=v[l],
+        sub[node]=max(int(0),v[l]);
+        leftt[node]=max(int(0),v[l]);
+        rightt[node]=max(int(0),v[l]);
+        return;
     }
-    return st[node]=update(2*node,l,m)+update(2*node+1,m+1,r);
+    query(2*node,l,m);
+    query(2*node+1,m+1,r);
+    merge(node,l,r);
 }
 
-inline int query(int node,int l,int r){
-    push(node,l,r);
-    if(r<x || y<l)return 0;
-    if(x<=l && r<=y)return st[node];
-    return /*st[node]=*/query(2*node,l,m)+query(2*node+1,m+1,r);
+inline void debug(){
+    cerr<<endl;
+    cerr<<"sum: ";for(int i=1;i<16;i++)cerr<<sum[i]<<",";cerr<<endl;
+    cerr<<"sub: ";for(int i=1;i<16;i++)cerr<<sub[i]<<",";cerr<<endl;
+    cerr<<"left: ";for(int i=1;i<16;i++)cerr<<leftt[i]<<",";cerr<<endl;
+    cerr<<"right: ";for(int i=1;i<16;i++)cerr<<rightt[i]<<",";cerr<<endl;
+    cerr<<endl;
 }
 
 int32_t main(void){
-    fastio;
     cin>>n>>q;
     for(int i=0;i<n;i++){
         cin>>x;
         v.pb(x);
     }
-    ans=build(1,1,n);
+    build();
+    //debug();
+
     while(q--){
-        cin>>x;
-        if(x==1){
-            cin>>x>>y;
-            update(1,1,n);
-        }
-        else{
-            cin>>x>>y;
-            cout<<query(1,1,n)<<endl;
-        }
+        cin>>x>>y;
+        v[x]=y;
+        query();
+        cout<<sub[1]<<endl;
+        //debug();
     }
 }
