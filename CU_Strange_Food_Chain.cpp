@@ -70,10 +70,22 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
-vi v;
+int n,m,k,t,q,x,y,w,fa[N],arr[N];
+vi v,ans;
+vii edges={{0,0}};
 
+inline void solve(void){
+    cin>>n>>k;
+    for(int i=1;i<=)
+    while(k--){
+        cin>>x;
+        if(x==1){
+            
+        }
+    }
+}
 
 int32_t main(void){
-    cin>>n;
+    cin>>t;
+    while(t--)solve();
 }

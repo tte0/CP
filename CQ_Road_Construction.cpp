@@ -45,7 +45,6 @@ SOFTWARE.
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
 #define sort(x) sort(all(x));
-#define reverse(x) reverse(all(x));
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
@@ -70,10 +69,29 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
+int n,m,k,t,q,x,y,w,ans,fa[N],sz[N];
 vi v;
+viii edges;
 
+inline int dsu(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=dsu(fa[x]);
+}
 
 int32_t main(void){
-    cin>>n;
+    cin>>n>>m;
+    int max_size=1,cnt=n;
+    for(int i=1;i<=n;i++){fa[i]=i;sz[i]=1;}
+    while(m--){
+        cin>>y>>x;
+        if(dsu(x)==dsu(y)){
+            cout<<cnt<<" "<<max_size<<endl;
+            continue;
+        }
+        sz[dsu(x)]+=sz[dsu(y)];
+        fa[dsu(y)]=dsu(x);
+        cnt--;
+        max_size=max(max_size,sz[dsu(x)]);
+        cout<<cnt<<" "<<max_size<<endl;
+    }
 }

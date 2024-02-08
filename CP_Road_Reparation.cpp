@@ -69,10 +69,31 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
+int n,m,k,t,q,x,y,w,ans,fa[N];
 vi v;
+viii edges;
 
+inline int dsu(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=dsu(fa[x]);
+}
 
 int32_t main(void){
-    cin>>n;
+    cin>>n>>m;
+    for(int i=1;i<=n;i++)fa[i]=i;
+    for(int i=0;i<m;i++){ 
+        cin>>x>>y>>w;
+        edges.pb({w,{x,y}});
+    }
+    sort(edges);
+    for(iii i:edges){
+        int w=i.ff,x=i.ss.ff,y=i.ss.ss;
+        if(dsu(x)==dsu(y))continue;
+        ans+=w;
+        fa[dsu(x)]=dsu(y);
+    }
+    int cnt=0;
+    for(int i=1;i<=n;i++)cnt+=(dsu(i)==i);
+    if(cnt==1)cout<<ans;
+    else cout<<"IMPOSSIBLE";
 }

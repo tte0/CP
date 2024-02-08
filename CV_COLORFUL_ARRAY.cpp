@@ -70,10 +70,20 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
-vi v;
+int n,m,k,t,q,x,y,st[4*N];
+viii v;
+
 
 
 int32_t main(void){
-    cin>>n;
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        cin>>x>>y>>k;
+        v.pb({k,{x,y}});
+    }
+    reverse(v);
+    for(auto i:v){
+        x=i.ss.ff,k=i.ff,y=i.ss.ss;
+        update();
+    }
 }
