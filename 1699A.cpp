@@ -69,10 +69,10 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
+int n,m,k,t,a,b,c,q,x,y,ans;
 vi v;
 
 
 int32_t main(void){
-    cin>>n;
+    cin>>t;while(t--){cin>>n;if(n&1){cout<<-1<<endl;continue;}cout<<"1 1 "<<((n/2)^1)<<endl;}
 }
