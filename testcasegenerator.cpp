@@ -56,9 +56,9 @@ int32_t main(void){
     m=n=300000;
     cout<<n<<" "<<m<<endl;
     for(int i=0;i<n;i++){
-        cout<<"277200 1000000000\n";
+        cout<<"277200 1\n";
     }
     for(int i=0;i<m;i++){
-        cout<<"1 300000 1 1000000000"<<endl;
+        cout<<"1 300000 1 1"<<endl;
     }
 }

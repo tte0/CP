@@ -71,15 +71,14 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans,cnt=1,comp_size[5*N];
+int n,m,k,t,a,b,x,y,ans,cnt=1,comp_size[5*N];
 vvi vis;
 vector<str> s;
 str q;
 
 inline int dfs(int x,int y){
     if(x<0 || y<0 || x>=n || y>=m || y==k)return 0;
-    if(vis[x][y])return 0;
-    vis[x][y]=cnt;
+    if(vis[x][y]++ || s[x][y]=='~')return 0;
     int ans=1;
     ans+=dfs(x-1,y);
     ans+=dfs(x+1,y);
@@ -104,12 +103,20 @@ inline void solve(void){
     for(int i=1;i<cnt;i++)ans+=comp_size[i]*comp_size[i];*/
     for(k=0;k<m;k++){
         vis.assign(n+5,vi(m+5,0));
-        
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(vis[i][j])continue;
+                int t=dfs(i,j);
+                ans+=t*t;
+            }
+        }
+        cout<<ans<<" ";
     }
 }
 
 int32_t main(void){
-    initSieve();
+    fastio;
     t=1;
     //cin>>t;
     while(t--)solve();

@@ -23,7 +23,6 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -65,22 +64,40 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=250005;
 const int MOD=1000000007;
 const ll  INF=4e18;
-const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
-vii v;
+int n,m,k,t,q,a,b,x,y,ans,vis[N];
+vi adj[N];
+
+inline void dfs(int node){
+    if(vis[node]++)return;
+    for(auto i:adj[node])dfs(i);
+}
 
 inline void solve(void){
-
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>k>>x>>y;
+        for(int j=x;j<=y;j++){
+            adj[k].pb(j);
+        }
+    }
+    dfs(1);
+    vi v;
+    for(int i=0;i<n;i++){
+        if(vis[i+1]==0)v.pb(i+1);
+    }
+    cout<<v.size()<<endl;
+    for(auto i:v)cout<<i<<" ";
 }
 
 int32_t main(void){
-    initSieve();
+    fastio;
     t=1;
     //cin>>t;
     while(t--)solve();
+    return 0;
 }
