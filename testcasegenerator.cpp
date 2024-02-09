@@ -53,16 +53,12 @@ int n,m,a,b,k,l,x,y,w,t;
 int32_t main(void){
     srand(time(NULL));
     fileio;
-    t=20;
-    cout<<t<<endl;
-    while(t--){    a=7,b=8,n=15,m=20;
-        k=rand()%5;
-        l=rand()%50;
-        cout<<a<<" "<<b<<" "<<m<<" "<<l<<" "<<k<<endl;
-        for(int i=0;i<m;i++){
-            x=rand()%n+1;
-            y=rand()%n+1;
-            w=rand()%40+1;
-            cout<<x<<" "<<y<<" "<<w<<endl;
-        }cendl;}
+    m=n=300000;
+    cout<<n<<" "<<m<<endl;
+    for(int i=0;i<n;i++){
+        cout<<"277200 1000000000\n";
+    }
+    for(int i=0;i<m;i++){
+        cout<<"1 300000 1 1000000000"<<endl;
+    }
 }

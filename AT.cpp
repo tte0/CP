@@ -74,9 +74,8 @@ inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod
 int n,m,k,t,q,a,b,x,y,ans;
 vii v;
 
-
-
 inline void solve(void){
+
 }
 
 int32_t main(void){

@@ -21,9 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#pragma GCC optimize("O3,fast-math")
+#pragma GCC target("popcnt,abm,mmx,lzcnt,bmi,bmi2,fma,sse,sse2,sse3,sse4,sse4.1,sse4.2,tune=native")
+#pragma GCC optimize("-fipa-sra,-fgcse-lm,-fgcse,inline,unroll-all-loops,no-stack-protector,O3,fast-math,Ofast")
 #include <bits/stdc++.h>
-#define int ll
+#define int int_fast32_t
 #define ff first
 #define ss second
 #define endl '\n'
@@ -39,7 +40,6 @@ SOFTWARE.
 #define yes cout<<"YES"<<endl
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
-#define sort(x) sort(all(x));
 #define reverse(x) reverse(all(x));
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
@@ -67,21 +67,70 @@ typedef multiset<char> mstc;
 typedef multiset<str> msts;
 const int N=200005;
 const int MOD=1000000007;
-const ll  INF=4e18;
-const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
-///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
+//////////////////////////////////////////////////////
+int n,m,k,t,q,a,b,x,y,ans,sieve[3*N/2],prefix[3*N/2][182];
 vii v;
 
+inline void initSieve(){
+    mset(sieve,-1);
+    sieve[0]=sieve[1]=1;
+    for(int i=2;i<3*N/2;i++){
+        if(sieve[i]!=-1)continue;
+        sieve[i]=i;
+        for(int j=i*i;j<3*N/2;j+=i)if(sieve[j]==-1)sieve[j]=i;
+    }
+}
 
+inline bool cmp(ii a,ii b){
+    if(a.ss!=b.ss)return a.ss<b.ss;
+    return a.ff<b.ff;
+}
 
 inline void solve(void){
+    cin>>n>>q;
+    for(int i=0;i<n;i++){
+        cin>>x>>y;
+        v.pb({-1,y});
+        int cnt=0,p=-1,ans=1;
+        while(x>1){
+            if(sieve[x]!=p){
+                ans*=(cnt)+1;
+                p=sieve[x],
+                cnt=0;
+            }
+            cnt++;
+            x/=sieve[x];
+        }
+        ans*=(cnt)+1;
+        v.back().ff=ans;
+    }
+    sort(all(v),cmp);
+    for(int i=0;i<n;i++)prefix[i+1][v[i].ff]++;
+    for(int i=2;i<=n;i++){
+        for(int j=1;j<=180;j++)prefix[i][j]+=prefix[i-1][j];
+    }
+    
+    vi arr;
+    for(auto i: v)arr.pb(i.ss);
+    while(q--){
+        cin>>x>>y>>a>>b;
+        x=min(x,(int)181);
+        y=min(y,(int)181);
+        int ind1=lower_bound(all(arr),a)-arr.begin();
+        int ind2=upper_bound(all(arr),b)-arr.begin();
+        int ans=0;
+        for(int i=x;i<=y;i++)ans+=prefix[ind2][i]-prefix[ind1][i];
+        cout<<ans<<endl;
+    }
 }
 
 int32_t main(void){
+    clock_t start=clock();
+    fastio;
     initSieve();
     t=1;
     //cin>>t;
     while(t--)solve();
+    //cout<<(clock()-start)/(CLOCKS_PER_SEC/1000);
 }
