@@ -46,60 +46,22 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
-
-inline void solve(void){
-    cin>>n>>q>>y>>x;
-    mii mp;mp[1]=x;
-    vi v(n,0);v[0]=1;
-    for(int i=1;i<n;i++){
-        cin>>x;
-        v[i]=v[i-1];
-        if(x==1){
-            cin>>x;
-            v[i]++;
-            if(v[i]+1>INF){
-                v[i]=INF;
-                continue;
-            }
-            mp[v[i]]=x;
-        }
-        else{
-            cin>>x;
-            if(v[i]>INF/(x+1)){
-                v[i]=INF;
-                continue;
-            }
-            v[i]+=v[i]*x;
-        }
-    }
-    //cerr<<"preprocess ok"<<endl;
-    //cerr<<"v: ";for(auto i:v)cerr<<i<<",";cerr<<endl;
-    while(q--){
-        cin>>x;
-        while(x>1){
-            //cerr<<"x: "<<x<<endl;
-            if(mp[x]!=0)break;
-            //cerr<<"a";
-            auto it=lower_bound(v.begin(),v.end(),x);
-            //cerr<<"b";
-            it--;
-            //cerr<<"c";
-            x=((x-1)%*it)+1;
-            //cerr<<" "<<x<<endl;
-        }
-        //cerr<<"binary ok"<<endl;
-        cout<<mp[x]<<" ";
-        //cerr<<"query: "<<q<<" ok"<<endl;
-    }
-    cendl;
-}
+int n,m,k,t,q,x,y,ans,two[N];
+vi v;
+vvi arr;
 
 int32_t main(void){
-    fastio;
-    cin>>t;
-    while(t--){
-        solve();
-        //cerr<<"solve ok"<<endl;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    arr.pb({v[0]});
+    for(int i=1;i<n;i++){
+        if(v[i])arr.back().pb(v[i]);
+        else if(arr.back().back()){
+            
+        }
+        else arr.pb({v[i]});
     }
 }

@@ -55,13 +55,9 @@ int32_t main(void){
         cin>>x;
         v.pb(x);
     }
-    int mx=0;
-    for(int i=1;i<n;i++){
-        if(v[i]>v[mx])mx=i;
-    }
-    int ans=0;
+    int ind=0,mx=0;
     for(int i=0;i<n;i++){
-        
+        if(mx<)
     }
-    cout<<ans+n-1<<endl;
+    cout<<ans<<endl;
 }
