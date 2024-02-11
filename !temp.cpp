@@ -1,3 +1,26 @@
+/*
+MIT License
+
+Copyright (c) 2024 tte0 (teomana,teoata17)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
 #define int ll
@@ -6,11 +29,6 @@
 #define endl '\n'
 #define spc ' '
 #define pb push_back
-#define N (200005)
-#define MOD (int(1e9)+7)
-#define MOD2 (998244353)
-#define MODL (int(1e9)+21)
-#define INF (int(4e18))
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
 #define lcm(x,y) ((x*y)/gcd(x,y))
@@ -21,12 +39,13 @@
 #define yes cout<<"YES"<<endl
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
+#define sort(x) sort(all(x));
+#define reverse(x) reverse(all(x));
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define dbg(x) cdebug()<<debug(x)
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 using namespace std;
-typedef long long ll;
+typedef int_fast64_t ll;
 typedef long double ldouble;
 typedef string str;
 typedef pair<int,int> ii;
@@ -45,11 +64,45 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-/////////////////////////////////////////////////////////////
-int n,m,k,t,x,y,ans,w;
-vii adj[1005];
-str s,q;
+
+inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+
+const int N=200005;
+const int MOD=1000000007;
+const ll  INF=4e18;
+const double PI=4*atan(1);
+
+int n,m,k,t,q,a,b,x,y,ans,sieve[2*N];
+vii v;
+
+inline void initSieve(){
+    mset(sieve,-1);
+    sieve[0]=sieve[1]=1;
+    for(int i=2;i<2*N;i++){
+        if(sieve[i]!=-1)continue;
+        sieve[i]=i;
+        for(int j=i*i;j<2*N;j+=i)if(sieve[j]==-1)sieve[j]=i;
+    }
+}
+
+inline void solve(void){
+    for(int i=1;i<=300000;i++){
+        x=i;
+        mii mp;
+        while(x>1){
+            mp[sieve[x]]++;
+            x/=sieve[x];
+        }
+        int cnt=1;
+        for(auto i:mp)cnt*=(i.ss+1);
+        ans=max(ans,cnt);
+    }
+    cout<<ans;
+}
 
 int32_t main(void){
-    cin>>n;
+    initSieve();
+    t=1;
+    //cin>>t;
+    while(t--)solve();
 }

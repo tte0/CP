@@ -46,15 +46,37 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans;
-viii v;
-
+int n,m,k,t,q,x,y,z,start[2*N],endd[2*N],value[2*N],ans,dp[2*N];
+vi v;
+viii days;
 
 int32_t main(void){
     cin>>n;
     for(int i=0;i<n;i++){
-        cin>>x>>y>>q;
-        v.pb({x,{y,q}});
+        cin>>x>>y>>z;
+        v.pb(x);
+        v.pb(y);
+        days.pb({x,{y,z}});
+    }
+    sort(all(days));
+    for(int i=0;i<n;i++){
+        start[i]=days[i].ff;
+        endd[i]=days[i].ss.ff;
+        value[i]=days[i].ss.ss;
     }
     sort(all(v));
+    v.resize(unique(all(v))-v.begin());
+    for(int i=0;i<n;i++){
+        start[i]=(lower_bound(all(v),start[i])-v.begin())+1;
+        endd[i]=(lower_bound(all(v),endd[i])-v.begin())+1;
+    }
+    //cerr<<"start: ";for(int i=0;i<n;i++)cerr<<start[i]<<" ";cerr<<endl;
+    //cerr<<"end: ";for(int i=0;i<n;i++)cerr<<endd[i]<<" ";cerr<<endl<<endl<<endl;
+    int mx=0,ind=0;
+    for(int i=0;i<n;i++){
+        for(;ind<start[i];ind++)mx=max(mx,dp[ind]);
+        dp[endd[i]]=max(dp[endd[i]],mx+value[i]);
+    }
+    for(int i=0;i<=2*n;i++)ans=max(ans,dp[i]);
+    cout<<ans;
 }
