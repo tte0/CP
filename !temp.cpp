@@ -75,33 +75,12 @@ const double PI=4*atan(1);
 int n,m,k,t,q,a,b,x,y,ans,sieve[2*N];
 vii v;
 
-inline void initSieve(){
-    mset(sieve,-1);
-    sieve[0]=sieve[1]=1;
-    for(int i=2;i<2*N;i++){
-        if(sieve[i]!=-1)continue;
-        sieve[i]=i;
-        for(int j=i*i;j<2*N;j+=i)if(sieve[j]==-1)sieve[j]=i;
-    }
-}
 
 inline void solve(void){
-    for(int i=1;i<=300000;i++){
-        x=i;
-        mii mp;
-        while(x>1){
-            mp[sieve[x]]++;
-            x/=sieve[x];
-        }
-        int cnt=1;
-        for(auto i:mp)cnt*=(i.ss+1);
-        ans=max(ans,cnt);
-    }
-    cout<<ans;
+    
 }
 
 int32_t main(void){
-    initSieve();
     t=1;
     //cin>>t;
     while(t--)solve();

@@ -64,45 +64,23 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
+
+inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+
 const int N=200005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
-inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
-///////////////////////////////////////////////////////////////////
+
 int n,m,k,t,q,a,b,x,y,ans,sieve[2*N];
 vii v;
 
-inline void initSieve(){
-    mset(sieve,-1);
-    sieve[0]=sieve[1]=1;
-    for(int i=2;i<2*N;i++){
-        if(sieve[i]!=-1)continue;
-        sieve[i]=i;
-        for(int j=i*i;j<2*N;j+=i)if(sieve[j]==-1)sieve[j]=i;
-    }
-}
 
 inline void solve(void){
-    for(int i=1;i<=300000;i++){
-        x=i;
-        mii mp;
-        while(x>1){
-            mp[sieve[x]]++;
-            x/=sieve[x];
-        }
-        int cnt=1;
-        for(auto i:mp)cnt*=(i.ss+1);
-        if(cnt>ans){
-            ans=cnt;
-            y=i;
-        }
-    }
-    cout<<y<<" "<<ans;
+    
 }
 
 int32_t main(void){
-    initSieve();
     t=1;
     //cin>>t;
     while(t--)solve();
