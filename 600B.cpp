@@ -64,13 +64,12 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-
-inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
-
 const int N=200005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
+inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+
 
 int n,m,k,t,q,a,b,x,y,ans,sieve[2*N];
 vii v;
@@ -78,6 +77,16 @@ vii v;
 
 inline void solve(void){
     cin>>n>>m;
+    vi v;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    sort(v);
+    while(m--){
+        cin>>x;
+        cout<<next(upper_bound(all(v),x),-1)-v.begin()+1<<" ";
+    }
 }
 
 int32_t main(void){
