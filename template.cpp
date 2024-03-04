@@ -44,6 +44,7 @@ SOFTWARE.
 #define rall(x) x.rbegin(),x.rend()
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
+#define usacoio(s) freopen(s+".in","w",stdout);freopen(s+".out","r",stdin)
 using namespace std;
 typedef int_fast64_t ll;
 typedef long double ldouble;
@@ -54,6 +55,7 @@ typedef vector<int> vi;
 typedef vector<ii> vii;
 typedef vector<iii> viii;
 typedef vector<vi> vvi;
+typedef vector<vvi> vvvi;
 typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;

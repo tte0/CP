@@ -1,33 +1,25 @@
 /*
-MIT License with Attribution and Non-Commercial Use Restriction
+MIT License
 
-Copyright (c) 2024 tte0 (aka. teomana,teoata17)
+Copyright (c) 2024 tte0 (teomana,teoata17)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to
-deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-1. The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-2. If you use this Software, you must give appropriate attribution by
-prominently displaying the original author's name.
-
-3. If you modify the Software, you must clearly indicate that you have
-modified the Software and include the original author's name.
-
-4. This Software may not be used for commercial purposes, including, but
-not limited to, selling the Software or using the Software in a way that generates income.
-
-THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
-OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT
-OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
@@ -37,11 +29,6 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define endl '\n'
 #define spc ' '
 #define pb push_back
-#define N (200005)
-#define MOD (int(1e9)+7)
-#define MOD2 (998244353)
-#define MODL (int(1e9)+21)
-#define INF (int(4e18))
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
 #define lcm(x,y) ((x*y)/gcd(x,y))
@@ -51,13 +38,15 @@ OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTW
 #define no cout<<"NO"<<endl
 #define yes cout<<"YES"<<endl
 #define cendl cout<<endl
-#define mset(x,y) mems+et(x,y,sizeof(x))
+#define mset(x,y) memset(x,y,sizeof(x))
+#define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define dbg(x) cdebug()<<debug(x)
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
+#define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
+#define usacoio(s) freopen(s+".in","w",stdout);freopen(s+".out","r",stdin)
 using namespace std;
-typedef long long ll;
+typedef int_fast64_t ll;
 typedef long double ldouble;
 typedef string str;
 typedef pair<int,int> ii;
@@ -76,28 +65,42 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-/////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,ans,prefix[3*N],left[3*N],right[3*N];
-vi v;
+const int N=500005;
+const int MOD=1000000007;
+const ll  INF=4e18;
+const double PI=4*atan(1);
+inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+///////////////////////////////////////////////////////////////////
+int n,m,k,t,q,a,b,x,y,ans=0,cnt[N];
+vi v[N];
 
-
-int32_t main(void){
+inline void solve(void){
     cin>>n>>k;
+    int sum=0;
     for(int i=0;i<n;i++){
         cin>>x;
-        v.pb(x);
+        if(x==k)sum++;
+        else{
+            v[x].pb(cnt[x]-sum);
+            v[x].pb(1);
+            cnt[x]=sum;
+        }
     }
-    for(int i=0;i<n;i++){
-        left[i] =INF;
-        right[i] =-1;
+    for(int i=1;i<=500000;i++)v[x].pb(cnt[x]-sum);
+    for(int x=1;x<=500000;x++){
+        vi t=v[x];
+        int sum=0,n=t.size();
+        for(int i=0;i<n;i++){
+            sum=max(sum+t[i],int(0));
+            ans=max(ans,sum);
+        }
     }
-    for(int i=0;i<n;i++){
-        left[v[i]]=min(left[v[i]],i);
-        right[v[i]]=max(right[v[i]],i);
-    }
-    for(int i=1;i<=n;i++)prefix[i]=prefix[i-1]+(v[i]==k);
-    for(int i=1;i<=n;i++){
-        if(left[i]==INF)continue;
-        ans=max()
-    }
+    cout<<ans+sum;
+}
+
+int32_t main(void){
+    fastio;
+    t=1;
+    //cin>>t;
+    while(t--)solve();
 }
