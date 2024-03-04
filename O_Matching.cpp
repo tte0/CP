@@ -70,24 +70,31 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
+int n,m,k,t,q,a,b,x,y,ans,dp[22][e2(21)+5];
 vi v;
+int arr[22][22];
+
+inline int f(int ind,int b){
+    //cerr<<"f("<<ind<<","<<b<<")"<<endl;
+    if(ind==n)return 1;
+    if(dp[ind][b]!=-1)return dp[ind][b];
+    int ans=0;
+    for(int i=0;i<n;i++){
+        if(arr[ind][i]==1 && (b&e2(i))==0)ans+=f(ind+1,b|e2(i));
+        ans%=MOD;
+    } 
+    return dp[ind][b]=ans;
+}
 
 inline void solve(void){
-    cin>>n>>k;
+    cin>>n;
+    mset(dp,-1);
     for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb(x);
-    }
-    vi dp(k+5,-1);
-    for(int i=0;i<=k;i++){
-        dp[i]=2;
         for(int j=0;j<n;j++){
-            if(i-v[j]<0)continue;
-            if(dp[i-v[j]]==2){dp[i]=1;break;}
+            cin>>arr[i][j];
         }
     }
-    cout<<(dp[k]==1?"First":"Second");
+    cout<<f(0,0);
 }
 
 int32_t main(void){

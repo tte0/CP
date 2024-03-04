@@ -74,20 +74,12 @@ int n,m,k,t,q,a,b,x,y,ans;
 vi v;
 
 inline void solve(void){
-    cin>>n>>k;
+    cin>>n;
     for(int i=0;i<n;i++){
         cin>>x;
         v.pb(x);
     }
-    vi dp(k+5,-1);
-    for(int i=0;i<=k;i++){
-        dp[i]=2;
-        for(int j=0;j<n;j++){
-            if(i-v[j]<0)continue;
-            if(dp[i-v[j]]==2){dp[i]=1;break;}
-        }
-    }
-    cout<<(dp[k]==1?"First":"Second");
+    vvi dp(n+5,vi(ssum(n)+5))
 }
 
 int32_t main(void){

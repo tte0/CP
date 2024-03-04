@@ -79,15 +79,22 @@ inline void solve(void){
         cin>>x;
         v.pb(x);
     }
-    vi dp(k+5,-1);
-    for(int i=0;i<=k;i++){
-        dp[i]=2;
-        for(int j=0;j<n;j++){
-            if(i-v[j]<0)continue;
-            if(dp[i-v[j]]==2){dp[i]=1;break;}
+    vvi dp(n+5,vi(k+5,0));
+    for(int j=0;j<=v[0];j++)dp[0][j]=1;
+    for(int i=1;i<n;i++){
+        int l=0,r=-v[i],sum=dp[i-1][0];
+        for(int j=0;j<=k;j++){
+            dp[i][j]=sum;
+
+            l++;
+            if(l<=k)sum+=dp[i-1][l];
+            if(r>=0)sum-=dp[i-1][r];
+            r++;
+
+            sum=(sum+5*MOD)%MOD;
         }
     }
-    cout<<(dp[k]==1?"First":"Second");
+    cout<<dp[n-1][k];
 }
 
 int32_t main(void){

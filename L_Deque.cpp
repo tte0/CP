@@ -54,6 +54,7 @@ typedef vector<int> vi;
 typedef vector<ii> vii;
 typedef vector<iii> viii;
 typedef vector<vi> vvi;
+typedef vector<vvi> vvvi;
 typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
@@ -74,20 +75,23 @@ int n,m,k,t,q,a,b,x,y,ans;
 vi v;
 
 inline void solve(void){
-    cin>>n>>k;
+    cin>>n;
     for(int i=0;i<n;i++){
         cin>>x;
         v.pb(x);
     }
-    vi dp(k+5,-1);
-    for(int i=0;i<=k;i++){
-        dp[i]=2;
-        for(int j=0;j<n;j++){
-            if(i-v[j]<0)continue;
-            if(dp[i-v[j]]==2){dp[i]=1;break;}
+    vvvi dp(n,vvi(n,vi(2,0)));
+    for(int i=0;i<n;i++){
+        dp[i][i][0]=+v[i];
+        dp[i][i][1]=-v[i];
+    }
+    for(int i=1;i<n;i++){
+        for(int j=0;j+i<n;j++){
+            dp[j][j+i][0]=max(v[j]+dp[j+1][j+i][1] ,v[j+i]+dp[j][j+i-1][1]);
+            dp[j][j+i][1]=min(-v[j]+dp[j+1][j+i][0],-v[j+i]+dp[j][j+i-1][0]);
         }
     }
-    cout<<(dp[k]==1?"First":"Second");
+    cout<<dp[0][n-1][0];
 }
 
 int32_t main(void){
