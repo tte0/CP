@@ -78,6 +78,7 @@ inline void solve(void){
 }
 
 int32_t main(void){
+    fastio;
     t=1;
     //cin>>t;
     while(t--)solve();
