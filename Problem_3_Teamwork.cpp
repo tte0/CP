@@ -43,7 +43,7 @@ SOFTWARE.
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
-#define fileio freopen("in.put","r",stdin);freopen("out.put","w",stdout)
+#define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 using namespace std;
 typedef int_fast64_t ll;
@@ -73,42 +73,31 @@ const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,ans;
-vi v={0},adj[N];
+vi v={0};
 
 inline void solve(void){
-    cin>>n>>m>>k;
+    cin>>n>>k;
     for(int i=0;i<n;i++){
         cin>>x;
         v.pb(x);
     }
-    for(int i=0;i<m;i++){
-        cin>>x>>y;
-        adj[x].pb(y);
-    }
-    vvi dp(1005,vi(1005,-1));
-    dp[1][0]=0;
-    for(int d=0;d<=1000;d++){
-        for(int node=1;node<=n;node++){
-            if(dp[node][d]==-1)continue;
-            for(auto i:adj[node]){
-                dp[i][d+1]=max(dp[i][d+1],dp[node][d]+v[i]);
-            }
+    vi dp(n+5,-1);
+    dp[0]=0;
+    for(int i=1;i<=n;i++){
+        int mx=0;
+        for(int j=i-1;j>=0 && j>=i-k;j--){
+            mx=max(mx,v[j+1]);
+            dp[i]=max(dp[i],dp[j]+mx*(i-j));
         }
-        ans=max(ans,dp[1][d]-k*d*d);
     }
-    cout<<ans;
+    cout<<dp[n];
 
-    /*for(int d=0;d<10;d++){
-        cerr<<"dp: ";
-        for(int node=1;node<=n;node++){
-            cerr<<dp[node][d]<<",";
-        }
-        cerr<<endl;
-    }*/
+    //cerr<<"dp: ";for(int i=0;i<=n;i++)cerr<<dp[i]<<",";cerr<<endl;
 }
 
 int32_t main(void){
-    usacoio("time");
+    fastio;
+    usacoio("teamwork");
     t=1;
     //cin>>t;
     while(t--)solve();

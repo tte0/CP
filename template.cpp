@@ -44,7 +44,7 @@ SOFTWARE.
 #define rall(x) x.rbegin(),x.rend()
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
-#define usacoio(s) freopen(s+".in","w",stdout);freopen(s+".out","r",stdin)
+#define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 using namespace std;
 typedef int_fast64_t ll;
 typedef long double ldouble;
