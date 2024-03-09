@@ -40,3 +40,5 @@ doublehashattack.cpp
 tempCodeRunnerFile.cpp
 in.put
 out.put
+*.in
+*.out
