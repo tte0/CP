@@ -31,7 +31,7 @@ SOFTWARE.
 #define pb push_back
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x*y)/gcd(x,y))
+#define lcm(x,y) ((x/gcd(x,y))*y)
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
