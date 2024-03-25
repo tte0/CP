@@ -66,80 +66,40 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=100005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
+int n,m,k,t,q,a,b,x,y,ans,dp[N][2];
 vi v;
-str s;
+
+inline int f(int ind,int x){
+    if(ind==n-1)return 1;
+    if(dp[ind][x]!=-1)return dp[ind][x];
+    int t=0;
+    if(v[ind]<v[ind+1])t=max(t,f(ind+1,x));
+    if(x==0 && ind<n-2 && v[ind]+1<v[ind+2])t=max(t,1+f(ind+2,1));
+    if(x==0)t=max(t,int(1));
+    return dp[ind][x]=t+1;
+}
 
 inline void solve(void){
-    cin>>n>>q>>s;
-    vi g2(n,0),g3(n,0);
-    for(int i=1;i<n;i++){
-        g2[i]=g2[i-1];
-        if(s[i]==s[i-1])g2[i]++;
-    }
-    for(int i=1;i<n;i++){
-        g3[i]=g3[i-1];
-        if(i<n-1 && s[i+1]==s[i-1])g3[i]++;
-    }
-
-    str man="@";
+    cin>>n;
+    mset(dp,-1);
     for(int i=0;i<n;i++){
-        man.pb('*');
-        man.pb(s[i]);
+        cin>>x;
+        v.pb(x);
     }
-    man.pb('*');
-    man.pb('!');
-    vi p(man.size(),0);
-    int l=1,r=1;
-    for(int i=2;i<=2*n;i++){
-        p[i]=max(int(0),min(r-i,p[l+(r-i)]));
-        while(man[i-p[i]]==man[i+p[i]])p[i]++;
-        if(i+p[i]>r){
-            l=i-p[i];
-            r=i+p[i];
-        }
-    }
-    cerr<<"m: ";for(auto i:man)cerr<<i<<",";cerr<<endl;
-    cerr<<"p: ";for(auto i:p  )cerr<<i<<",";cerr<<endl;
-
-    while(q--){
-        cin>>x>>y;
-        x--;
-        y--;
-        if(g2[y]-g2[x]==y-x){
-            cout<<0<<endl;
-            continue;
-        }
-        if(y-x==1){
-            cout<<2<<endl;
-            continue;
-        }
-        bool isPalindrome;
-        if((y-x+1)%2==0){
-            isPalindrome=(p[2*(y-x+1)+1]>=y-x+1);
-        }else{
-            isPalindrome=(p[2*(y-x+1)]>=y-x+1);
-        }
-
-        for(int i=x;i<=(x+y)/2;i++)isPalindrome&=(s[i]==s[x+y-i]);
-
-        if(g3[y-1]-g3[x]==y-x-1){
-            cout<<2*ssum((y-x+1)/2)-((y-x+1)%2==0)*(int(isPalindrome)*(y-x+1))<<endl;
-            continue;
-        }  
-        cout<<ssum(y-x+1)-1-(int(isPalindrome)*(y-x+1))<<endl;
-    }
+    for(int i=0;i<n;i++)ans=max(ans,f(i,0));
+    for(int i=1;i<n;i++)ans=max(ans,1+f(i,1));
+    cout<<ans;
 }
 
 int32_t main(void){
     fastio;
     t=1;
-    cin>>t;
+    //cin>>t;
     while(t--)solve();
 }
