@@ -71,21 +71,12 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
-vi v;
 
 class Solution {
 public:
-    int longestCommonSubsequence(string s, string q) {
-        n=s.size();
-        m=q.size();
-        vvi dp(n+5,vi(m+5,0));
-        for(int i=1;i<=n;i++){
-            for(int j=1;j<=m;j++){
-                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
-                if(s[i-1]==s[j-1])dp[i][j]=max(dp[i][j],dp[i-1][j-1]+1);
-            }
-        }
-        return dp[n][m];
+    vector<int> findDuplicates(vector<int>& nums) {
+        int n=nums.size();
+        int cnt=0;
+        for(int)
     }
 };
