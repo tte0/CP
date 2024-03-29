@@ -66,17 +66,60 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=2505;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
-vi v;
+int n,m,k,t,q,a,b,x,y,ans,vis[N];
+vi adj[N],radj[N];
+viii edges;
+
+inline void dfs(int node){
+    if(vis[node]&1)return;
+    vis[node]|=1;
+    for(auto i:adj[node])dfs(i);
+}
+
+inline void rdfs(int node){
+    if(vis[node]&2)return;
+    vis[node]|=2;
+    for(auto i:radj[node])rdfs(i);
+}
 
 inline void solve(void){
-    cin>>n;
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        cin>>x>>y>>k;
+        adj[x-1].pb(y-1);
+        radj[y-1].pb(x-1);
+        edges.pb({x-1,{y-1,-k}});
+    }
+
+    dfs(0);
+    rdfs(n-1);
+
+    vi arr(n,INF);
+    arr[0]=0;
+    for(int i=0;i<=n;i++){
+        for(auto j:edges){
+            int x=j.ff,y=j.ss.ff,k=j.ss.ss;
+            arr[y]=min(arr[y],arr[x]+k);
+        }
+    }
+    for(int i=0;i<=n;i++){
+        for(auto j:edges){
+            int x=j.ff,y=j.ss.ff,k=j.ss.ss;
+            if(arr[y]>arr[x]+k && vis[y]==3){
+                cout<<-1<<endl;
+                return;
+            }
+            arr[y]=min(arr[y],arr[x]+k);
+        }
+    }
+
+    cout<<-arr[n-1]<<endl;
 }
 
 int32_t main(void){
