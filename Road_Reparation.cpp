@@ -72,18 +72,38 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
-vector<str> alphabet={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+int n,m,k,t,q,a,b,x,y,w,ans,fa[N];
+vi v;
+viii edges;
 
-
-inline vector<str> generateString(const vector<str>& alphabet,const int& base,const int& mod){
-    unordered_map<int,str> mp;
-    
+inline int dsu(int x){
+    return fa[x]=(fa[x]==x?x:dsu(fa[x]));
 }
 
+inline void solve(void){
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        cin>>x>>y>>k;
+        edges.pb({k,{x-1,y-1}});
+    }
+    for(int i=0;i<n;i++)fa[i]=i;
 
+    sort(all(edges));
+    int cnt=0;
+    for(auto i:edges){
+        int d=i.ff,x=i.ss.ff,y=i.ss.ss;
+        if(dsu(x)==dsu(y))continue;
+        ans+=d;
+        cnt++;
+        fa[dsu(x)]=dsu(y);
+    }
+    if(cnt<n-1)cout<<"IMPOSSIBLE"<<endl;
+    else cout<<ans<<endl;
+}
 
 int32_t main(void){
     fastio;
-    
+    t=1;
+    //cin>>t;
+    while(t--)solve();
 }

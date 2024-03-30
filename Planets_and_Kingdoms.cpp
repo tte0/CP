@@ -72,18 +72,55 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
-vector<str> alphabet={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+int n,m,k,t,q,a,b,x,y,w,ans,vis[N];
+vvi comp;
+vi adj[N],radj[N],nodeList,bt;
 
-
-inline vector<str> generateString(const vector<str>& alphabet,const int& base,const int& mod){
-    unordered_map<int,str> mp;
-    
+inline void dfs(int node){
+    if(vis[node]++)return;
+    for(auto i:adj[node])dfs(i);
+    nodeList.pb(node);
 }
 
+inline void dfs2(int node){
+    if(vis[node]++)return;
+    bt.pb(node);
+    for(int i:radj[node])dfs2(i);
+}
 
+inline void solve(void){
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        cin>>x>>y;
+        x--;y--;
+        adj[x].pb(y);
+        radj[y].pb(x);
+    }
+
+    for(int i=0;i<n;i++){
+        if(vis[i])continue;
+        dfs(i);
+    }
+    mset(vis,0);
+    reverse(all(nodeList));
+    for(auto i:nodeList){
+        if(vis[i])continue;
+        dfs2(i);
+        comp.pb(bt);
+        bt.clear();
+    }
+
+    vi ans(n);
+    for(int i=0;i<comp.size();i++){
+        for(int j:comp[i])ans[j]=i+1;
+    }
+    cout<<comp.size()<<endl;
+    for(auto i:ans)cout<<i<<spc;
+}
 
 int32_t main(void){
     fastio;
-    
+    t=1;
+    //cin>>t;
+    while(t--)solve();
 }

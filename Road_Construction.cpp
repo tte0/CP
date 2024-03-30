@@ -23,15 +23,20 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
+#define int int_fast64_t
 #define ff first
 #define ss second
 #define endl '\n'
 #define spc ' '
 #define pb push_back
+#define N (200005)
+#define MOD (int(1e9)+7)
+#define MOD2 (998244353)
+#define MODL (int(1e9)+21)
+#define INF (int(4e18))
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x/gcd(x,y))*y)
+#define lcm(x,y) ((x*y)/gcd(x,y))
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
@@ -39,14 +44,12 @@ SOFTWARE.
 #define yes cout<<"YES"<<endl
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
-#define popcnt(x) __builtin_popcountll(x)
+#define sort(x) sort(all(x));
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
-#define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
-#define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 using namespace std;
-typedef int_fast64_t ll;
+typedef long long ll;
 typedef long double ldouble;
 typedef string str;
 typedef pair<int,int> ii;
@@ -55,7 +58,6 @@ typedef vector<int> vi;
 typedef vector<ii> vii;
 typedef vector<iii> viii;
 typedef vector<vi> vvi;
-typedef vector<vvi> vvvi;
 typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
@@ -66,24 +68,30 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
-const int MOD=1000000007;
-const ll  INF=4e18;
-const double PI=4*atan(1);
-inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
-///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
-vector<str> alphabet={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+/////////////////////////////////////////////////////////////
+int n,m,k,t,q,x,y,w,ans,fa[N],sz[N];
+vi v;
+viii edges;
 
-
-inline vector<str> generateString(const vector<str>& alphabet,const int& base,const int& mod){
-    unordered_map<int,str> mp;
-    
+inline int dsu(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=dsu(fa[x]);
 }
 
-
-
 int32_t main(void){
-    fastio;
-    
+    cin>>n>>m;
+    int max_size=1,cnt=n;
+    for(int i=1;i<=n;i++){fa[i]=i;sz[i]=1;}
+    while(m--){
+        cin>>y>>x;
+        if(dsu(x)==dsu(y)){
+            cout<<cnt<<" "<<max_size<<endl;
+            continue;
+        }
+        sz[dsu(x)]+=sz[dsu(y)];
+        fa[dsu(y)]=dsu(x);
+        cnt--;
+        max_size=max(max_size,sz[dsu(x)]);
+        cout<<cnt<<" "<<max_size<<endl;
+    }
 }

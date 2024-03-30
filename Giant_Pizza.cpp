@@ -72,18 +72,21 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
-vector<str> alphabet={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+int n,m,k,t,q,a,b,x,y,w,ans;
+vi v,adj[N];
+str s,q;
 
-
-inline vector<str> generateString(const vector<str>& alphabet,const int& base,const int& mod){
-    unordered_map<int,str> mp;
-    
+inline void solve(void){
+    cin>>m>>n;
+    for(int i=0;i<m;i++){
+        cin>>s>>x>>q>>y;
+        
+    }
 }
-
-
 
 int32_t main(void){
     fastio;
-    
+    t=1;
+    //cin>>t;
+    while(t--)solve();
 }
