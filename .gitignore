@@ -45,3 +45,7 @@ out.put
 deneme.cpp
 a.cpp
 temp.cpp
+in.put
+out.put
+*.in
+*.out
