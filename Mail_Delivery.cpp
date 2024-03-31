@@ -66,64 +66,52 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=100005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,a,b,x,y,w,ans,vis[N],comp[N];
-vi v,adj[N],radj[N],nodeList,bt;
-str s,q;
+int n,m,k,t,q,a,b,x,y,w,ans,deg[N];
+vi v,adj[N];
+unordered_map<int,int> mp;
 
-inline void dfs(int node){
-    if(vis[node]++)return;
-    for(int i:adj[node])dfs(i);
-    nodeList.pb(node);
-}
-
-inline void dfs2(int node){
-    if(vis[node]++)return;
-    for(int i:radj[node])dfs2(i);
-    bt.pb(node);
+inline int f(const ii& a){
+    return a.ff+N*a.ss;
 }
 
 inline void solve(void){
-    cin>>m>>n;
-    n=2*n+1;
+    cin>>n>>m;
     for(int i=0;i<m;i++){
-        cin>>s>>x>>q>>y;
-        if(s=="-")x=n-x;
-        if(q=="-")y=n-y;
-        adj[n-x].pb(y);
-        radj[y].pb(n-x); // Insert edge in reverse in radj
-        adj[n-y].pb(x);
-        radj[x].pb(n-y); // Insert edge in reverse in radj
-        
+        cin>>x>>y;
+        adj[x].pb(y);
+        adj[y].pb(x);
+        mp[f({x,y})]++;
+        mp[f({y,x})]++;
     }
 
-    for(int i=1;i<n;i++)if(!vis[i])dfs(i);
-    reverse(all(nodeList));
-    mset(vis,0);
+    bool ok=true;
+    for(int i=1;i<=n;i++)ok&=(adj[i].size()%2==0);
+    if(!ok)return void(cout<<"IMPOSSIBLE"<<endl);
 
-    int cnt=1;
-    for(int node:nodeList){
-        if(vis[node])continue;
-        dfs2(node);
-        for(int i:bt)comp[i]=cnt;
-        bt.clear();
-        cnt++;
+    stack<int> st;
+    st.push(1);
+    while(st.size()){
+        int node=st.top();
+        while(adj[node].size() && mp[f({node,adj[node].back()})]==0)adj[node].pop_back();
+
+        if(adj[node].empty()){
+            v.pb(node);
+            st.pop();
+        }
+        else{
+            st.push(adj[node].back());
+            mp[f({node,adj[node].back()})]--;
+            mp[f({adj[node].back(),node})]--;
+        }
     }
-
-
-
-    vi ans(n/2+1,0);
-    for(int i=1;i<n;i++){
-        if(comp[i]==comp[n-i])return void(cout<<"IMPOSSIBLE"<<endl);
-        ans[comp[i]]=(comp[i]>comp[n-i]);
-    }
-
-    for(int i=1;i<=n/2;i++)cout<<(ans[i]?"- ":"+ ");
+    if(v.size()-1!=m)return void(cout<<"IMPOSSIBLE"<<endl);
+    for(auto i:v)cout<<i<<spc;
 }
 
 int32_t main(void){

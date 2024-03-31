@@ -48,7 +48,6 @@ SOFTWARE.
 using namespace std;
 typedef int_fast64_t ll;
 typedef long double ldouble;
-typedef string str;
 typedef pair<int,int> ii;
 typedef pair<int,ii> iii;
 typedef vector<int> vi;
@@ -59,75 +58,58 @@ typedef vector<vvi> vvvi;
 typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
-typedef map<str,int> msi;
 typedef set<int> sti;
 typedef set<char> stc;
-typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
-typedef multiset<str> msts;
-const int N=200005;
+const int N=500005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,a,b,x,y,w,ans,vis[N],comp[N];
-vi v,adj[N],radj[N],nodeList,bt;
-str s,q;
+int n,m,k,t,q,a,b,x,y,w,ans,st[4*N],stl[4*N],str[4*N];
+vi v;
+string s;
 
-inline void dfs(int node){
-    if(vis[node]++)return;
-    for(int i:adj[node])dfs(i);
-    nodeList.pb(node);
+#define mid ((l+r)/2)
+
+inline void updateNode(const int& l,const int& r,const int& node){
+    st[node]=max({st[2*node],st[2*node+1],str[2*node]+stl[2*node+1]});
+    stl[node]=stl[2*node+1];
+    str[node]=str[2*node];
+    if(stl[node]==r-mid)stl[node]+=stl[2*node];
+    if(str[node]==mid-l+1)str[node]+=str[2*node+1];
 }
 
-inline void dfs2(int node){
-    if(vis[node]++)return;
-    for(int i:radj[node])dfs2(i);
-    bt.pb(node);
+inline void build(int l,int r,int node){
+    if(l==r)return void(st[node]=stl[node]=str[node]=1);
+    build(l,mid,2*node);
+    build(mid+1,r,2*node+1);
+    st[node]=stl[node]=str[node]=r-l+1;
+}
+
+inline int update(int l,int r,int node,int x){
+    if(st[node]<x)return 1;
 }
 
 inline void solve(void){
-    cin>>m>>n;
-    n=2*n+1;
-    for(int i=0;i<m;i++){
-        cin>>s>>x>>q>>y;
-        if(s=="-")x=n-x;
-        if(q=="-")y=n-y;
-        adj[n-x].pb(y);
-        radj[y].pb(n-x); // Insert edge in reverse in radj
-        adj[n-y].pb(x);
-        radj[x].pb(n-y); // Insert edge in reverse in radj
-        
+    cin>>n>>m;
+    build(1,n,1);
+
+    while(m--){
+        cin>>s;
+        if(s=="A"){
+            cin>>x;
+            if(st[1]<x)ans++;
+            else update(1,n,1,x);
+        }
     }
-
-    for(int i=1;i<n;i++)if(!vis[i])dfs(i);
-    reverse(all(nodeList));
-    mset(vis,0);
-
-    int cnt=1;
-    for(int node:nodeList){
-        if(vis[node])continue;
-        dfs2(node);
-        for(int i:bt)comp[i]=cnt;
-        bt.clear();
-        cnt++;
-    }
-
-
-
-    vi ans(n/2+1,0);
-    for(int i=1;i<n;i++){
-        if(comp[i]==comp[n-i])return void(cout<<"IMPOSSIBLE"<<endl);
-        ans[comp[i]]=(comp[i]>comp[n-i]);
-    }
-
-    for(int i=1;i<=n/2;i++)cout<<(ans[i]?"- ":"+ ");
 }
 
 int32_t main(void){
     fastio;
+    //usacoio("seating");
     t=1;
     //cin>>t;
     while(t--)solve();
