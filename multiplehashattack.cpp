@@ -72,18 +72,79 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,ans;
+int n,m,k,t,q,a,b,x,y,z,ans;
 vector<str> alphabet={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
 
 
-inline vector<str> generateString(const vector<str>& alphabet,const int& base,const int& mod){
+inline int hashString(const str& s,const int& base,const int& mod){
+    int ans=0,k=1,n=s.size();
+    for(int i=0;i<n;i++){
+        ans=(ans+(s[i]-'a')*k)%mod;
+        k=(k*base)%mod;
+    }
+    return ans;
+}
+
+inline void generateString(const vector<str>& alphabet,str& s,const int length){
+    for(int i=0;i<length;i++)s.append(alphabet[rand()%alphabet.size()]);
+}
+
+inline void shorten(str& s,str& q){
+    while(q.back() == s.back()){
+        s.pop_back();
+        q.pop_back();
+    }
+    reverse(all(s));
+    reverse(all(q));
+    while(s.back() == q.back()){
+        s.pop_back();
+        q.pop_back();
+    }
+    reverse(all(s));
+    reverse(all(q));
+}
+
+inline vector<str> generateAlphabet(const vector<str>& alphabet,const int& base,const int& mod,const int& limit=INF){
     unordered_map<int,str> mp;
+    int n=(alphabet.size()>2?7:20),hash;
+    str s,q; 
+    while(true){
+        s="";
+        generateString(alphabet,s,n);
+        hash=hashString(s,base,mod);
+
+        //cerr<<s<<spc<<hash<<endl;
+
+        if(mp[hash]!="" && mp[hash]!=s){
+            q=mp[hash];
+            break;
+        }
+        if(mp.size()<limit)mp[hash]=s;
+    }
+
+    shorten(s,q);
     
+    return {s,q};
 }
 
 
 
 int32_t main(void){
-    fastio;
-    
+    srand(time(NULL));
+    cout<<"How many hash: ";
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cout<<"base: ";cin>>x;
+        cout<<"mod : ";cin>>y;
+        if(i>2)alphabet=generateAlphabet(alphabet,x,y,45000);
+        else alphabet=generateAlphabet(alphabet,x,y);
+    }
+
+    freopen("normal.txt","w",stdout);
+    for(auto& i:alphabet)cout<<i<<endl;
+
+    for(auto& i:alphabet)reverse(all(i));
+
+    freopen("reverse.txt","w",stdout);
+    for(auto& i:alphabet)cout<<i<<endl;
 }
