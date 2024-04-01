@@ -35,6 +35,10 @@
 .vscode/
 *
 !*.cpp
+!.gitignore
+!LICENSE
+!README.md
+
 leetcode.cpp
 doublehashattack.cpp
 tempCodeRunnerFile.cpp
