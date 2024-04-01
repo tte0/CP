@@ -33,19 +33,11 @@
 
 .cph/
 .vscode/
-*.exe
-*.txt
+*
+!*.cpp
 leetcode.cpp
 doublehashattack.cpp
 tempCodeRunnerFile.cpp
-in.put
-out.put
-*.in
-*.out
 deneme.cpp
 a.cpp
 temp.cpp
-in.put
-out.put
-*.in
-*.out
