@@ -45,6 +45,7 @@ SOFTWARE.
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
+#define wait while(clock()-start<=0.585*CLOCKS_PER_SEC);
 using namespace std;
 typedef int_fast64_t ll;
 typedef long double ldouble;
@@ -73,7 +74,7 @@ const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v;
+vi v,adj[N];
 
 inline void solve(void){
     cin>>n;
