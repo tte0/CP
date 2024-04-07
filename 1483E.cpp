@@ -75,22 +75,33 @@ inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
+str in;
 
 inline void solve(void){
-    cin>>n;
-    for(int i=0;i<n;i++)adj[i].clear();
-    for(int i=0;i<n-1;i++){
-        cin>>x>>y;
-        x--,y--;
-        adj[x].pb(y);
-        adj[y].pb(x);
+    int lbnd=0,ubnd=1e14;
+    int n=1;
+    while(true){
+        int x;
+        if(n<=2)x=n;
+        else x=n-1;
+        cout<<"? "<<x<<endl;cout.flush();
+        cin>>in;
+        if(in=="Fired!" || in=="Q")exit(0);
+        if(in[0]=='L'){
+            lbnd=x;
+            n+=x;
+        }
+        if(in[0]=='F'){
+            ubnd=x-1;
+            n-=x;
+            break;
+        }
+        
     }
-    
 }
 
 int32_t main(void){
-    fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
