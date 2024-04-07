@@ -38,7 +38,6 @@ SOFTWARE.
 #define no cout<<"NO"<<endl
 #define yes cout<<"YES"<<endl
 #define cendl cout<<endl
-#define cflush cout.flush()
 #define mset(x,y) memset(x,y,sizeof(x))
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
@@ -76,69 +75,15 @@ inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
-str in;
-char s[101];
 
 inline void solve(void){
-    int lbnd=0,ubnd=1e14;
-    int n=1;
-    while(true){
-        int x;
-        x=n;
-        printf("? %ld\n",x);fflush(stdout);
-        scanf("%100s",&s);
-        in=s;
-        if(in=="Fired!" || in=="q")exit(0);
-        if(in=="Lucky!" || in=="l"){
-            lbnd=x;
-            n+=x;
-        }
-        if(in=="Fraudster!" || in=="f"){
-            ubnd=x-1;
-            n-=x;
-            break;
-        }
-        
-    }
-    if(lbnd==ubnd){
-        cout<<"! "<<lbnd<<endl;
-        return;
-    }
-    double searchValue=0.5;// (0,1)
-    while(lbnd<ubnd){
-        int m=min(ubnd,lbnd+max(int(1),int(searchValue*(ubnd-lbnd+1))));
-        while(n<m){
-            int x=lbnd;
-            printf("? %ld\n",x);fflush(stdout);
-            scanf("%100s",&s);
-            in=s;
-            if(in=="Fired!" || in=="q")exit(0);
-            if(in=="Lucky!" || in=="l")n+=x;
-            if(in=="Fraudster!" || in=="f"){
-                cerr<<"(patladi: x=lbnd)"<<endl;
-                exit(0);
-            }
-        }
-
-        int x=m;
-        printf("? %ld\n",x);fflush(stdout);
-        scanf("%100s",&s);
-        in=s;
-        if(in=="Fired!" || in=="q")exit(0);
-        if(in=="Lucky!" || in=="l"){
-            lbnd=m;
-            n+=m;
-        }
-        if(in=="Fraudster!" || in=="f"){
-            ubnd=m-1;
-            n-=m;
-        }
-    }
-    printf("! %ld\n",lbnd);fflush(stdout);
-    return;
+    cin>>n>>k;
+    if(k==4*n-2)cout<<2*n<<endl;
+    else cout<<(k+1)/2<<endl;
 }
 
 int32_t main(void){
+    fastio;
     t=1;
     cin>>t;
     while(t--)solve();

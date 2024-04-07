@@ -38,7 +38,6 @@ SOFTWARE.
 #define no cout<<"NO"<<endl
 #define yes cout<<"YES"<<endl
 #define cendl cout<<endl
-#define cflush cout.flush()
 #define mset(x,y) memset(x,y,sizeof(x))
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
@@ -68,78 +67,46 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=300005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,sz[N],root;
 vi v,adj[N];
-str in;
-char s[101];
+
+inline int dfs(int node=root,int p=-1){
+    sz[node] = 1;
+    for(int child : adj[node]){
+        if(child != p){
+            sz[node] += dfs(child, node);
+        }
+    }
+    return sz[node];
+}
+
+inline int f(int node=root,int p=-1,int b=0){
+    
+}
 
 inline void solve(void){
-    int lbnd=0,ubnd=1e14;
-    int n=1;
-    while(true){
-        int x;
-        x=n;
-        printf("? %ld\n",x);fflush(stdout);
-        scanf("%100s",&s);
-        in=s;
-        if(in=="Fired!" || in=="q")exit(0);
-        if(in=="Lucky!" || in=="l"){
-            lbnd=x;
-            n+=x;
-        }
-        if(in=="Fraudster!" || in=="f"){
-            ubnd=x-1;
-            n-=x;
-            break;
-        }
-        
+    cin>>n;
+    for(int i=0;i<n;i++)adj[i].clear();
+    for(int i=0;i<n-1;i++){
+        cin>>x>>y;
+        x--,y--;
+        adj[x].pb(y);
+        adj[y].pb(x);
     }
-    if(lbnd==ubnd){
-        cout<<"! "<<lbnd<<endl;
-        return;
-    }
-    double searchValue=0.5;// (0,1)
-    while(lbnd<ubnd){
-        int m=min(ubnd,lbnd+max(int(1),int(searchValue*(ubnd-lbnd+1))));
-        while(n<m){
-            int x=lbnd;
-            printf("? %ld\n",x);fflush(stdout);
-            scanf("%100s",&s);
-            in=s;
-            if(in=="Fired!" || in=="q")exit(0);
-            if(in=="Lucky!" || in=="l")n+=x;
-            if(in=="Fraudster!" || in=="f"){
-                cerr<<"(patladi: x=lbnd)"<<endl;
-                exit(0);
-            }
-        }
-
-        int x=m;
-        printf("? %ld\n",x);fflush(stdout);
-        scanf("%100s",&s);
-        in=s;
-        if(in=="Fired!" || in=="q")exit(0);
-        if(in=="Lucky!" || in=="l"){
-            lbnd=m;
-            n+=m;
-        }
-        if(in=="Fraudster!" || in=="f"){
-            ubnd=m-1;
-            n-=m;
-        }
-    }
-    printf("! %ld\n",lbnd);fflush(stdout);
-    return;
+    for(int i=n-1;i>=0;i--)if(adj[i].size()==1)root=i;
+    dfs();
+    f();
 }
 
 int32_t main(void){
+    fastio;
     t=1;
-    cin>>t;
+    //cin>>t;
     while(t--)solve();
 }
