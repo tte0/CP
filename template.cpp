@@ -43,7 +43,7 @@ SOFTWARE.
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
-#define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
+#define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define wait while(clock()-start<=0.585*CLOCKS_PER_SEC);
 using namespace std;
