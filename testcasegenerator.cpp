@@ -52,13 +52,12 @@ int n,m,a,b,k,l,x,y,w,t;
 
 int32_t main(void){
     srand(time(NULL));
-    fileio;
-    m=n=300000;
-    cout<<n<<" "<<m<<endl;
+    freopen("Kayalar9.txt","w",stdout);
+
+    n=500000;
+    a=1,b=1000000000;
+    cout<<n<<spc<<a<<spc<<b<<endl;
     for(int i=0;i<n;i++){
-        cout<<"277200 1\n";
-    }
-    for(int i=0;i<m;i++){
-        cout<<"1 300000 1 1"<<endl;
+        cout<<((rand()%2)?"S ":"S ")<<(rand()%(b-a+1)+a)<<endl;
     }
 }

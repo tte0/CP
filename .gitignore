@@ -38,7 +38,6 @@
 !.gitignore
 !LICENSE
 !README.md
-!tst2023/*.txt
 
 leetcode.cpp
 doublehashattack.cpp
