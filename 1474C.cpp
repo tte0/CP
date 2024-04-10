@@ -45,7 +45,7 @@ SOFTWARE.
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
-#define wait while(clock()-start<=0.585*CLOCKS_PER_SEC);
+#define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
 using namespace std;
 typedef int_fast64_t ll;
 typedef long double ldouble;
@@ -78,11 +78,51 @@ vi v,adj[N];
 
 inline void solve(void){
     cin>>n;
+    vi v;
+    n<<=1;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    sort(all(v));
+
+    for(int i=0;i<n;i++){
+        //cerr<<"i: "<<i<<endl;
+        unordered_map<int,int> mp;
+        for(int i=0;i<n;i++)mp[v[i]]++;
+        //for(const ii& i:mp)cerr<<"mp: "<<i.ff<<","<<i.ss<<endl;
+        vii bt;
+
+        int flag=0,mx=n-1;
+        int x=v[i]+v[mx];
+        for(int i=0;i<n/2;i++){
+            //cerr<<"iteration "<<i<<endl;
+            while(mp[v[mx]]==0)mx--;
+            mp[v[mx]]--;
+            if(mp[x-v[mx]]){
+                bt.pb({v[mx],x-v[mx]});
+                mp[x-v[mx]]--;
+                x=v[mx];
+            }
+            else{
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0){
+            yes;
+            cout<<v[i]+v[n-1]<<endl;
+            for(const ii& i:bt)cout<<i.ff<<" "<<i.ss<<endl;
+            return;
+        }
+    }
+    no;
+
 }
 
 int32_t main(void){
     fastio;
     t=1;
-    //cin>>t;
-    while(t--)solve();
+    cin>>t;
+    while(t--){solve();}
 }

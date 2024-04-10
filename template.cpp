@@ -85,5 +85,4 @@ int32_t main(void){
     t=1;
     //cin>>t;
     while(t--)solve();
-    Ey_Turk_gencliqi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir;
 }
