@@ -42,7 +42,6 @@ SOFTWARE.
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
@@ -74,11 +73,23 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,a,b,x,y,w,ans;
 vi v,adj[N];
+str s,q;
 
 inline void solve(void){
-    cin>>n;
+    cin>>n>>k>>s;
+    for(int i=0;i<n/2;i++){
+        q.pb(s.back());
+        s.pop_back();
+    }
+    if(s.size()!=q.size())s.pop_back();
+    n>>=1;
+
+    int t=(k>n/2?1:-1);
+    while(true){
+        
+    }
 }
 
 int32_t main(void){

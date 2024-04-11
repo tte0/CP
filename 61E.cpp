@@ -68,17 +68,67 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=1000005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,st[2*N],st2[2*N];
+vi v,comp,adj[N];
+
+inline int query2(int l,int r){
+    int ans=0;
+    for(l+=n,r+=n;l<r;l>>=1,r>>=1){
+        if(l&1)ans+=st2[l++];
+        if(r&1)ans+=st2[--r];
+    }
+    return ans;
+}
+
+inline void update2(int p,int val){
+    for(st2[p+=n]+=val;p>1;p>>=1)st2[p>>1]=st2[p]+st2[p^1];
+}
+
+inline int query(int l,int r){
+    int ans=0;
+    for(l+=n,r+=n;l<r;l>>=1,r>>=1){
+        if(l&1)ans+=st[l++];
+        if(r&1)ans+=st[--r];
+    }
+    return ans;
+}
+
+inline void update(int p,int val){
+    for(st[p+=n]+=val;p>1;p>>=1)st[p>>1]=st[p]+st[p^1];
+}
 
 inline void solve(void){
     cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+        comp.pb(x);
+    }
+    compress(comp);
+    for(int i=0;i<n;i++){
+        v[i]=(upper_bound(all(comp),v[i])-comp.begin());
+    }
+    //cerr<<"v: ";for(const int& i:v)cerr<<i<<" ";cerr<<endl;
+
+    reverse(all(v));
+
+    for(int i=0;i<n;i++){
+        int x=v[i];
+        ans+=query2(1,x);
+        update2(x,query(1,x));
+        update(x,1);
+
+        //cerr<<"st: ";for(int i=1;i<=2*n;i++)cerr<<st[i]<<" ";cerr<<endl;
+        //cerr<<"st2: ";for(int i=1;i<=2*n;i++)cerr<<st2[i]<<" ";cerr<<endl;
+    }
+
+    cout<<ans<<endl;
 }
 
 int32_t main(void){

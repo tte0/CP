@@ -42,7 +42,6 @@ SOFTWARE.
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
@@ -75,10 +74,28 @@ const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+vi v={0},adj[N];
 
 inline void solve(void){
     cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    for(int i=2;i<=n;i++)v[i]+=v[i-1];
+
+    unordered_map<int,int> mp;
+    mp[0]++;
+    for(int l=0,r=1;r<=n;r++){
+        while(mp[v[r]]){
+            mp[v[l]]--;
+            l++;
+        }
+        ans+=r-l;
+        mp[v[r]]++;
+    }
+
+    cout<<ans<<endl;
 }
 
 int32_t main(void){

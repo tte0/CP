@@ -42,7 +42,6 @@ SOFTWARE.
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
@@ -78,7 +77,13 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    cin>>n;
+    cin>>a>>b;
+    if(a>b)return void(cout<<-1);
+    if(b==0)return void(cout<<0);
+    if(a==b)return void(cout<<"1\n"<<a);
+    if((b-a)%2)return void(cout<<-1);
+    if((a&((b-a)/2))==0)return void(cout<<"2\n"<<(a|((b-a)/2))<<" "<<(b-a)/2);
+    return void(cout<<"3\n"<<a<<" "<<(b-a)/2<<" "<<(b-a)/2);
 }
 
 int32_t main(void){

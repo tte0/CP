@@ -42,7 +42,6 @@ SOFTWARE.
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
@@ -79,11 +78,29 @@ vi v,adj[N];
 
 inline void solve(void){
     cin>>n;
+    vi v;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    sort(all(v));
+    vvi dp(n+5,vi(2*n+5,INF));
+
+    dp[0][1]=0;
+
+    for(int t=1;t<2*n;t++){
+        for(int i=0;i<=n;i++){
+            dp[i][t+1]=min(dp[i][t+1],dp[i][t]);
+            if(i<n)dp[i+1][t+1]=min(dp[i+1][t+1],dp[i][t]+abs(t-v[i]));
+        }
+    }
+
+    cout<<dp[n][2*n]<<endl;
 }
 
 int32_t main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

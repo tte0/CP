@@ -42,7 +42,6 @@ SOFTWARE.
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
@@ -68,17 +67,61 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=205;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,dp[N][N][N];
+vi v1,v2,v3;
 
 inline void solve(void){
-    cin>>n;
+    mset(dp,-1);
+    cin>>n>>m>>q;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v1.pb(x);
+    }
+    for(int i=0;i<m;i++){
+        cin>>x;
+        v2.pb(x);
+    }
+    for(int i=0;i<q;i++){
+        cin>>x;
+        v3.pb(x);
+    }
+    
+    sort(all(v1));
+    sort(all(v2));
+    sort(all(v3));
+
+    dp[0][0][0]=0;
+
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=m;j++){
+            for(int k=0;k<=q;k++){
+                if(i<n)dp[i+1][j][k]=max(dp[i+1][j][k],dp[i][j][k]);
+                if(j<m)dp[i][j+1][k]=max(dp[i][j+1][k],dp[i][j][k]);
+                if(k<q)dp[i][j][k+1]=max(dp[i][j][k+1],dp[i][j][k]);
+                if(i<n && j<m)dp[i+1][j+1][k]=max(dp[i+1][j+1][k],dp[i][j][k]+v1[i]*v2[j]);
+                if(i<n && k<q)dp[i+1][j][k+1]=max(dp[i+1][j][k+1],dp[i][j][k]+v1[i]*v3[k]);
+                if(j<m && k<q)dp[i][j+1][k+1]=max(dp[i][j+1][k+1],dp[i][j][k]+v2[j]*v3[k]);
+            }
+        }
+    }
+    cout<<dp[n][m][q]<<endl;
+
+    /*for(int i=0;i<=n;i++){
+        for(int j=0;j<=m;j++){
+            cerr<<"dp: ";
+            for(int k=0;k<=q;k++){
+                cerr<<dp[i][j][k]<<spc;
+            }
+            cerr<<endl;
+        }
+        cerr<<endl;
+    }*/
 }
 
 int32_t main(void){
