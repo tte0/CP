@@ -35,8 +35,8 @@ SOFTWARE.
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
-#define no cout<<"no"<<endl
-#define yes cout<<"yes"<<endl
+#define no cout<<"NO"<<endl
+#define yes cout<<"YES"<<endl
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
 #define popcnt(x) __builtin_popcountll(x)
@@ -68,29 +68,66 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=3005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,st[2*N];
 vi v,adj[N];
 
+inline int query(int l,int r){
+    int ans=0;
+    for(l+=n,r+=n;l<r;l>>=1,r>>=1){
+        if(l&1)ans+=st[l++];
+        if(r&1)ans+=st[--r];
+    }
+    return ans;
+}
+
+inline void update(int p,int val){
+    for(st[p+=n]+=val;p>1;p>>=1)st[p>>1]=st[p]+st[p^1];
+}
+
 inline void solve(void){
-    cin>>n>>k;
+    mset(st,0);
+    cin>>n;
     vi v;
     for(int i=0;i<n;i++){
         cin>>x;
-        v.pb((x==k?1:(x<k?0:2)));
+        v.pb(x);
     }
-    if(v.size()==1)return void(cout<<(v[0]==1?"yes":"no")<<endl);
+    vi q[n];
+    for(int i=0;i<n-1;i++){
+        for(int j=i+2;j<n;j++){
+            if(v[i]==v[j]){
+                q[i].pb(j);
+            }
+        }
+    }
 
-    bool ok=0;
-    for(int i=0;i<n-1;i++)ok|=(min(v[i],v[i+1])==1);
-    for(int i=0;i<n-2;i++)ok|=(v[i]==1 && v[i+1]==0 && v[i+2]==2);
+    /*for(int i=0;i<n;i++){
+        cerr<<"q: ";
+        for(const int& j:q[i])cerr<<j<<" ";
+        cerr<<endl;
+    }
+    cerr<<endl;*/
+    int ans=0;
+    for(int i=0;i<n;i++){
+        vi t=q[i];
+        for(const int& j:t){
+            ans+=query(i+1,j-1);
+        }
+        for(const int& j:t){
+            update(j,1);
+        }
 
-    cout<<(ok?"yes":"no")<<endl;
+        //cerr<<"st: ";for(int i=1;i<2*n;i++)cerr<<st[i]<<" ";cerr<<endl;
+        //cerr<<"ans: "<<ans<<endl;
+    }
+
+    cout<<ans<<endl;
 }
 
 int32_t main(void){

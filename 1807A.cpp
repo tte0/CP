@@ -35,8 +35,8 @@ SOFTWARE.
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
-#define no cout<<"no"<<endl
-#define yes cout<<"yes"<<endl
+#define no cout<<"NO"<<endl
+#define yes cout<<"YES"<<endl
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
 #define popcnt(x) __builtin_popcountll(x)
@@ -78,19 +78,8 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    cin>>n>>k;
-    vi v;
-    for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb((x==k?1:(x<k?0:2)));
-    }
-    if(v.size()==1)return void(cout<<(v[0]==1?"yes":"no")<<endl);
-
-    bool ok=0;
-    for(int i=0;i<n-1;i++)ok|=(min(v[i],v[i+1])==1);
-    for(int i=0;i<n-2;i++)ok|=(v[i]==1 && v[i+1]==0 && v[i+2]==2);
-
-    cout<<(ok?"yes":"no")<<endl;
+    cin>>n>>m>>k;
+    cout<<(n+m==k?"+":"-")<<endl;
 }
 
 int32_t main(void){

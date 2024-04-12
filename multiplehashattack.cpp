@@ -71,7 +71,7 @@ const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
-///////////////////////////////////////////////////////////////////
+////////////////n///////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,z,ans;
 vector<str> alphabet={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
 
@@ -104,7 +104,7 @@ inline void shorten(str& s,str& q){
     reverse(all(q));
 }
 
-inline vector<str> generateAlphabet(const vector<str>& alphabet,const int& base,const int& mod,const int& limit=INF){
+inline vector<str> generateAlphabet(const vector<str>& alphabet,const int& base,const int& mod,const int& limit=1.4e10){
     unordered_map<int,str> mp;
     int n=(alphabet.size()>2?7:20),hash;
     str s,q; 
@@ -119,7 +119,7 @@ inline vector<str> generateAlphabet(const vector<str>& alphabet,const int& base,
             q=mp[hash];
             break;
         }
-        if(mp.size()<limit)mp[hash]=s;
+        if(s.size()*mp.size()<limit)mp[hash]=s;
     }
 
     shorten(s,q);
@@ -136,7 +136,7 @@ int32_t main(void){
     for(int i=0;i<n;i++){
         cout<<"base: ";cin>>x;
         cout<<"mod : ";cin>>y;
-        if(i>2)alphabet=generateAlphabet(alphabet,x,y,45000);
+        if(i>2)alphabet=generateAlphabet(alphabet,x,y);
         else alphabet=generateAlphabet(alphabet,x,y);
     }
 

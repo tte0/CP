@@ -35,8 +35,8 @@ SOFTWARE.
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
 #define ssum(x) ((x)*((x)+1)/2)
 #define isint(x) (ceil((x))==floor((x)))
-#define no cout<<"no"<<endl
-#define yes cout<<"yes"<<endl
+#define no cout<<"NO"<<endl
+#define yes cout<<"YES"<<endl
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
 #define popcnt(x) __builtin_popcountll(x)
@@ -79,23 +79,68 @@ vi v,adj[N];
 
 inline void solve(void){
     cin>>n>>k;
-    vi v;
+    vi v,v1,v2;
     for(int i=0;i<n;i++){
         cin>>x;
-        v.pb((x==k?1:(x<k?0:2)));
+        v.pb(x);
     }
-    if(v.size()==1)return void(cout<<(v[0]==1?"yes":"no")<<endl);
+    for(int i=0;i<n;i++){
+        cin>>x;
+        if(x==1)v1.pb(v[i]);
+        else v2.pb(v[i]);
+    }
+    sort(rall(v1));
+    sort(rall(v2));
 
-    bool ok=0;
-    for(int i=0;i<n-1;i++)ok|=(min(v[i],v[i+1])==1);
-    for(int i=0;i<n-2;i++)ok|=(v[i]==1 && v[i+1]==0 && v[i+2]==2);
 
-    cout<<(ok?"yes":"no")<<endl;
+    n=v1.size(),m=v2.size();
+    /*int p1=0,p2=m-1,cnt=accumulate(all(v2),0),cost=2*v2.size(),ans=INF;
+    while(true){
+        //cerr<<"p1,p2|cnt,cost,ans : "<<p1<<","<<p2<<"|"<<cnt<<","<<cost<<","<<ans<<endl;
+        if(cnt>=k){
+            ans=min(ans,cost);
+            if(p2<0)break;
+            cost-=2;
+            cnt-=v2[p2--];
+        }
+        else{
+            if(p1>=n)break;
+            cost++;
+            cnt+=v1[p1++];
+        }
+    }
+    //if(cnt>=k)ans=min(ans,cnt);
+
+    cout<<ans<<endl;*/
+
+    v1.insert(v1.begin(),0);
+    v2.insert(v2.begin(),0);
+    //cerr<<"v1: ";for(const int i:v1)cerr<<i<<" ";cerr<<endl;
+    //cerr<<"v2: ";for(const int i:v2)cerr<<i<<" ";cerr<<endl;
+
+    for(int i=1;i<=n;i++)v1[i]+=v1[i-1];
+    for(int i=1;i<=m;i++)v2[i]+=v2[i-1];
+    //cerr<<"v1: ";for(const int i:v1)cerr<<i<<" ";cerr<<endl;
+    //cerr<<"v2: ";for(const int i:v2)cerr<<i<<" ";cerr<<endl;
+
+    int ans=INF;
+    for(int i=0;i<=n;i++){
+        int x=v1[i];
+        int y=lower_bound(all(v2),k-x)-v2.begin();
+        if(y<=m)ans=min(ans,i+2*y);
+        
+        //cerr<<"ans: "<<ans<<endl;
+    }
+
+    cout<<(ans==INF?-1:ans)<<endl;
 }
 
 int32_t main(void){
     fastio;
     t=1;
     cin>>t;
-    while(t--)solve();
+    while(t--){
+        solve();
+        //cerr<<"testcase ok"<<endl;
+    }
 }
