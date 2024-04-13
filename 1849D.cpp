@@ -79,6 +79,30 @@ vi v,adj[N];
 
 inline void solve(void){
     cin>>n;
+    vi v,c(n,0);
+    for(int i=0;i<n;i++){
+        cin>>x;
+        v.pb(x);
+    }
+    cerr<<"v: ";for(int i=0;i<n;i++)cerr<<v[i]<<" ";cerr<<endl;
+    if(n==1)return void(cout<<n);
+
+    if(v[0])c[1]=1;
+    if(v[n-1])c[n-2]=1;
+
+    for(int i=1;i<n-1;i++){
+        if(v[i]>0){
+            if(c[i-1]==0)c[i-1]=1;
+            else c[i+1]=1;
+        }
+        if(v[i]>1){
+            c[i+1]=1;
+        }
+    }
+
+    cout<<n-accumulate(all(c),int(0));
+
+    cerr<<"c: ";for(int i=0;i<n;i++)cerr<<c[i]<<" ";cerr<<endl;
 }
 
 int32_t main(void){
