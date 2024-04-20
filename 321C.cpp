@@ -68,37 +68,49 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
+const int N=100005;
 const int MOD=1000000007;
 const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,arr[N][26],ans[N];
 vi v,adj[N];
+
+inline bool dfs(int node=0,int p=-1){
+    for(auto i:adj[node]){
+        if(i==p)continue;
+        if(!dfs(i,node))return false;
+        for(int c=0;c<26;c++)arr[node][c]+=arr[i][c];
+    }
+    int t;
+    for(t=0;t<26;t++){
+        if(arr[node][t]>1)break;
+    }
+    for(t=min(t,int(25));t>=0;t--){
+        if(arr[node][t]==0)break;
+    }    
+
+    if(t==-1)return false;
+    ans[node]=t;
+    arr[node][t]=1;
+    for(t++;t<26;t++)arr[node][t]=0;
+    return true;
+}
 
 inline void solve(void){
     cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb(x);
+    for(int i=0;i<n-1;i++){
+        cin>>x>>y;
+        x--,y--;
+        adj[x].pb(y);
+        adj[y].pb(x);
     }
 
-    vi prefix=v,suffix=v;
-    prefix[0]+=n-1;
-    suffix[n-1]+=n-1;
-    for(int i=1;i<n;i++)prefix[i]=max(prefix[i]+(n-i-1),prefix[i-1]);
-    for(int i=n-2;i>=0;i--)suffix[i]=max(suffix[i]+i,suffix[i+1]);
-
-    int ans=INF;
+    if(!dfs())return void(cout<<"IMPOSSIBLE");
     for(int i=0;i<n;i++){
-        int t=v[i];
-        if(i!=0)t=max(t,prefix[i-1]);
-        if(i!=n-1)t=max(t,suffix[i+1]);
-        //cerr<<t<<endl;
-        ans=min(ans,t);
+        cout<<char(int('A')+ans[i])<<" ";
     }
-    cout<<ans<<endl;
 }
 
 int32_t main(void){

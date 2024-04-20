@@ -76,33 +76,37 @@ inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
+random_device rd;
+mt19937_64 mt(rd());
+
+inline int randrange(int l,int r){
+    return ((int(mt()>>1))%(r-l+1))+l;
+}
 
 inline void solve(void){
-    cin>>n;
-    for(int i=0;i<n;i++){
+    //for(int i=0;i<5;i++)cerr<<randrange(1,5)<<endl;
+
+    int l=4,r=1e18+1;
+    int cnt=0;
+    while(l<r){
+        ldouble searchFactor=0.30;
+        int m=max(l,int((ldouble(l)+ldouble(r))*searchFactor));
+        cout<<"? "<<randrange(1,l-1)<<" "<<m<<endl;
         cin>>x;
-        v.pb(x);
+        //x=-1;
+        if(x==0)exit(0);
+        if(x==-1)r=m;
+        else{
+            l=max(x,m)+1;
+            searchFactor=0.5;
+        }
+        cnt++;
     }
-
-    vi prefix=v,suffix=v;
-    prefix[0]+=n-1;
-    suffix[n-1]+=n-1;
-    for(int i=1;i<n;i++)prefix[i]=max(prefix[i]+(n-i-1),prefix[i-1]);
-    for(int i=n-2;i>=0;i--)suffix[i]=max(suffix[i]+i,suffix[i+1]);
-
-    int ans=INF;
-    for(int i=0;i<n;i++){
-        int t=v[i];
-        if(i!=0)t=max(t,prefix[i-1]);
-        if(i!=n-1)t=max(t,suffix[i+1]);
-        //cerr<<t<<endl;
-        ans=min(ans,t);
-    }
-    cout<<ans<<endl;
+    cout<<"! "<<l-1<<endl;
+    //cerr<<"query: "<<cnt<<endl;
 }
 
 int32_t main(void){
-    fastio;
     t=1;
     //cin>>t;
     while(t--)solve();

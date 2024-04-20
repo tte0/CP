@@ -1,6 +1,5 @@
 #pragma GCC optimize("O3,fast-math")
 #include <bits/stdc++.h>
-#include <windows.h>
 #define int ll
 #define ff first
 #define ss second
@@ -48,9 +47,9 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-ii bestmove[60000];
+unordered_map<vs,int> bestmove;
 
-int btoi(vs& board){
+int btoi(const vs& board){
     int ans=0,p=1;
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
@@ -61,8 +60,7 @@ int btoi(vs& board){
     }
     return ans;
 }
-
-void printboard(vs& board){
+void printboard(const vs& board){
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             if(board[i][j]==0)cout<<".";
@@ -72,8 +70,20 @@ void printboard(vs& board){
         cout<<endl;
     }
 }
+vs itob(int x){
+    vs board(3,"...");
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(x%3==1)board[i][j]='X';
+            if(x%3==2)board[i][j]='O';
+            x/=3;
+        }
+    }
+    return board;
+}
 
-iii minimax(vs board){
+
+iii minimax(vs board,){
     
 }
 

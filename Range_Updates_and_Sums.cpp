@@ -74,31 +74,101 @@ const ll  INF=4e18;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,k,t,q,a,b,x,y,w,ans,st[4*N],lazy[4*N]={false};
+bool lazy2[N];//true -> set | false -> add
+vi v={0},adj[N];
+
+#define m ((l+r)/2)
+
+inline int build(int l=1,int r=n,int node=1){
+    return st[node]=(l==r?v[l]:build(l,m,2*node)+build(m+1,r,node*2+1));
+}
+
+inline void push(int l,int r,int node){
+    if(lazy2[node])st[node]=(r-l+1)*lazy[node];
+    else st[node]+=(r-l+1)*lazy[node];
+    if(l!=r){
+        if(lazy2[node]){
+            lazy[node*2]=lazy[node];
+            lazy[node*2+1]=lazy[node];
+            lazy2[node*2]=lazy2[node*2+1]=lazy2[node];
+        }
+        else{
+            lazy[node*2]+=lazy[node];
+            lazy[node*2+1]+=lazy[node];
+        }
+    }
+    lazy[node]=lazy2[node]=0;
+}
+
+inline int update(int l=1,int r=n,int node=1){
+    push(l,r,node);
+    if(r<x || y<l)return st[node];
+    if(x<=l && r<=y){
+        lazy[node]+=w;
+        push(l,r,node);
+        return st[node];
+    }
+    return st[node]=update(l,m,2*node)+update(m+1,r,2*node+1);
+}
+
+inline int query(int l=1,int r=n,int node=1){
+    //cerr<<"query: "<<l<<spc<<r<<spc<<node<<endl;
+    push(l,r,node);
+    if(r<x || y<l)return 0;
+    if(x<=l && r<=y)return st[node];
+    return query(l,m,2*node)+query(m+1,r,2*node+1);
+}
+
+inline int update2(int l=1,int r=n,int node=1){
+    push(l,r,node);
+    if(r<x || y<l)return st[node];
+    if(x<=l && r<=y){
+        lazy[node]=w;
+        lazy2[node]=1;
+        push(l,r,node);
+        return st[node];
+    }
+    return st[node]=update2(l,m,2*node)+update2(m+1,r,2*node+1);
+}
+
+inline void fullpush(int l=1,int r=n,int node=1){
+    push(l,r,node);
+    if(l==r)return;
+    fullpush(l,m,2*node);
+    fullpush(m+1,r,2*node+1);
+}
 
 inline void solve(void){
-    cin>>n;
+    cin>>n>>q;
     for(int i=0;i<n;i++){
         cin>>x;
         v.pb(x);
     }
-
-    vi prefix=v,suffix=v;
-    prefix[0]+=n-1;
-    suffix[n-1]+=n-1;
-    for(int i=1;i<n;i++)prefix[i]=max(prefix[i]+(n-i-1),prefix[i-1]);
-    for(int i=n-2;i>=0;i--)suffix[i]=max(suffix[i]+i,suffix[i+1]);
-
-    int ans=INF;
-    for(int i=0;i<n;i++){
-        int t=v[i];
-        if(i!=0)t=max(t,prefix[i-1]);
-        if(i!=n-1)t=max(t,suffix[i+1]);
-        //cerr<<t<<endl;
-        ans=min(ans,t);
+    build();
+    //cerr<<"build ok\n";
+    //cerr<<"st: ";for(int i=1;i<=4*n;i++)cerr<<st[i]<<spc;cerr<<endl;
+    while(q--){
+        cin>>x;
+        if(x==1){
+            cin>>x>>y>>w;
+            update();
+            //cerr<<"update ok\n";
+        }
+        else if(x==3){
+            cin>>x>>y;
+            cout<<query()<<endl;
+            //cerr<<"query ok\n";
+        }
+        else{
+            cin>>x>>y>>w;
+            update2();
+            //cerr<<"update2 ok\n";
+        }
+        //fullpush();
+        //cerr<<"st: ";for(int i=1;i<=4*n;i++)cerr<<st[i]<<spc;cerr<<endl;
+        //cerr<<endl;
     }
-    cout<<ans<<endl;
 }
 
 int32_t main(void){

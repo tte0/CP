@@ -76,34 +76,15 @@ inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
-
+str s,q;
 inline void solve(void){
-    cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb(x);
-    }
-
-    vi prefix=v,suffix=v;
-    prefix[0]+=n-1;
-    suffix[n-1]+=n-1;
-    for(int i=1;i<n;i++)prefix[i]=max(prefix[i]+(n-i-1),prefix[i-1]);
-    for(int i=n-2;i>=0;i--)suffix[i]=max(suffix[i]+i,suffix[i+1]);
-
-    int ans=INF;
-    for(int i=0;i<n;i++){
-        int t=v[i];
-        if(i!=0)t=max(t,prefix[i-1]);
-        if(i!=n-1)t=max(t,suffix[i+1]);
-        //cerr<<t<<endl;
-        ans=min(ans,t);
-    }
-    cout<<ans<<endl;
+    cin>>s>>q;
+    if(s[0]<q[0])
 }
 
 int32_t main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

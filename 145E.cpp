@@ -75,30 +75,22 @@ const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+vi v={INF};
+str s;
+
+inline void build(int l=1,int r=n,int node=1){
+    if(l==r){
+        
+    }
+}
 
 inline void solve(void){
-    cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb(x);
+    cin>>n>>m>>s;
+    for(const auto& c:s){
+        if(c=='4')v.pb(4);
+        else v.pb(7);
     }
-
-    vi prefix=v,suffix=v;
-    prefix[0]+=n-1;
-    suffix[n-1]+=n-1;
-    for(int i=1;i<n;i++)prefix[i]=max(prefix[i]+(n-i-1),prefix[i-1]);
-    for(int i=n-2;i>=0;i--)suffix[i]=max(suffix[i]+i,suffix[i+1]);
-
-    int ans=INF;
-    for(int i=0;i<n;i++){
-        int t=v[i];
-        if(i!=0)t=max(t,prefix[i-1]);
-        if(i!=n-1)t=max(t,suffix[i+1]);
-        //cerr<<t<<endl;
-        ans=min(ans,t);
-    }
-    cout<<ans<<endl;
+    build();
 }
 
 int32_t main(void){
