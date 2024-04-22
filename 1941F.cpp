@@ -28,7 +28,6 @@ SOFTWARE.
 #define ss second
 #define endl '\n'
 #define spc ' '
-#define pb push_back
 #define e2(x) (1LL<<(x))
 #define gcd(x,y) __gcd(x,y)
 #define lcm(x,y) ((x/gcd(x,y))*y)
@@ -80,12 +79,32 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    cin>>n;
+    int a_sz,b_sz;
+    cin>>n>>a_sz>>b_sz;
+    vi v(n),a(a_sz),b(b_sz);
+    for(int i=0;i<n;i++)cin>>v[i];
+    for(int i=0;i<a_sz;i++)cin>>a[i];
+    for(int i=0;i<b_sz;i++)cin>>b[i];
+    sort(all(a));
+    sort(rall(b));
+    int k=0;
+    for(int i=0;i<n-1;i++)k=(v[i+1]-v[i]>v[k+1]-v[k]?i:k);
+
+    int ans=INF,pa=0,pb=0;
+    while(pa<a_sz && pb<b_sz){
+        int x=(a[pa]+b[pb]);
+        if(max(x-v[k],v[k+1]-x)<max(ans-v[k],v[k+1]-ans))ans=x;
+        if(x<=(v[k]+v[k+1])/2)pa++;
+        else pb++;
+    }
+    if(v[k]<ans && ans<v[k+1])v.insert(v.begin()+k+1,ans);n=v.size();
+    for(int i=0;i<n-1;i++)k=(v[i+1]-v[i]>v[k+1]-v[k]?i:k);
+    cout<<v[k+1]-v[k]<<endl;
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

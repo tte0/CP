@@ -76,16 +76,73 @@ const ll  INFL=INT64_MAX;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,vis[N],dist[N],flag;
 vi v,adj[N];
 
+inline int findCycle(int node=b,int p=-1){
+    //cerr<<"dfs: "<<node<<endl;
+    if(vis[node])return (vis[node]==1?node:-1);
+    vis[node]++;
+    for(auto i:adj[node]){
+        if(i==p)continue;
+        int t=findCycle(i,node);
+        //cerr<<"back to: "<<node<<" from: "<<i<<" with t="<<t<<endl;
+        if(t!=-1){
+            if(flag)vis[node]++;
+            if(t==node)flag++;
+            return t;
+        }
+    }
+    vis[node]++;
+    return -1;
+}
+
 inline void solve(void){
-    cin>>n;
+    mset(vis,0);
+    mset(dist,-1);
+    cin>>n>>a>>b;//catcher,escaper
+    a--,b--;
+    for(int i=0;i<n;i++)adj[i].clear();
+    for(int i=0;i<n;i++){
+        cin>>x>>y;
+        x--,y--;
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+
+    if(a==b)return void(no);
+
+    flag=0;
+    int target=findCycle();
+    if(target==-1){cerr<<"cycle not found! t:"<<t<<endl;exit(1);}
+    if(vis[b]==1){
+        //cerr<<"escaper is on cycle! t:"<<t<<endl;
+        return void(yes);
+    }
+
+    //cerr<<"target: "<<target<<endl;
+
+    int distA=-1,distB=-1;
+    mset(vis,0);
+    queue<ii> q;//node,dist
+    q.push({target,0});
+    while(distA==-1 || distB==-1){
+        int node=q.front().ff,d=q.front().ss;q.pop();
+        //cerr<<"node,dist: "<<node<<spc<<d<<endl;
+        if(vis[node]++)continue;
+        if(node==a)distA=d;
+        if(node==b)distB=d;
+        for(auto i:adj[node])q.push({i,d+1});
+    }
+    //cerr<<"distA: "<<distA<<" distB: "<<distB<<endl;
+
+    if(distA<=distB)no;
+    else yes;
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
