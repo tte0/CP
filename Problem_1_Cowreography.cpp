@@ -69,18 +69,55 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=2e5+5;
+const int N=1e6+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,a,b,x,y,w,ans,cnt[N],cnt2[N];
+str s,q;
+
+
 
 inline void solve(void){
-    cin>>n;
+    cin>>n>>k>>s>>q;
+    int p=0,p2=0,current=0,current2=0;
+    for(int i=0;i<n;i++){
+        //cerr<<"i: "<<i<<" -> "<<s[i]<<q[i]<<endl;
+        if(s[i]=='1' && q[i]=='0')cnt[i]++,current++;
+        if(q[i]=='1' && s[i]=='0')cnt2[i]++,current2++;
+        //cerr<<"p,p2|c,c2: "<<p<<","<<p2<<"|"<<current<<","<<current2<<endl;
+        //cerr<<"cnt: ";for(int _=max(int(0),i-8);_<=i+1;_++)cerr<<cnt[_];cerr<<endl;
+        //cerr<<"cnt2: ";for(int _=max(int(0),i-8);_<=i+1;_++)cerr<<cnt2[_];cerr<<endl;
+        while(current && current2){
+            while(cnt[p]==0)p++;
+            //cerr<<"p iterated"<<endl;
+            while(cnt2[p2]==0)p2++;
+            //cerr<<"p2 iterated"<<endl;
+            int x=min(cnt[p],cnt2[p2]);
+            ans+=x;
+            cnt[p]-=x,cnt2[p2]-=x;
+            current-=x,current2-=x;
+            //cerr<<"p,p2|c,c2: "<<p<<","<<p2<<"|"<<current<<","<<current2<<endl;
+        }
+        if(i-k>=int(0)){
+            cnt[i]+=cnt[i-k];
+            ans+=cnt[i-k];
+            cnt[i-k]=0;
+
+            cnt2[i]+=cnt2[i-k];
+            ans+=cnt2[i-k];
+            cnt2[i-k]=0;
+        }
+        //cerr<<"p,p2|c,c2: "<<p<<","<<p2<<"|"<<current<<","<<current2<<endl;
+        //cerr<<"cnt: ";for(int _=max(int(0),i-8);_<=i+1;_++)cerr<<cnt[_];cerr<<endl;
+        //cerr<<"cnt2: ";for(int _=max(int(0),i-8);_<=i+1;_++)cerr<<cnt2[_];cerr<<endl;
+        //cerr<<endl;
+    }
+
+    cout<<ans<<endl;
 }
 
 i32 main(void){

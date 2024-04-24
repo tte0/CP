@@ -25,7 +25,7 @@
 #define rall(x) x.rbegin(),x.rend()
 #define dbg(x) cdebug()<<debug(x)
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
-#define fileio freopen("out.put","w",stdout);freopen("in.put","r",stdin)
+#define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 using namespace std;
 typedef long long ll;
 typedef long double ldouble;
@@ -58,9 +58,16 @@ inline int rand_range(int l,int r){
 int32_t main(void){
     srand(time(NULL));
     fastio;
-    fileio;
-    for(int i=0;i<1e6;i++)cout<<"z";
-    cendl;
-    for(int i=0;i<5e5;i++)cout<<"z";
-    cendl;
+    freopen("in.txt","r",stdin);
+    str s,q;
+    cin>>n>>k>>s>>q;
+    int cnt=0;
+    for(int i=0;i<n;++i)cnt+=(s[i]=='1');
+    for(int i=0;i<n;++i)cnt-=(q[i]=='1');
+    if(s.size()!=n || q.size()!=n || cnt){
+        cout<<"Invalid input"<<endl;
+        return 0;
+    }
+    cout<<"Valid input"<<endl;
+    return 0;
 }
