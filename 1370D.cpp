@@ -82,10 +82,36 @@ inline void maxs(int& x,const int& y){return void(x=max(x,y));}
 inline void mins(int& x,const int& y){return void(x=min(x,y));}
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+vi v;
+
+inline bool f(int target){
+    cerr<<"target: "<<target;
+    int cnt=0,cnt2=0;
+    for(int i=0;i<n-1+(k%2);i++)if(v[i]<=target)cnt++,i++;
+    for(int i=1;i<n-(k%2);i++)if(v[i]<=target)cnt2++,i++;
+    return (cnt>=(k+1)/2 || cnt2>=k/2);
+}
 
 inline void solve(void){
-    cin>>n;
+    cin>>n>>k;
+    v.resize(n);
+    for(int& i:v)cin>>i;
+    if(n==k){
+        int mx=-INF,mx2=-INF;
+        for(int i=0;i<n;i+=2)maxs(mx,v[i]);
+        for(int i=1;i<n;i+=2)maxs(mx2,v[i]);
+        return void(cout<<min(mx,mx2)<<endl);
+    }
+
+    int l=-1,r=INF;
+    while(l<r){
+        int m=l+(r-l)/2;
+        bool b=f(m);
+        //cerr<<" -> "<<(b?"true":"false")<<endl;
+        if(!b)l=m+1;
+        else r=m;
+    }
+    cout<<l<<endl;
 }
 
 i32 main(void){

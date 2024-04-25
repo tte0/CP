@@ -69,26 +69,18 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=3e5+5;
+const int N=2e5+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans[N];
+int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    cin>>n>>k;
-    v.resize(n);
-    for(int& i:v)cin>>i;
-    priority_queue<ii,vii,greater<ii>> q;
-    for(int i=0;i<k;i++)q.push({v[i],i});
-    int cost=-1,current=k;
-    while(q.size()){
-        int node=q.top().ss,d=q.
-    }
+    cin>>n;
 }
 
 i32 main(void){
