@@ -48,7 +48,15 @@ typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
 /////////////////////////////////////////////////////////////
-int n,m,a,b,k,l,x,y,w,t;
+int n,m,a,b,k,l,x,y,w,t,fa[N];
+
+inline int dsu(int x){
+    return fa[x]==x?x:fa[x]=dsu(fa[x]);
+}
+
+inline void merge(int x,int y){
+    fa[dsu(x)]=dsu(y);
+}
 
 inline int rand_range(int l,int r){
     ll rnd=(RAND_MAX*ll(rand()))+rand();
@@ -57,17 +65,19 @@ inline int rand_range(int l,int r){
 
 int32_t main(void){
     srand(time(NULL));
-    fastio;
-    freopen("in.txt","r",stdin);
-    str s,q;
-    cin>>n>>k>>s>>q;
-    int cnt=0;
-    for(int i=0;i<n;++i)cnt+=(s[i]=='1');
-    for(int i=0;i<n;++i)cnt-=(q[i]=='1');
-    if(s.size()!=n || q.size()!=n || cnt){
-        cout<<"Invalid input"<<endl;
-        return 0;
-    }
-    cout<<"Valid input"<<endl;
+    freopen("in.txt","w",stdout);
+    int n=1e5,m=1e5;
+    cout<<n<<spc<<m<<endl;
+    /*for(int i=1;i<=n;++i)fa[i]=i;
+    for(int i=1;i<=n;i++)cout<<rand_range(0,1)<<spc;
+    for(int i=1;i<m;++i){
+        int a=rand_range(1,n)-1,b=rand_range(1,n)-1;
+        while(dsu(a)==dsu(b)){a=rand_range(1,n)-1,b=rand_range(1,n)-1;}
+        cout<<a<<spc<<b<<endl;
+        merge(a,b);
+    }*/
+
+    for(int i=0;i<n;i++)cout<<i%2<<spc;
+    for(int i=1;i<n;i++)cout<<i-1<<spc<<i<<endl;
     return 0;
 }
