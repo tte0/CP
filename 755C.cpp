@@ -72,7 +72,7 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=2e5+5;
+const int N=1e4+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
@@ -81,26 +81,33 @@ inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod
 inline void maxs(int& x,const int& y){return void(x=max(x,y));}
 inline void mins(int& x,const int& y){return void(x=min(x,y));}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,vis[N];
 vi v,adj[N];
 
+inline void dfs(int node){
+    if(vis[node]++)return;
+    for(auto i:adj[node])dfs(i);
+}
+
 inline void solve(void){
-    cin>>n>>m;
-    stc st[m];
-    for(int i=0;i<2*n-1;i++){
-        for(int j=0;j<m;j++){
-            char c;
-            cin>>c;
-            if(st[j].find(c)!=st[j].end())st[j].erase(c);
-            else st[j].insert(c);
-        }
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        x--;
+        adj[x].pb(i);
+        adj[i].pb(x);
     }
-    for(int i=0;i<m;i++)cout<<*(st[i].begin());
-    cendl;cout.flush();
+    for(int i=0;i<n;i++){
+        if(vis[i])continue;
+        ans++;
+        dfs(i);
+    }
+    cout<<ans;
 }
 
 i32 main(void){
+    fastio;
     t=1;
-    cin>>t;
+    //cin>>t;
     while(t--)solve();
 }

@@ -84,22 +84,32 @@ inline void mins(int& x,const int& y){return void(x=min(x,y));}
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
-inline void solve(void){
-    cin>>n>>m;
-    stc st[m];
-    for(int i=0;i<2*n-1;i++){
-        for(int j=0;j<m;j++){
-            char c;
-            cin>>c;
-            if(st[j].find(c)!=st[j].end())st[j].erase(c);
-            else st[j].insert(c);
-        }
-    }
-    for(int i=0;i<m;i++)cout<<*(st[i].begin());
+inline int query(int x){
+    cout<<"? "<<x+1;
+    for(int i=0;i<=x;i++)cout<<" "<<i+1;
     cendl;cout.flush();
+    return v[x];
+}
+
+inline void solve(void){
+    cin>>n;
+    v.resize(n);
+    for(int& i:v)cin>>i;
+    for(int i=1;i<n;i++)v[i]+=v[i-1];
+
+    int l=0,r=n;
+    while(l<r){
+        int m=(l+r)/2;
+        int expected=query(m);
+        cin>>x;
+        if(expected==x)l=m+1;
+        else r=m;
+    }
+    cout<<"! "<<l+1<<endl<<flush;
 }
 
 i32 main(void){
+    ios_base::sync_with_stdio(false);
     t=1;
     cin>>t;
     while(t--)solve();
