@@ -76,6 +76,7 @@ const int N=2e5+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
+const int MAXQUERY=100;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 inline void maxs(int& x,const int& y){return void(x=max(x,y));}

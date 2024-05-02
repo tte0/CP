@@ -48,6 +48,7 @@ SOFTWARE.
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
 using namespace std;
+typedef int32_t i32;
 typedef int_fast64_t ll;
 typedef long double ldouble;
 typedef string str;
@@ -62,51 +63,41 @@ typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
+typedef unordered_map<int,int> umii;
+typedef unordered_map<char,int> umci;
+typedef unordered_map<str,int> umsi;
 typedef set<int> sti;
 typedef set<char> stc;
 typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=200005;
-const int MOD=1000000007;
-const ll  INF=4e18;
+const int N=2e5+5;
+const int MOD=1e9+7;
+const i32 INF=INT32_MAX;
+const ll  INFL=INT64_MAX;
 const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+inline void maxs(int& x,const int& y){return void(x=max(x,y));}
+inline void mins(int& x,const int& y){return void(x=min(x,y));}
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
-random_device rd;
-mt19937_64 mt(rd());
-
-inline int randrange(int l,int r){
-    return ((int(mt()>>1))%(r-l+1))+l;
-}
 
 inline void solve(void){
-    //for(int i=0;i<5;i++)cerr<<randrange(1,5)<<endl;
-
-    int l=4,r=1e18+1;
-    int cnt=0;
-    while(l<r){
-        ldouble searchFactor=0.30;
-        int m=max(l,int((ldouble(l)+ldouble(r))*searchFactor));
-        cout<<"? "<<randrange(1,l-1)<<" "<<m<<endl;
+    int mn=INFL,mx=-INFL;
+    for(int i=2;i<=26;i++){
+        cout<<"? 1 "<<i;
+        cout.flush();
         cin>>x;
-        //x=-1;
-        if(x==0)exit(0);
-        if(x==-1)r=m;
-        else{
-            l=max(x,m)+1;
-            searchFactor=0.5;
-        }
-        cnt++;
+        mins(mn,x);
+        maxs(mx,x);
     }
-    cout<<"! "<<l-1<<endl;
-    //cerr<<"query: "<<cnt<<endl;
+    cout<<"! "<<mn+mx<<endl;
+    cout.flush();
 }
 
-int32_t main(void){
+i32 main(void){
     t=1;
     //cin>>t;
     while(t--)solve();
