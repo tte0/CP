@@ -43,7 +43,7 @@ SOFTWARE.
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(10)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
@@ -90,17 +90,17 @@ ostream& operator<<(ostream& os, const pair<T,T2>& p){
 }
 template<typename T>
 ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(auto& el:a)os<<el<< ' ';
+    for(auto& el:a)os<<el<<' ';
     return os;
 }
 template<typename T>
 ostream& operator<<(ostream& os,const set<T>& a) {
-    for(auto& el:a)os<<el<< ' ';
+    for(auto& el:a)os<<el<<' ';
     return os;
 }
 template<typename T,typename T2>
 ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(auto& el:a)os<<el<< ' ';
+    for(auto& el:a)os<<el<<' ';
     return os;
 }
 void debug(){cerr<<endl;}
@@ -110,58 +110,55 @@ void debug(T t, Args... args){
     debug(args...);
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+10;
+const int N=2e5+5;
 const int MOD=1e9+7;
+const ldouble EPS=1e-12;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-str s;
+vi v,adj[N];
+
+pair<ldouble,ldouble> quadratic(ldouble a,ldouble b,ldouble c){
+    ldouble d=b*b-4*a*c;
+    if(d<0)return {INF,INF};
+    d=sqrt(d);
+    return {(-b+d)/(2*a),(-b-d)/(2*a)};
+}
 
 inline void solve(void){
-    cin>>n>>q>>s;
-    s.pb('1');s.insert(s.begin(),'0');
-    n+=2;
-
-    vi lmz(n,0),rmo(n,n-1),v(1,0);
-    for(int i=1;i<n;i++){
-        //debug("i:",i);
-        if(s[i-1]=='0' && s[i]=='0')lmz[i]=lmz[i-1];
-        if(s[i-1]=='0' && s[i]=='1')lmz[i]=lmz[i-1];
-        if(s[i-1]=='1' && s[i]=='0')lmz[i]=i;
-        if(s[i-1]=='1' && s[i]=='1')lmz[i]=i;
+    cin>>n;
+    map<int,int> mp;
+    for(int i=0;i<n;++i){
+        cin>>x;
+        mp[x]++;
     }
-    for(int i=n-2;i>=0;i--){
-        //debug("i:",i);
-        if(s[i]=='0' && s[i+1]=='0')rmo[i]=i;
-        if(s[i]=='0' && s[i+1]=='1')rmo[i]=rmo[i+1];
-        if(s[i]=='1' && s[i+1]=='0')rmo[i]=i;
-        if(s[i]=='1' && s[i+1]=='1')rmo[i]=rmo[i+1];
-    }
-    for(int i=1;i<n;i++)if(s[i]!=s[i-1])v.pb(i);
+    //debug("mp:",mp);
 
-    //debug("s:",s);
-    //debug("lmz:",lmz);
-    //debug("rmo:",rmo);
-    //debug("v:",v);
-
-    mii ans;
+    cin>>q;
     while(q--){
         cin>>x>>y;
-        if(--upper_bound(all(v),x)==--upper_bound(all(v),y) || (s[x]=='0' && (upper_bound(all(v),x)==--upper_bound(all(v),y)))){
-            //debug("x,y,h:",x,y,0);
-            ans[-1]++;
+
+        ldouble a=quadratic(1,-x,y).ff,b=quadratic(1,-x,y).ss;
+        //debug(a,b);
+        if(a==INF || abs(a-round(a))>EPS || abs(b-round(b))>EPS){
+            cout<<0<<" ";
             continue;
         }
-        //debug("x,y,h:",x,y,lmz[x]+N*rmo[y]);
-        ans[lmz[x]+N*rmo[y]]++;
+        a=round(a),b=round(b);
+        int x=a,y=b;
+        //debug("x,y:",x,y);
+        if(x==y){
+            cout<<mp[a]*(mp[a]-1)/2<<" ";
+        }
+        else{
+            //debug("mp[a],mp[b]:",mp[a],mp[b]);
+            cout<<mp[a]*mp[b]<<" ";
+        }
     }
-
-    //debug("ans:",ans);
-
-    cout<<ans.size()<<endl;
+    cout<<endl;
     //debug();
 }
 

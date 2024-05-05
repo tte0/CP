@@ -43,7 +43,7 @@ SOFTWARE.
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
@@ -83,37 +83,63 @@ inline int fp(int b,int p,int mod){
 }
 inline void maxs(int& x,const int& y){return void(x=max(x,y));}
 inline void mins(int& x,const int& y){return void(x=min(x,y));}
+inline void gcds(int& x,const int& y){return void(x=gcd(x,y));}
+inline void lcms(int& x,const int& y){return void(x=lcm(x,y));}
 template<typename T,typename T2>
-ostream& operator<<(ostream& os, const pair<T,T2>& p){
+inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
     os<<p.ff<<","<<p.ss<<endl;
     return os;
 }
 template<typename T>
-ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(auto& el:a)os<<el<<' ';
+inline ostream& operator<<(ostream& os,const vector<T>& a) {
+    for(auto& _:a)os<<_<<' ';
     return os;
 }
 template<typename T>
-ostream& operator<<(ostream& os,const set<T>& a) {
-    for(auto& el:a)os<<el<<' ';
+inline ostream& operator<<(ostream& os,const set<T>& a) {
+    for(auto& _:a)os<<_<<' ';
     return os;
 }
 template<typename T,typename T2>
-ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(auto& el:a)os<<el<<' ';
+inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
+    for(auto& _:a)os<<_<<' ';
     return os;
+}
+template<typename T,typename T2>
+inline istream& operator>>(istream& is,pair<T,T2>& p){
+    is>>(p.ff)>>(p.ss);
+    return is;
+}
+template<typename T>
+inline istream& operator>>(istream& is,vector<T>& a) {
+    for(auto& _:a)is>>_;
+    return is;
+}
+void print(){cout<<endl;}
+template<typename T,typename... Args>
+inline void print(T t, Args... args){
+    cout<<t<<' ';
+    print(args...);
+}
+void input(){return;}
+template<typename T,typename... Args>
+inline void input(T& t, Args&... args){
+    cin>>t;
+    input(args...);
 }
 void debug(){cerr<<endl;}
 template<typename T,typename... Args>
-void debug(T t, Args... args){
+inline void debug(T t, Args... args){
     cerr<<t<< ' ';
     debug(args...);
 }
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
+const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
+const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////

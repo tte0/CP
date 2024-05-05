@@ -43,7 +43,7 @@ SOFTWARE.
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
@@ -90,17 +90,17 @@ ostream& operator<<(ostream& os, const pair<T,T2>& p){
 }
 template<typename T>
 ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(auto& el:a)os<<el<< ' ';
+    for(auto& el:a)os<<el<<' ';
     return os;
 }
 template<typename T>
 ostream& operator<<(ostream& os,const set<T>& a) {
-    for(auto& el:a)os<<el<< ' ';
+    for(auto& el:a)os<<el<<' ';
     return os;
 }
 template<typename T,typename T2>
 ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(auto& el:a)os<<el<< ' ';
+    for(auto& el:a)os<<el<<' ';
     return os;
 }
 void debug(){cerr<<endl;}
@@ -110,63 +110,63 @@ void debug(T t, Args... args){
     debug(args...);
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+10;
+const int N=2e5+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-str s;
+int n,m,k,t,q,a,b,c,x,y,w,ans;
+vi adj[N],sz,mx,mx2;
+
+inline int dfs(int node=0,int p=-1){
+    //debug("node,p:",node,p);
+    sz[node]=1;
+    for(int i:adj[node]){
+        if(i==p)continue;
+        sz[node]+=dfs(i,node);
+        if(mx[i]+1>mx2[node])mx2[node]=mx[i]+1;
+        if(mx2[node]>mx[node])swap(mx[node],mx2[node]);
+    }
+    return sz[node];
+}
+
+inline int f(int node=0,int p=-1,int b=0){
+    //debug("f:",node,p,b);
+    int ans=k*max(mx[node],b);
+    for(int i:adj[node]){
+        if(i==p)continue;
+        if(mx[i]+1==mx[node])maxs(ans,f(i,node,max(b,mx2[node])+1)-c);
+        else maxs(ans,f(i,node,max(b,mx[node])+1)-c);
+    }
+    //debug("node,ans:",node,ans);
+    return ans;
+}
 
 inline void solve(void){
-    cin>>n>>q>>s;
-    s.pb('1');s.insert(s.begin(),'0');
-    n+=2;
-
-    vi lmz(n,0),rmo(n,n-1),v(1,0);
-    for(int i=1;i<n;i++){
-        //debug("i:",i);
-        if(s[i-1]=='0' && s[i]=='0')lmz[i]=lmz[i-1];
-        if(s[i-1]=='0' && s[i]=='1')lmz[i]=lmz[i-1];
-        if(s[i-1]=='1' && s[i]=='0')lmz[i]=i;
-        if(s[i-1]=='1' && s[i]=='1')lmz[i]=i;
-    }
-    for(int i=n-2;i>=0;i--){
-        //debug("i:",i);
-        if(s[i]=='0' && s[i+1]=='0')rmo[i]=i;
-        if(s[i]=='0' && s[i+1]=='1')rmo[i]=rmo[i+1];
-        if(s[i]=='1' && s[i+1]=='0')rmo[i]=i;
-        if(s[i]=='1' && s[i+1]=='1')rmo[i]=rmo[i+1];
-    }
-    for(int i=1;i<n;i++)if(s[i]!=s[i-1])v.pb(i);
-
-    //debug("s:",s);
-    //debug("lmz:",lmz);
-    //debug("rmo:",rmo);
-    //debug("v:",v);
-
-    mii ans;
-    while(q--){
+    cin>>n>>k>>c;
+    for(int i=0;i<n;i++)adj[i].clear();
+    for(int i=0;i<n-1;i++){
         cin>>x>>y;
-        if(--upper_bound(all(v),x)==--upper_bound(all(v),y) || (s[x]=='0' && (upper_bound(all(v),x)==--upper_bound(all(v),y)))){
-            //debug("x,y,h:",x,y,0);
-            ans[-1]++;
-            continue;
-        }
-        //debug("x,y,h:",x,y,lmz[x]+N*rmo[y]);
-        ans[lmz[x]+N*rmo[y]]++;
+        x--,y--;
+        adj[x].pb(y);
+        adj[y].pb(x);
     }
-
-    //debug("ans:",ans);
-
-    cout<<ans.size()<<endl;
+    sz.assign(n,0ll);
+    mx.assign(n,0ll);
+    mx2.assign(n,0ll);
+    dfs();
+    //debug("dfs ok");
+    //debug("sz:",sz);
+    //debug("mx:",mx);
+    //debug("mx2:",mx2);
+    cout<<f()<<endl;
     //debug();
 }
 
 i32 main(void){
-    fastio;
+    //fastio;
     t=1;
     cin>>t;
     while(t--)solve();
