@@ -83,30 +83,15 @@ inline int fp(int b,int p,int mod){
 }
 inline void maxs(int& x,const int& y){return void(x=max(x,y));}
 inline void mins(int& x,const int& y){return void(x=min(x,y));}
-template<typename T,typename T2>
-ostream& operator<<(ostream& os, const pair<T,T2>& p){
-    os<<p.ff<<","<<p.ss<<endl;
-    return os;
-}
 template<typename T>
-ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(auto& el:a)os<<el<<' ';
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
+    for(auto& el : vec)os<<el<< ' ';
     return os;
 }
-template<typename T>
-ostream& operator<<(ostream& os,const set<T>& a) {
-    for(auto& el:a)os<<el<<' ';
-    return os;
-}
-template<typename T,typename T2>
-ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(auto& el:a)os<<el<<' ';
-    return os;
-}
-void debug(){cerr<<endl;}
-template<typename T,typename... Args>
-void debug(T t, Args... args){
-    cerr<<t<< ' ';
+void debug(){cout<<endl;}
+template<typename T, typename... Args>
+void debug(T t, Args... args) {
+    std::cout << t << ' ';
     debug(args...);
 }
 ///////////////////////////////////////////////////////////////////

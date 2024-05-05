@@ -89,25 +89,18 @@ ostream& operator<<(ostream& os, const pair<T,T2>& p){
     return os;
 }
 template<typename T>
-ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(auto& el:a)os<<el<<' ';
-    return os;
-}
-template<typename T>
-ostream& operator<<(ostream& os,const set<T>& a) {
-    for(auto& el:a)os<<el<<' ';
-    return os;
-}
-template<typename T,typename T2>
-ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(auto& el:a)os<<el<<' ';
+ostream& operator<<(ostream& os, const vector<T>& vec){
+    for(auto& el : vec)os<<el<< ' ';
     return os;
 }
 void debug(){cerr<<endl;}
-template<typename T,typename... Args>
+template<typename T, typename... Args>
 void debug(T t, Args... args){
-    cerr<<t<< ' ';
-    debug(args...);
+    #ifndef ONLINE_JUDGE
+        cerr << t << ' ';
+        debug(args...);
+    #endif
+    return;
 }
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
@@ -117,16 +110,48 @@ const ll  INFL=INT64_MAX;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,t,q,x;
+str s;
 
 inline void solve(void){
-    cin>>n;
+    cin>>n>>m>>s;
+    vii v(m);
+    for(auto& i:v)cin>>i.ff;
+    for(auto& i:v)cin>>i.ss;
+    for(auto& i:v)i.ff--,i.ss--;
+    vi flip(n+1);
+    //debug("v:",v);
+    cin>>q;
+    while(q--){
+        cin>>x;
+        x--;
+        int l=0,r=m;
+        while(l<r){
+            //debug("l,r:",l,r);
+            int mid=(l+r)/2;
+            if(v[mid].ff<=x)l=mid+1;
+            else r=mid;
+        }
+        l--;
+        //debug("l,x:",l,x);
+        flip[min(x,v[l].ff+v[l].ss-x)]++;
+        flip[max(x,v[l].ff+v[l].ss-x)+1]++;
+        //debug("flip:",flip);
+    }
+
+    int ind=0,cnt=0;
+    for(int i=0;i<n;i++){
+        if(v[ind].ss<i)ind++;
+        cnt+=flip[i];
+        if(cnt%2==0)cout<<s[i];
+        else cout<<s[v[ind].ff+v[ind].ss-i];
+    }
+    cendl;
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

@@ -90,17 +90,17 @@ ostream& operator<<(ostream& os, const pair<T,T2>& p){
 }
 template<typename T>
 ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(auto& el:a)os<<el<<' ';
+    for(auto& el:a)os<<el<< ' ';
     return os;
 }
 template<typename T>
 ostream& operator<<(ostream& os,const set<T>& a) {
-    for(auto& el:a)os<<el<<' ';
+    for(auto& el:a)os<<el<< ' ';
     return os;
 }
 template<typename T,typename T2>
 ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(auto& el:a)os<<el<<' ';
+    for(auto& el:a)os<<el<< ' ';
     return os;
 }
 void debug(){cerr<<endl;}
@@ -110,7 +110,7 @@ void debug(T t, Args... args){
     debug(args...);
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=2e5+10;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
@@ -118,15 +118,56 @@ const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+str s;
 
 inline void solve(void){
-    cin>>n;
+    cin>>n>>q>>s;
+    s.pb('1');s.insert(s.begin(),'0');
+    n+=2;
+
+    vi lmz(n,0),rmo(n,n-1),v(1,0);
+    for(int i=1;i<n;i++){
+        //debug("i:",i);
+        if(s[i-1]=='0' && s[i]=='0')lmz[i]=lmz[i-1];
+        if(s[i-1]=='0' && s[i]=='1')lmz[i]=lmz[i-1];
+        if(s[i-1]=='1' && s[i]=='0')lmz[i]=i;
+        if(s[i-1]=='1' && s[i]=='1')lmz[i]=i;
+    }
+    for(int i=n-2;i>=0;i--){
+        //debug("i:",i);
+        if(s[i]=='0' && s[i+1]=='0')rmo[i]=i;
+        if(s[i]=='0' && s[i+1]=='1')rmo[i]=rmo[i+1];
+        if(s[i]=='1' && s[i+1]=='0')rmo[i]=i;
+        if(s[i]=='1' && s[i+1]=='1')rmo[i]=rmo[i+1];
+    }
+    for(int i=1;i<n;i++)if(s[i]!=s[i-1])v.pb(i);
+
+    //debug("s:",s);
+    //debug("lmz:",lmz);
+    //debug("rmo:",rmo);
+    //debug("v:",v);
+
+    mii ans;
+    while(q--){
+        cin>>x>>y;
+        if(lower_bound(all(v),x)==--upper_bound(all(v),y) || (s[x]=='0' && (++lower_bound(all(v),x)==--upper_bound(all(v),y)))){
+            //debug("x,y,h:",x,y,0);
+            ans[-1]++;
+            continue;
+        }
+        //debug("x,y,h:",x,y,lmz[x]+N*rmo[y]);
+        ans[lmz[x]+N*rmo[y]]++;
+    }
+
+    //debug("ans:",ans);
+
+    cout<<ans.size()<<endl;
+    //debug();
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
