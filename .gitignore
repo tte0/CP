@@ -45,3 +45,4 @@ deneme*.cpp
 a.cpp
 temp.cpp
 STRESSTEST*.cpp
+testcasegenerator.cpp
