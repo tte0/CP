@@ -72,41 +72,39 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-inline int fp(int b,int p,int mod){
-    int ans=1;
-    while(p){
-        if(p&1)ans=(ans*b)%mod;
-        p>>=1;
-        b=(b*b)%mod;
-    }
-    return ans;
-}
-inline void maxs(int& x,const int& y){return void(x=max(x,y));}
-inline void mins(int& x,const int& y){return void(x=min(x,y));}
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
-    for(auto& el : vec)os<<el<< ' ';
-    return os;
-}
-void debug(){cout<<endl;}
-template<typename T, typename... Args>
-void debug(T t, Args... args) {
-    std::cout << t << ' ';
-    debug(args...);
-}
-///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e5+5;
+const int A=512;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
+inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+inline void maxs(int& x,const int& y){return void(x=max(x,y));}
+inline void mins(int& x,const int& y){return void(x=min(x,y));}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,arr[N][(A>>6)+5];
 vi v,adj[N];
+
+inline void __set(const int& ind,const int& ind2){return void(arr[ind][ind2>>6]|=e2(ind2%64));}
+inline bool __val(const int& ind,const int& ind2){return bool(arr[ind][ind2>>6]&e2(ind2%64));}
 
 inline void solve(void){
     cin>>n;
+    v.resize(n);
+    for(int& i:v)cin>>i;
+
+    stack<int> st({v[0]});
+    __set(0,v[0]);
+
+    for(int i=1;i<n;i++){
+        __set(i,v[i]);
+        while(st.size() && st.top()<=v[i]){
+            for(int j=0;j<A;j++)
+            st.pop();
+        }
+        st.push(v[i]);
+    }
 }
 
 i32 main(void){
