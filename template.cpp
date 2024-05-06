@@ -92,17 +92,17 @@ inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
 }
 template<typename T>
 inline ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(auto& _:a)os<<_<<' ';
+    for(const T& _:a)os<<_<<' ';
     return os;
 }
 template<typename T>
 inline ostream& operator<<(ostream& os,const set<T>& a) {
-    for(auto& _:a)os<<_<<' ';
+    for(const T& _:a)os<<_<<' ';
     return os;
 }
 template<typename T,typename T2>
 inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(auto& _:a)os<<_<<' ';
+    for(const auto& _:a)os<<_<<' ';
     return os;
 }
 template<typename T,typename T2>
@@ -112,26 +112,20 @@ inline istream& operator>>(istream& is,pair<T,T2>& p){
 }
 template<typename T>
 inline istream& operator>>(istream& is,vector<T>& a) {
-    for(auto& _:a)is>>_;
+    for(T& _:a)is>>_;
     return is;
 }
-void print(){cout<<endl;}
-template<typename T,typename... Args>
-inline void print(T t, Args... args){
-    cout<<t<<' ';
-    print(args...);
+template<typename... Args>
+inline void print(const Args&... args){
+    ((cout<<args<<' '),...)<<endl;
 }
-void input(){return;}
-template<typename T,typename... Args>
-inline void input(T& t, Args&... args){
-    cin>>t;
-    input(args...);
+template<typename... Args>
+inline void input(Args&... args){
+    (cin>>...>>args);
 }
-void debug(){cerr<<endl;}
-template<typename T,typename... Args>
-inline void debug(T t, Args... args){
-    cerr<<t<< ' ';
-    debug(args...);
+template<typename... Args>
+inline void debug(const Args&... args){
+    ((cout<<args<<' '),...)<<endl;
 }
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
@@ -147,7 +141,7 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    cin>>n;
+    input(n);
 }
 
 i32 main(void){
