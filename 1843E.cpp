@@ -23,7 +23,6 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
 #include <bits/stdc++.h>
-#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -72,7 +71,7 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-inline int fp(int b,int p,int mod=1e9+7){
+inline int fp(int b,int p,int mod){
     int ans=1;
     while(p){
         if(p&1)ans=(ans*b)%mod;
@@ -131,7 +130,7 @@ inline void debug(const Args&... args){
     ((cerr<<args<<' '),...)<<endl;
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -141,15 +140,43 @@ const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+
+inline bool f(const vii&v,const vi& query,const int& m){
+    vi pref(n+1,0);
+    for(int i=0;i<=m;i++)pref[query[i]]++;
+    //debug("pref:",pref);
+    for(int i=1;i<=n;i++)pref[i]+=pref[i-1];
+    //debug("pref:",pref);
+    for(const ii& i:v){
+        if(pref[i.ss]-pref[i.ff-1]>(i.ss-i.ff+1)/2)return true;
+    }
+    return false;
+}
 
 inline void solve(void){
-    input(n);
+    input(n,m);
+    vii v(m);
+    input(v,q);
+    vi query(q);
+    input(query);
+
+    //debug("n,m,q:",n,m,q);
+    //debug("v:",v);
+    //debug("query:",query);
+    int l=0,r=q;
+    while(l<r){
+        //debug("l,r:",l,r);
+        int m=(l+r)/2;
+        if(f(v,query,m))r=m;
+        else l=m+1;
+    }
+    print(l==q?-1:l+1);
+    //debug();
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

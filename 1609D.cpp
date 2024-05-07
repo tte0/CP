@@ -72,7 +72,7 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-inline int fp(int b,int p,int mod=1e9+7){
+inline int fp(int b,int p,int mod){
     int ans=1;
     while(p){
         if(p&1)ans=(ans*b)%mod;
@@ -141,10 +141,41 @@ const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+vi v,adj[N],fa;
+
+inline int dsu(int x){
+    if(fa[x]<0)return x;
+    return fa[x]=dsu(fa[x]);
+}
+
+inline bool merge(int x,int y){
+    x=dsu(x),y=dsu(y);
+    if(x==y)return false;
+    fa[x]+=fa[y];
+    fa[y]=x;
+    return true;
+}
 
 inline void solve(void){
-    input(n);
+    input(n,q);
+    vii v(q);
+    input(v);
+    for(int _=1;_<=q;++_){
+        fa.assign(n,-1);
+        int cnt=1;
+        for(int i=0;i<_;i++){
+            if(!merge(v[i].ff-1,v[i].ss-1))cnt++;
+        }
+        vi sz;
+        for(int i=0;i<n;++i){
+            if(fa[i]<0)sz.pb(-fa[i]);
+        }
+        sort(rall(sz));
+        //debug("sz:",sz);
+        int ans=0;
+        for(int i=0;i<cnt;i++)ans+=sz[i];
+        print(ans-1);
+    }
 }
 
 i32 main(void){

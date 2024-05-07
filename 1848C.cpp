@@ -72,7 +72,7 @@ typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-inline int fp(int b,int p,int mod=1e9+7){
+inline int fp(int b,int p,int mod){
     int ans=1;
     while(p){
         if(p&1)ans=(ans*b)%mod;
@@ -143,13 +143,56 @@ const double PI=4*atan(1);
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
+inline bool f(int x,int y){
+    debug("f:",x,y);
+    if(x==y)return true;2444
+    if(x==0)return true;
+    if(y==0)return false;
+    bool b=(x/y)%2;
+    x%=y;
+    return b^!f(y,abs(x-y));
+}
+
 inline void solve(void){
     input(n);
+    vi v1(n),v2(n);
+    input(v1,v2);
+    vii v;
+    for(int i=0;i<n;i++)if(v1[i]||v2[i])v.pb({v1[i],v2[i]});
+    debug(v);
+    int cnt=0,cnt2=0;
+    n=v.size();
+    for(int i=0;i<n;i++){
+        if(f(v[i].ff,v[i].ss))cnt++;
+        else cnt2++;
+        debug("cnt,cnt2:",cnt,cnt2);
+    }
+    if(cnt==0 || cnt2==0)yes;
+    else no;
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
+/*
+1 7
+7 6
+6 1
+1 5
+
+2 10
+10 8
+8 2
+2 6
+
+10 2
+2 8
+8 6
+6 2
+
+6 2
+
+*/
