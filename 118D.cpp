@@ -59,6 +59,7 @@ typedef vector<ii> vii;
 typedef vector<iii> viii;
 typedef vector<vi> vvi;
 typedef vector<vvi> vvvi;
+typedef vector<vvvi> vvvvi;
 typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
@@ -131,7 +132,7 @@ inline void debug(const Args&... args){
     ((cerr<<args<<' '),...)<<endl;
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e2+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -140,48 +141,30 @@ const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,dp[N][N][2][11];
 vi v,adj[N];
 
-inline void manacher_init(str& s,str q,vi& v){
-    s="!";
-    for(int i=0;i<q.size();i++){
-        s.pb('#');
-        s.pb(q[i]);
+inline int f(int x,int y,int cur,int cnt){
+    //debug("f:",x,y,cur,cnt);
+    if(x==n && y==m)return 1;
+    if(x>n || y>m)return 0;
+    if(dp[x][y][cur][cnt]!=-1)return dp[x][y][cur][cnt];
+    dp[x][y][cur][cnt]=0;
+    if(cur==0){
+        dp[x][y][cur][cnt]+=f(x,y+1,1,1);
+        if(cnt<a)dp[x][y][cur][cnt]=(dp[x][y][cur][cnt]+f(x+1,y,0,cnt+1))%int(1e8);
     }
-    s.pb('#');
-    s.pb('@');
-
-    //cerr<<"s:        ";for(auto c:s)cerr<<c<<spc;cerr<<endl;
-
-    v.resize(s.size(),0);
-    int l=0,r=0;
-    for(int i=1;i<v.size();i++){
-        if(i<=r)v[i]=min(r-i,v[l+r-i]);
-        while(s[i-v[i]]==s[i+v[i]])v[i]++;
-        if(r<i+v[i])l=i-v[i],r=i+v[i];
+    else{
+        dp[x][y][cur][cnt]+=f(x+1,y,0,1);
+        if(cnt<b)dp[x][y][cur][cnt]=(dp[x][y][cur][cnt]+f(x,y+1,1,cnt+1))%int(1e8);
     }
-}
-
-inline str longestPalindrome(const vi& v,const str& s){
-    str ans="";
-    int mx=0;
-    for(int i=1;i<v.size();i++)if(v[i]>v[mx])mx=i;
-
-    for(int i=mx-v[mx]+1;i<=mx+v[mx]-1;i++)if(s[i]!='#')ans.pb(s[i]);
-    return ans;
+    return dp[x][y][cur][cnt];
 }
 
 inline void solve(void){
-    str s;
-    input(s);
-    vi manacher;
-
-    clock_t start=clock();
-    manacher_init(s,s,manacher);
-    //debug("manacher:",manacher);
-    //debug("manacher time:",double(clock()-start)/double(CLOCKS_PER_SEC/1000),"ms");
-    print(longestPalindrome(manacher,s));
+    mset(dp,-1);
+    input(n,m,a,b);
+    cout<<(f(1,0,0,1)+f(0,1,1,1))%int(1e8);
 }
 
 i32 main(void){

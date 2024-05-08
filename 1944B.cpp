@@ -143,50 +143,27 @@ const double PI=4*atan(1);
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
-inline void manacher_init(str& s,str q,vi& v){
-    s="!";
-    for(int i=0;i<q.size();i++){
-        s.pb('#');
-        s.pb(q[i]);
-    }
-    s.pb('#');
-    s.pb('@');
-
-    //cerr<<"s:        ";for(auto c:s)cerr<<c<<spc;cerr<<endl;
-
-    v.resize(s.size(),0);
-    int l=0,r=0;
-    for(int i=1;i<v.size();i++){
-        if(i<=r)v[i]=min(r-i,v[l+r-i]);
-        while(s[i-v[i]]==s[i+v[i]])v[i]++;
-        if(r<i+v[i])l=i-v[i],r=i+v[i];
-    }
-}
-
-inline str longestPalindrome(const vi& v,const str& s){
-    str ans="";
-    int mx=0;
-    for(int i=1;i<v.size();i++)if(v[i]>v[mx])mx=i;
-
-    for(int i=mx-v[mx]+1;i<=mx+v[mx]-1;i++)if(s[i]!='#')ans.pb(s[i]);
-    return ans;
-}
-
 inline void solve(void){
-    str s;
-    input(s);
-    vi manacher;
+    input(n,k);
+    k*=2;
+    vi v(n),v2(n);
+    input(v,v2);
 
-    clock_t start=clock();
-    manacher_init(s,s,manacher);
-    //debug("manacher:",manacher);
-    //debug("manacher time:",double(clock()-start)/double(CLOCKS_PER_SEC/1000),"ms");
-    print(longestPalindrome(manacher,s));
+    mii mp,mp2;
+    for(auto i:v)mp[i]++;
+    for(auto i:v2)mp2[i]++;
+    vi ans1,ans2,ans3;
+    for(auto i:mp)if(i.ss==2){ans1.pb(i.ff);ans1.pb(i.ff);}
+    for(auto i:mp2)if(i.ss==2){ans2.pb(i.ff);ans2.pb(i.ff);}
+    for(auto i:mp)if(i.ss==1)ans3.pb(i.ff);
+
+    for(int i=0;i<k;i++)cout<<(i<ans1.size()?ans1[i]:ans3[i-ans1.size()])<<" ";cendl;
+    for(int i=0;i<k;i++)cout<<(i<ans2.size()?ans2[i]:ans3[i-ans1.size()])<<" ";cendl;
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
