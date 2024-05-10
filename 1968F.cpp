@@ -23,7 +23,6 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
 #include <bits/stdc++.h>
-#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -150,7 +149,7 @@ const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
-const int BLOCK=320;
+extern const int BLOCK=400;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
@@ -159,12 +158,22 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    input(n);
+    input(n,q);
+    vi v(n),
+    input(v);
+
+    v.insert(v.begin(),0);
+    for(int i=1;i<=n;i++)v[i]^=v[i-1];
+    umii mp;
+    vvi arr;
+    for(int i=0;i<=n;i++){
+        if
+    }
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

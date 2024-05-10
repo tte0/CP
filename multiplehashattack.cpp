@@ -73,7 +73,7 @@ const double PI=4*atan(1);
 inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
 ////////////////n///////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,z,ans;
-vector<str> alphabet={"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+vector<str> alphabet={"a","c","e","g","i"};
 
 
 inline int hashString(const str& s,const int& base,const int& mod){
@@ -106,7 +106,7 @@ inline void shorten(str& s,str& q){
 
 inline vector<str> generateAlphabet(const vector<str>& alphabet,const int& base,const int& mod,const int& limit=1.4e10){
     unordered_map<int,str> mp;
-    int n=(alphabet.size()>2?7:20),hash;
+    int n=25,hash;
     str s,q; 
     while(true){
         s="";

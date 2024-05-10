@@ -110,11 +110,6 @@ inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
     return os;
 }
 template<typename T,typename T2>
-inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
-    for(const auto& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T,typename T2>
 inline istream& operator>>(istream& is,pair<T,T2>& p){
     is>>(p.ff)>>(p.ss);
     return is;
@@ -134,23 +129,17 @@ template<typename... Args>
 inline void input(Args&... args){
     (cin>>...>>args);
 }
-#ifdef ONLINE_JUDGE
-template<typename... Args>
-inline void debug(const Args&... args){}
-#else
 inline void debug(){cerr<<endl;}
 template<typename... Args>
 inline void debug(const Args&... args){
     ((cerr<<args<<' '),...)<<endl;
 }
-#endif
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
-const int BLOCK=320;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
@@ -158,13 +147,104 @@ const double PI=4*atan(1);
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
+class Manacher{
+    private:
+        int n=0,c=0;
+        str s="",con;
+        vi p,v,v2;
+        void __con_init(){
+            con="!#";
+            for(int i=0;i<int(s.size());i++){
+                con.pb(s[i]);
+                con.pb('#');
+            }
+            con.pb('@');
+            c=con.size();
+            assert(c==(2*int(s.size())+3));
+        }
+        void __p_init(){
+            p.assign(c,0);
+            int l=1,r=1;
+            for(int i=1;i<c;i++){
+                maxs(p[i],min(r-i,p[l+r-i]));
+                while(con[i-p[i]]==con[i+p[i]])p[i]++;
+                if(r<i+p[i])l=i-p[i],r=i+p[i];
+            }
+            for(int i=0;i<c;i++)p[i]--;
+            p.erase(p.begin());p.erase(p.begin());
+            p.pop_back();p.pop_back();
+            con.erase(con.begin());con.erase(con.begin());
+            con.pop_back();con.pop_back();
+            c-=4;
+        }
+        void __prefix_init(){
+            for(int i=1;i<n;i++)if(s[i]!=s[i-1])v.pb(i-1);
+            for(int i=2;i<n;i++)if(s[i]!=s[i-2])v2.pb(i-2);
+        }
+    public:
+        Manacher(str input){
+            s=input;
+            n=s.size();
+
+            __con_init();
+            __p_init();
+            __prefix_init();
+        }
+        bool isPalindrome(int l,int r){
+            l--,r--;
+            return p[l+r]>=(r-l+1);
+        }
+        void debug(){
+            ::debug("n:",n);
+            cerr<<"con: ";for(auto c:con)cerr<<c<<" ";cerr<<endl;
+            ::debug("p:  ",p);
+        }      
+        void query(int l,int r){
+            l--,r--;
+            int sz=(r-l+1);
+            if(sz==1)return print(0);
+            if(sz==2)return print(2*(isPalindrome(l+1,r+1)?0:1));
+            int ans=0;
+            auto it=lower_bound(all(v),l);
+            if(it!=v.end() && (*it)<=r){
+                it=lower_bound(all(v2),l);
+                if(it==v2.end() || (*it)>=r-1)ans=((sz-1)/2)*(((sz-1)/2)+1);
+                else ans=sz*(sz-1)/2-1;
+            }
+            print(ans+sz*(isPalindrome(l+1,r+1)?0:1));
+        } 
+};
+
+
+inline void test(str s){
+    Manacher M(s);
+    M.debug();
+    for(int i=1;i<=int(s.size());i++)assert(M.isPalindrome(i,i));
+    assert(!M.isPalindrome(1,5));
+    assert(!M.isPalindrome(4,5));
+    assert(!M.isPalindrome(5,6));
+    assert(!M.isPalindrome(3,4));
+    assert(M.isPalindrome(3,5));
+}
+
+
 inline void solve(void){
-    input(n);
+    str s;
+    input(n,q,s);
+    Manacher man(s);    
+    
+    while(q--){
+        input(x,y);
+        man.query(x,y);
+    }
 }
 
 i32 main(void){
-    fastio;
+    #ifndef ONLINE_JUDGE
+        test("aybabtu");
+    #endif
+    //fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

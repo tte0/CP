@@ -110,11 +110,6 @@ inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
     return os;
 }
 template<typename T,typename T2>
-inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
-    for(const auto& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T,typename T2>
 inline istream& operator>>(istream& is,pair<T,T2>& p){
     is>>(p.ff)>>(p.ss);
     return is;
@@ -134,23 +129,17 @@ template<typename... Args>
 inline void input(Args&... args){
     (cin>>...>>args);
 }
-#ifdef ONLINE_JUDGE
-template<typename... Args>
-inline void debug(const Args&... args){}
-#else
 inline void debug(){cerr<<endl;}
 template<typename... Args>
 inline void debug(const Args&... args){
     ((cerr<<args<<' '),...)<<endl;
 }
-#endif
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
-const int BLOCK=320;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
@@ -160,11 +149,20 @@ vi v,adj[N];
 
 inline void solve(void){
     input(n);
+    vi v(n);
+    input(v);
+    vi cnt(n+1);
+    for(auto i:v)cnt[i]++;
+    int x=0;
+    for(int i=0;i<=n;i++){
+        if(cnt[i]==0 || cnt[i]==1 && x)return print(i);
+        x+=(cnt[i]==1);
+    }
 }
 
 i32 main(void){
     fastio;
     t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
