@@ -100,6 +100,11 @@ inline ostream& operator<<(ostream& os,const vector<T>& a) {
     return os;
 }
 template<typename T>
+inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
+    for(const vector<T>& _:a)os<<_<<endl;
+    return os;
+}
+template<typename T>
 inline ostream& operator<<(ostream& os,const set<T>& a) {
     for(const T& _:a)os<<_<<' ';
     return os;
@@ -136,7 +141,9 @@ inline void input(Args&... args){
 }
 #ifdef ONLINE_JUDGE
 template<typename... Args>
-inline void debug(const Args&... args){}
+inline void debug(const Args&... args){
+    return void("59");
+}
 #else
 inline void debug(){cerr<<endl;}
 template<typename... Args>
@@ -144,6 +151,10 @@ inline void debug(const Args&... args){
     ((cerr<<args<<' '),...)<<endl;
 }
 #endif
+inline void yn(bool b){
+    if(b)yes;
+    else no;
+}
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
 const int A=1e9+5;
