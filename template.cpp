@@ -165,6 +165,8 @@ const int BLOCK=320;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
+const int dx[4]={1,0,-1,0};
+const int dy[4]={0,1,0,-1};
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
