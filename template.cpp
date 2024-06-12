@@ -54,6 +54,7 @@ typedef long double ldouble;
 typedef string str;
 typedef pair<int,int> ii;
 typedef pair<int,ii> iii;
+typedef pair<ii,ii> iiii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
 typedef vector<iii> viii;
@@ -63,9 +64,11 @@ typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
+typedef map<int,vi> miv;
 typedef unordered_map<int,int> umii;
 typedef unordered_map<char,int> umci;
 typedef unordered_map<str,int> umsi;
+typedef unordered_map<int,vi> umiv;
 typedef set<int> sti;
 typedef set<char> stc;
 typedef set<str> sts;
@@ -85,10 +88,10 @@ inline int fp(int b,int p,int mod=1e9+7){
     }
     return ans;
 }
-inline void maxs(int& x,const int& y){return void(x=max(x,y));}
-inline void mins(int& x,const int& y){return void(x=min(x,y));}
-inline void gcds(int& x,const int& y){return void(x=gcd(x,y));}
-inline void lcms(int& x,const int& y){return void(x=lcm(x,y));}
+template<typename T> inline void maxs(T& x,const T& y){return void(x=max(x,y));}
+template<typename T> inline void mins(T& x,const T& y){return void(x=min(x,y));}
+template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
+template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
 template<typename T,typename T2>
 inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
     os<<p.ff<<","<<p.ss<<endl;
