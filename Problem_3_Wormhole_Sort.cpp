@@ -43,7 +43,7 @@ SOFTWARE.
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
@@ -54,6 +54,7 @@ typedef long double ldouble;
 typedef string str;
 typedef pair<int,int> ii;
 typedef pair<int,ii> iii;
+typedef pair<ii,ii> iiii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
 typedef vector<iii> viii;
@@ -63,64 +64,185 @@ typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
+typedef map<int,vi> miv;
+typedef unordered_map<int,int> umii;
+typedef unordered_map<char,int> umci;
+typedef unordered_map<str,int> umsi;
+typedef unordered_map<int,vi> umiv;
 typedef set<int> sti;
 typedef set<char> stc;
 typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
-const int N=100005;
-const int MOD=1000000007;
+inline int segsum(int start,int end,int step){
+    if(end<start)return 0;
+    return (((end-start)/step+1)*(start+end))>>1;
+}
+inline int fp(int b,int p,int mod=1e9+7){
+    int ans=1;
+    while(p){
+        if(p&1)ans=(ans*b)%mod;
+        p>>=1;
+        b=(b*b)%mod;
+    }
+    return ans;
+}
+template<typename T> inline void maxs(T& x,const T& y){return void(x=max(x,y));}
+template<typename T> inline void mins(T& x,const T& y){return void(x=min(x,y));}
+template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
+template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
+template<typename T,typename T2>
+inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
+    os<<p.ff<<","<<p.ss<<endl;
+    return os;
+}
+template<typename T>
+inline ostream& operator<<(ostream& os,const vector<T>& a) {
+    for(const T& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T>
+inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
+    for(const vector<T>& _:a)os<<_<<endl;
+    return os;
+}
+template<typename T>
+inline ostream& operator<<(ostream& os,const set<T>& a) {
+    for(const T& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>
+inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
+    for(const auto& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>
+inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
+    for(const auto& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>
+inline istream& operator>>(istream& is,pair<T,T2>& p){
+    is>>(p.ff)>>(p.ss);
+    return is;
+}
+template<typename T>
+inline istream& operator>>(istream& is,vector<T>& a) {
+    for(T& _:a)is>>_;
+    return is;
+}
+inline void print(){cout<<endl;}
+template<typename... Args>
+inline void print(const Args&... args){
+    ((cout<<args<<' '),...)<<endl;
+}
+inline void input(){}
+template<typename... Args>
+inline void input(Args&... args){
+    (cin>>...>>args);
+}
+#ifdef ONLINE_JUDGE
+template<typename... Args>
+inline void debug(const Args&... args){
+    return void("59");
+}
+#else
+inline void debug(){cerr<<endl;}
+template<typename... Args>
+inline void debug(const Args&... args){
+    ((cerr<<args<<' '),...)<<endl;
+}
+#endif
+inline void yn(bool b){
+    if(b)yes;
+    else no;
+}
+///////////////////////////////////////////////////////////////////
+const int N=2e5+5;
+const int A=1e9+5;
+const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
+const int BLOCK=320;
+const ldouble EPS=1e-9;
+const int MAXQUERY=100;
 const double PI=4*atan(1);
-inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+const int dx[4]={1,0,-1,0};
+const int dy[4]={0,1,0,-1};
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans,p[N],vis[N],fa[N];
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,fa[N],vis[N];
+vi v;
+vvi comp;
 viii edges;
 
-inline int dfs(int node){
-    return (vis[node]++?node:dfs(p[node]));
-}
-
 inline int dsu(int x){
-    return (fa[x]<0?x:fa[x]=dsu(fa[x]));
+    if(fa[x]<0)return x;
+    return fa[x]=dsu(fa[x]);
 }
 
-inline void unionSet(int x,int y){//x->y
-    if(fa[dsu(x)]<fa[dsu(y)])swap(x,y); // 
-    fa[dsu(y)]+=fa[dsu(x)];
-    fa[dsu(x)]=dsu(y);
+inline void merge(int x,int y){
+    x=dsu(x),y=dsu(y);
+    if(x==y)return;
+    fa[x]+=fa[y];
+    fa[y]=x;
+}
+
+inline bool valid(int c){
+    mset(fa,-1);
+    for(int i=0;i<c;i++){
+        merge(edges[i].ss.ff,edges[i].ss.ss);
+    }
+    for(auto v:comp){
+        for(int i=1;i<v.size();i++){
+            if(dsu(v[0])!=dsu(v[i]))return false;
+        }
+    }
+    return true;
 }
 
 inline void solve(void){
     mset(fa,-1);
-    cin>>n>>m;
-    for(int i=0;i<n;i++)cin>>p[i];
-    for(int i=0;i<n;i++){
-        cin>>x>>y>>w;
+    input(n,m);
+    v.resize(n);
+    input(v);
+    for(auto& i:v)i--;
+    for(int i=0;i<m;i++){
+        input(x,y,w);
         x--,y--;
+        if(y<x)swap(x,y);
         edges.pb({w,{x,y}});
     }
-    sort(all(edges));
-    int target=0;
+    sort(rall(edges));
+
+    //debug("v:",v);
+    //debug("edges:",edges);
+
     for(int i=0;i<n;i++){
-        if(vis[i])continue;
-        dfs(i);
-        target++;
+        int node=i;
+        if(!(vis[node]))comp.pb({});
+        while(!vis[node]++){
+            comp.back().pb(node);
+            node=v[node];
+        }
     }
 
-    int cnt=n;
-    if(target==cnt)return void(cout<<-1<<endl);
-    int i;
-    for(i=0;i<n && target<cnt;i++){
-        nit 
+    //debug("comp:",comp);
+
+    int l=0,r=m;
+    while(l<r){
+        int m=((l+r)/2);
+        //debug("l,r,x:",l,r,((m==0)?(-1):(edges[m-1].ff)));
+        if(!valid(m))l=m+1;
+        else r=m;
     }
+
+    cout<<((l==0)?(-1):(edges[l-1].ff));
 }
 
 i32 main(void){
     fastio;
+    usacoio("wormsort");
     t=1;
     //cin>>t;
     while(t--)solve();
