@@ -171,14 +171,29 @@ const double PI=4*atan(1);
 const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,cnt[N];
 vi v,adj[N];
 
 inline void solve(void){
     input(n,m);
     for(int i=0;i<m;i++){
-        
+        input(y,x);
+        x--,y--;
+        adj[x].pb(y);
+        cnt[y]++;
     }
+
+    priority_queue<int> q;
+    for(int i=0;i<n;i++)if(!cnt[i])q.push(i);
+
+    while(q.size()){
+        int node=q.top();q.pop();
+        v.pb(node+1);
+        for(const int& i:adj[node])if(!(--cnt[i]))q.push(i);
+    }
+
+    reverse(all(v));
+    print(v);
 }
 
 i32 main(void){

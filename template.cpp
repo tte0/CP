@@ -46,7 +46,7 @@ SOFTWARE.
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
-#define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
+#define ASSERT(condition,message) if(!condition){debug("Assertion failed:",message);abort();}
 using namespace std;
 typedef int32_t i32;
 typedef int_fast64_t ll;
