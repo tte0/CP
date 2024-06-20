@@ -46,7 +46,6 @@ SOFTWARE.
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
-#define ASSERT(condition,message) if(!condition){debug("Assertion failed:",message);abort();}
 using namespace std;
 typedef int32_t i32;
 typedef int_fast64_t ll;
@@ -157,6 +156,12 @@ inline void debug(const Args&... args){
 inline void yn(bool b){
     if(b)yes;
     else no;
+}
+inline void ASSERT(bool condition=true,str message=""){
+    if(condition){
+        debug("Assertion failed:",message,"at",__FILE__+str(":")+to_string(__LINE__));
+        abort();
+    }
 }
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
