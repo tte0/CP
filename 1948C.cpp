@@ -53,6 +53,7 @@ typedef long double ldouble;
 typedef string str;
 typedef pair<int,int> ii;
 typedef pair<int,ii> iii;
+typedef pair<ii,ii> iiii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
 typedef vector<iii> viii;
@@ -62,9 +63,11 @@ typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
+typedef map<int,vi> miv;
 typedef unordered_map<int,int> umii;
 typedef unordered_map<char,int> umci;
 typedef unordered_map<str,int> umsi;
+typedef unordered_map<int,vi> umiv;
 typedef set<int> sti;
 typedef set<char> stc;
 typedef set<str> sts;
@@ -84,10 +87,10 @@ inline int fp(int b,int p,int mod=1e9+7){
     }
     return ans;
 }
-inline void maxs(int& x,const int& y){return void(x=max(x,y));}
-inline void mins(int& x,const int& y){return void(x=min(x,y));}
-inline void gcds(int& x,const int& y){return void(x=gcd(x,y));}
-inline void lcms(int& x,const int& y){return void(x=lcm(x,y));}
+template<typename T> inline void maxs(T& x,const T& y){return void(x=max(x,y));}
+template<typename T> inline void mins(T& x,const T& y){return void(x=min(x,y));}
+template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
+template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
 template<typename T,typename T2>
 inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
     os<<p.ff<<","<<p.ss<<endl;
@@ -171,91 +174,39 @@ const int BLOCK=320;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
+const int dx[4]={1,0,-1,0};
+const int dy[4]={0,1,0,-1};
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,x,y,w,ans;
-vi a,b,adj[N];
-
-inline int select(const int& x){
-    return (a[x]>b[x])?1:-1;
-}
+int n,m,k,t,q,a,b,x,y,w,ans;
+vi v,adj[N];
+vector<str> s(2);
 
 inline void solve(void){
-    input(n,m);
-    int k=n+m+1;
-    a.resize(k);
-    b.resize(k);
-    input(a,b);
+    input(n,s);
+    priority_queue<iii> q;
+    vvi vis(2,vi(n,0));
+    q.push({0,{0,0}});
 
-    if(n==0){
-        int sum=accumulate(all(b),0LL);
-        for(auto i:b)cout<<sum-i<<" ";
-        cendl;return;
-    }
-    if(m==0){
-        int sum=accumulate(all(a),0LL);
-        for(auto i:a)cout<<sum-i<<" ";
-        cendl;return;
-    }
-
-    vi v(k),v2(k);
-    {//create normal (v) vector
-        int n=::n,m=::m;
-        for(int i=1;i<k;i++){
-            if(!n || (m && a[i]<b[i])){
-                v[i]=b[i];
-                m--;
-            }
-            else{
-                v[i]=a[i];
-                n--;
-            }
-        }
-        for(int i=k-2;i>0;i--)v[i]+=v[i+1];
-        ASSERT(n==0,"n==0");
-        ASSERT(m==0,"m==0");
-    }
-    {//create 1-diff (v2) vector
-        int n=::n-select(0),m=::m+select(0);
-        for(int i=1;i<k;i++){
-            if(!n || (m && a[i]<b[i])){
-                v2[i]=b[i];
-                m--;
-            }
-            else{
-                v2[i]=a[i];
-                n--;
-            }
-        }
-        for(int i=k-2;i>0;i--)v2[i]+=v2[i+1];
-        ASSERT(n==0,"1n==0");
-        ASSERT(m==0,"1m==0");
-    }
-
-    debug("v:",v);
-    debug("v2:",v2);
-
-    int sum=0;
-    for(int i=0;i<k-1;i++){
-        if(select(i)==select(0))cout<<sum+v[i+1]<<" ";
-        else cout<<sum+v2[i+1]<<" ";
-        if(!m || (n && select(i)==1)){
-            sum+=a[i];
-            n--;
+    while(q.size()){
+        int d=q.top().ff,x=q.top().ss.ff,y=q.top().ss.ss;q.pop();
+        if(y<0 || y>=n || !(x==0 || x==1) || vis[x][y]++)continue;
+        if(x==1 && y==n-1)return print("YES");
+        if(d&1){
+            q.push({d+1,{x,y+(s[x][y]=='>'?1:-1)}});
         }
         else{
-            sum+=b[i];
-            m--;
+            q.push({d+1,{x+dx[0],y+dy[0]}});
+            q.push({d+1,{x+dx[1],y+dy[1]}});
+            q.push({d+1,{x+dx[2],y+dy[2]}});
+            q.push({d+1,{x+dx[3],y+dy[3]}});
         }
     }
-    print(sum);
-
-    
-    ASSERT(n==0,"2n==0");
-    ASSERT(m==0,"2m==0");
+    print("NO");
 }
 
 i32 main(void){
     fastio;
+    //usacoio("59");
     t=1;
     cin>>t;
     while(t--)solve();

@@ -157,11 +157,12 @@ inline void yn(bool b){
     if(b)yes;
     else no;
 }
-inline void ASSERT(bool condition=true,str message=""){
-    if(condition){
-        debug("Assertion failed:",message,"at",__FILE__+str(":")+to_string(__LINE__));
-        abort();
-    }
+#define ASSERT(condition, message)\
+while(0){\
+    if(condition){\
+        debug("Assertion failed:", message, "at", __FILE__ + str(":") + to_string(__LINE__));\
+        abort();\
+    }\
 }
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
