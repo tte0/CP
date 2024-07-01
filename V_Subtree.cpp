@@ -165,7 +165,7 @@ while(0){\
     }\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -177,26 +177,50 @@ const double PI=4*atan(1);
 const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,dp[N],dp2[N];
+vi adj[N];
+
+inline int dfs(int node=0,int p=-1){
+    dp[node]=1;
+    for(const int& i:adj[node]){
+        if(i==p)continue;
+        dp[node]*=1+dfs(i,node);
+        dp[node]%=m;
+    }
+    return dp[node];
+}
+
+inline void f(int node=0,int p=-1,int back=1){
+    dp2[node]=dp[node]*back;
+    dp2[node]%=m;
+    for(const int& i:adj[node]){
+        if(i==p)continue;
+        back*=dp[i];
+        back%=m;
+    }
+    for(const int& i:adj[node]){
+        if(i==p)continue;
+        f(i,node,1+(back*fp(dp[i],,m)))
+    }
+
+}
 
 inline void solve(void){
-    input(n);
-    v.resize(n);
-    input(v);
-    while(v.size() && !v.back())v.pop_back();
-    if(v.empty())return yn(true);
-
-    v[0]--;v.back()++;
-    for(int i=1;i<v.size();i++)v[i]+=v[i-1];
-    for(auto i:v)if(i<0)return yn(false);
-    yn(v.back()==0);
+    input(n,m);
+    for(int i=1;i<n;i++){
+        input(x,y);
+        x--,y--;
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+    dfs();
+    f();
 }
 
 i32 main(void){
     fastio;
     //usacoio("59");
     t=1;
-    cin>>t;
+    //cin>>t;
     while(t--)solve();
 }
