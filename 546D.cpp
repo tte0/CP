@@ -165,7 +165,7 @@ while(0){\
     }\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=5e6+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -178,30 +178,43 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-str s;
+i32 a,b,sieve[N];
+
+inline void init(){
+    mset(sieve,-1);
+    sieve[0]=sieve[1]=0;
+    for(int i=2;i<=5000000;i++){
+        if(sieve[i]!=-1)continue;
+        sieve[i]=i;
+        for(int j=i*i;j<=5000000;j+=i)sieve[j]=i;
+    }
+
+    //cerr<<"sieve: ";for(int i=0;i<=10;i++)cerr<<sieve[i]<<",";cerr<<endl;
+
+    for(int i=5000000;i>1;i--){
+        int x=i,cnt=0;
+        while(x>1){
+            cnt++;
+            x/=sieve[x];
+        }
+        ASSERT(x!=1,"x!=1 after factorization");
+        sieve[i]=cnt;
+    }
+    //cerr<<"sieve: ";for(int i=0;i<=10;i++)cerr<<sieve[i]<<",";cerr<<endl;
+    for(int i=1;i<=5000000;i++)sieve[i]+=sieve[i-1];
+    //cerr<<"sieve: ";for(int i=0;i<=10;i++)cerr<<sieve[i]<<",";cerr<<endl;
+}
 
 inline void solve(void){
-    input(n,k,s);
-    if(k>n/2){
-        reverse(all(s));
-        k=n-k+1;
-    }k--;
-
-    int l,r,cnt=0;
-    for(l=k;l && s[k-l]==s[n-(k-l)-1];l--);
-    for(r=(n-1)/2-k;r && s[r+k]==s[n-(r+k)-1];r--);
-    for(int i=0;i<n/2;i++)cnt+=min(abs(s[i]-s[n-i-1]),26-abs(s[i]-s[n-i-1]));
-
-    print(cnt+min(l,r)+(r+l));
-
-    debug("cnt,l,r:",cnt,l,r);
+    input(a,b);
+    print(sieve[a]-sieve[b]);
 }
 
 i32 main(void){
     fastio;
     //usacoio("59");
-    t=1;
-    //cin>>t;
+    init();
+    int t=1;
+    cin>>t;
     while(t--)solve();
 }

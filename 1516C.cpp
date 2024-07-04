@@ -167,35 +167,41 @@ while(0){\
 const int N=105;
 const int A=2005;
 const int MOD=1e9+7;
-const i32 INF=INT32_MAX;
+const i32 INF=1000000000;
 const ll  INFL=INT64_MAX;
 const int BLOCK=320;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
-const double PI=4*atan(1);
+const ldouble PI=4*atan(1);
 const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
+mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
-vvi dp(N,vi(N*A,-1)),dp2(N,vi(N*A,-1)),bt(N,vi(N*A,-1));
+int n,m,k,t,q,a,b,x,y,w,ans,dp[N][N*A];
+vi v;
 
-inline bool f(int ind,int x){
-    if(ind==n)return !x;
-    if(dp[ind][x]!=-1)return dp[ind][x];
-    return dp[ind][x]=(f(ind+1,abs(x+v[ind]))|f(ind+1,abs(x+v[ind])));
-}
-
-inline int f2(int ind=0,int x=0){
-    if(ind==n)x?0:INF;
+inline bool f(int ind=0,int sum=0){
+    if(ind==n)return !sum;
+    if(dp[ind][sum]!=-1)return dp[ind][sum];
+    return dp[ind][sum]=f(ind+1,abs(sum+v[ind]))|f(ind+1,abs(sum-v[ind]));
 }
 
 inline void solve(void){
+    mset(dp,-1);
     input(n);
     v.resize(n);
     input(v);
+    
+    int g=v[0];
+    for(int i=1;i<n;i++)gcds(g,v[i]);
+    for(int& i:v)i/=g;
 
-    f2();
+    if(!f() || accumulate(all(v),0LL)%2)return print(0);
+    else print(1);
+
+    for(int i=0;i<n;i++){
+        if(v[i]%2==1)return print(i+1);
+    }
 }
 
 i32 main(void){

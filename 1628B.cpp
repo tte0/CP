@@ -60,6 +60,7 @@ typedef vector<iii> viii;
 typedef vector<vi> vvi;
 typedef vector<vvi> vvvi;
 typedef vector<pair<char,int>> vci;
+typedef vector<str> vstr;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
@@ -179,29 +180,37 @@ const int dy[4]={0,1,0,-1};
 mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-str s;
+vstr v;
 
 inline void solve(void){
-    input(n,k,s);
-    if(k>n/2){
-        reverse(all(s));
-        k=n-k+1;
-    }k--;
+    input(n);
+    v.resize(n);
+    input(v);
 
-    int l,r,cnt=0;
-    for(l=k;l && s[k-l]==s[n-(k-l)-1];l--);
-    for(r=(n-1)/2-k;r && s[r+k]==s[n-(r+k)-1];r--);
-    for(int i=0;i<n/2;i++)cnt+=min(abs(s[i]-s[n-i-1]),26-abs(s[i]-s[n-i-1]));
-
-    print(cnt+min(l,r)+(r+l));
-
-    debug("cnt,l,r:",cnt,l,r);
+    for(const str& s:v){
+        if(s[0]==s.back())return print("YES");
+    }
+    
+    msi mp2,mp3;
+    for(int i=0;i<n;i++){
+        if(v[i].size()==2){
+            if(mp2[str(rall(v[i]))])return print("YES");
+            mp2[v[i]]++;
+            mp3[v[i]]++;
+        }
+        else{
+            if(mp3[str(rall(v[i]))]||mp3[str(rall(v[i])-1)])return print("YES");
+            mp3[v[i]]++;
+            mp2[v[i].substr(0,2)]++;
+        }
+    }
+    print("NO");
 }
 
 i32 main(void){
     fastio;
     //usacoio("59");
-    t=1;
-    //cin>>t;
+    int t=1;
+    cin>>t;
     while(t--)solve();
 }

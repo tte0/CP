@@ -60,6 +60,7 @@ typedef vector<iii> viii;
 typedef vector<vi> vvi;
 typedef vector<vvi> vvvi;
 typedef vector<pair<char,int>> vci;
+typedef vector<str> vstr;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
@@ -176,6 +177,7 @@ const int MAXQUERY=100;
 const double PI=4*atan(1);
 const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
+mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
@@ -187,7 +189,7 @@ inline void solve(void){
 i32 main(void){
     fastio;
     //usacoio("59");
-    t=1;
+    int t=1;
     //cin>>t;
     while(t--)solve();
 }
