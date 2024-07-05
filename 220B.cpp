@@ -21,9 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#pragma GCC optimize("O3,fast-math,unroll-all-loops")
+#pragma GCC optimize("unroll-all-loops,no-stack-protector,O3,fast-math")
 #include <bits/stdc++.h>
-#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -48,7 +47,7 @@ SOFTWARE.
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
 using namespace std;
-typedef int_fast32_t i32;
+typedef int32_t i32;
 typedef int_fast64_t ll;
 typedef long double ldouble;
 typedef string str;
@@ -167,7 +166,7 @@ while(0){\
     }\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -180,17 +179,69 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans[N];
+vi v;
+viii query;
 
-inline void solve(void){
-    input(n);
+inline bool cmp(iii a,iii b){
+    if(a.ss.ff/BLOCK != b.ss.ff/BLOCK)return a.ss.ff<b.ss.ff;
+    return a.ss.ss<b.ss.ss;
 }
 
-signed main(void){
+inline void solve(void){
+    input(n,q);
+    v.resize(n);
+    input(v);
+    for(int i=0;i<q;i++){
+        input(x,y);
+        x--,y--;
+        query.pb({i,{x,y}});
+    }
+    sort(all(query),cmp);
+    
+    umii mp;mp[v[0]]++;
+    int l=0,r=0,cnt=mp[1];
+    for(auto _:query){
+        int ind=_.ff,x=_.ss.ff,y=_.ss.ss;
+        
+        //if(n==100000 && n==q && ind<10)print("startloop (ind):",ind);
+        while(r<y){
+            mp[v[++r]]++;
+            if(mp[v[r]]==v[r])cnt++;
+            else if(mp[v[r]]==v[r]+1)cnt--;
+        }
+        //if(n==100000 && n==q && ind<10)print("r expand:",cnt);
+        while(x<l){
+            mp[v[--l]]++;
+            if(mp[v[l]]==v[l])cnt++;
+            else if(mp[v[l]]==v[l]+1)cnt--;
+        }
+        //if(n==100000 && n==q && ind<10)print("l expand:",cnt);
+        while(y<r){
+            if(mp[v[r]]==v[r])cnt--;
+            else if(mp[v[r]]==v[r]+1)cnt++;
+            mp[v[r--]]--;
+        }
+        //if(n==100000 && n==q && ind<10)print("r decrase:",cnt);
+        while(l<x){
+            if(mp[v[l]]==v[l])cnt--;
+            else if(mp[v[l]]==v[l]+1)cnt++;
+            mp[v[l++]]--;
+        }
+        //if(n==100000 && n==q && ind<10)print("l decrase:",cnt);
+        ans[ind]=cnt;
+    }
+
+    for(int i=0;i<q;i++)print(ans[i]);
+}
+
+i32 main(void){
+    clock_t start=clock();
+    //fileio;
     fastio;
     //usacoio("59");
     int t=1;
     //cin>>t;
     while(t--)solve();
+    debug("Time elapsed:",(clock()-start)/(CLOCKS_PER_SEC/1000),"ms");
 }
