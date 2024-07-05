@@ -22,7 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
-#include <bits/stdc++.h>
+#include <bits/stdc++.h> 
+#include <ext/pb_ds/assoc_container.hpp> 
+#include <ext/pb_ds/tree_policy.hpp> 
 #define int ll
 #define ff first
 #define ss second
@@ -48,6 +50,7 @@ SOFTWARE.
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
 using namespace std;
+using namespace __gnu_pbds;
 typedef int32_t i32;
 typedef int_fast64_t ll;
 typedef long double ldouble;
@@ -167,7 +170,7 @@ while(0){\
     }\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e6+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -180,11 +183,52 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,st[2*N];
+vi v;
+
+inline int query(){
+
+}
+
+inline void update(){
+
+}
 
 inline void solve(void){
     input(n);
+    v.resize(n);
+    input(v);
+    reverse(all(v));
+
+    vi comp=v;
+    compress(comp);
+    for(int& i:v)i=lower_bound(all(comp),i)-comp.begin();
+
+    vi cnt(comp.size()),pref(n),suf(n);
+    for(int i=0;i<n;i++){
+        pref[i]=++cnt[v[i]];
+    }
+    cnt.assign(comp.size(),0);
+    for(int i=n-1;i>=0;i--){
+        suf[i]=++cnt[v[i]];
+    }
+
+    for(int i=0;i<n;i++)st[n+suf[i]]++;
+    for(int i=n-1;i>0;i--)st[i]=st[i<<1]+st[i<<1|1];
+
+    debug("build ok");
+    for(int i=0;i<n;i++){
+        int x=suf[i];
+        for(st[x+=n]--;x>1;x>>=1)st[x>>1]=st[x]+st[x^1];
+
+        for(int l=pref[i]+n+1,r=2*n;l<r;l>>=1,r>>=1){
+            debug("l,r:",l,r);
+            if(l&1)ans+=st[l++];
+            if(r&1)ans+=st[--r];
+        }
+    }
+
+    print(ans);
 }
 
 i32 main(void){
