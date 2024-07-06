@@ -23,14 +23,12 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
 #include <bits/stdc++.h>
-#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
 #define spc ' '
 #define pb push_back
 #define e2(x) (1LL<<(x))
-#define lg(x) (__lg(x))
 #define gcd(x,y) __gcd(x,y)
 #define lcm(x,y) ((x/gcd(x,y))*y)
 #define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
@@ -96,7 +94,7 @@ template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
 template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
 template<typename T,typename T2>
 inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
-    os<<"["<<p.ff<<","<<p.ss<<"]";
+    os<<p.ff<<","<<p.ss<<endl;
     return os;
 }
 template<typename T>
@@ -122,42 +120,6 @@ inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
 template<typename T,typename T2>
 inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
     for(const auto& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const queue<T>& b) {
-    queue<T> a=b;
-    while(a.size()){
-        os<<a.front()<<" ";
-        a.pop();
-    }
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const stack<T>& b) {
-    stack<T> a=b;
-    while(a.size()){
-        os<<a.top()<<" ";
-        a.pop();
-    }
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const priority_queue<T>& b) {
-    priority_queue<T> a=b;
-    while(a.size()){
-        os<<a.top()<<" ";
-        a.pop();
-    }
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const priority_queue<T,vector<T>,greater<T>>& b) {
-    priority_queue<T,vector<T>,greater<T>> a=b;
-    while(a.size()){
-        os<<a.top()<<" ";
-        a.pop();
-    }
     return os;
 }
 template<typename T,typename T2>
@@ -204,7 +166,7 @@ while(0){\
     }\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=5e3+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -217,11 +179,28 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,x,y,w,ans,dp[N][N];
+vi a,b;
+
+inline int f(int x=0,int y=0){
+    if(x==n)return 0;
+    if(n-x>m-y)return INF;//
+    if(dp[x][y]!=-1)return dp[x][y];
+    return dp[x][y]=min(f(x,y+1),f(x+1,y+1)+abs(a[x]-b[y]));
+}
 
 inline void solve(void){
+    mset(dp,-1);
     input(n);
+    for(int i=0;i<n;i++){
+        input(x);
+        if(x)a.pb(i);
+        else b.pb(i);
+    }
+    n=a.size();
+    m=b.size();
+
+    print(f());
 }
 
 signed main(void){

@@ -96,7 +96,7 @@ template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
 template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
 template<typename T,typename T2>
 inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
-    os<<"["<<p.ff<<","<<p.ss<<"]";
+    os<<p.ff<<","<<p.ss<<endl;
     return os;
 }
 template<typename T>
@@ -122,42 +122,6 @@ inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
 template<typename T,typename T2>
 inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
     for(const auto& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const queue<T>& b) {
-    queue<T> a=b;
-    while(a.size()){
-        os<<a.front()<<" ";
-        a.pop();
-    }
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const stack<T>& b) {
-    stack<T> a=b;
-    while(a.size()){
-        os<<a.top()<<" ";
-        a.pop();
-    }
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const priority_queue<T>& b) {
-    priority_queue<T> a=b;
-    while(a.size()){
-        os<<a.top()<<" ";
-        a.pop();
-    }
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const priority_queue<T,vector<T>,greater<T>>& b) {
-    priority_queue<T,vector<T>,greater<T>> a=b;
-    while(a.size()){
-        os<<a.top()<<" ";
-        a.pop();
-    }
     return os;
 }
 template<typename T,typename T2>
@@ -219,15 +183,49 @@ mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
+vvi st;
+
+inline int query(int l,int r){
+    ASSERT(r<l,"invalid query r<l");
+    if(l==r)return INF;
+    int j=lg(r-l);
+    return gcd(st[l][j],st[r-e2(j)][j]);
+}
 
 inline void solve(void){
     input(n);
+    v.resize(n);
+    input(v);
+    if(n==1)return print("1");
+    for(int i=0;i<n-1;i++)v[i]=abs(v[i]-v[i+1]);
+    v.pop_back();
+    n--;
+
+    st.assign(n,vi(lg(n)+2,-1));
+    for(int i=0;i<n;i++)st[i][0]=v[i];
+    for(int j=1;j<st[0].size();j++){
+        for(int i=0;i<n;i++){
+            st[i][j]=gcd(st[i][j-1],(st[min(int(i+e2(j-1)),(n-1))][j-1]));
+        }
+    }
+    
+    int l=0,r=0;ans=1;
+    while(l<n && r<=n){
+        if(query(l,r)==1)l++;
+        else{
+            maxs(ans,r-l+1);
+            r++;
+        }
+    }
+
+    print(ans);
+    debug("testcase ok");
 }
 
 signed main(void){
-    fastio;
+    //fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
