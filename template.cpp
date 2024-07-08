@@ -23,6 +23,8 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 #define int ll
 #define ff first
 #define ss second
@@ -43,12 +45,14 @@ SOFTWARE.
 #define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
+#define clock() (chrono::high_resolution_clock::now().time_since_epoch().count())
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
 using namespace std;
+using namespace __gnu_pbds;
 typedef int_fast32_t i32;
 typedef int_fast64_t ll;
 typedef long double ldouble;
@@ -215,7 +219,7 @@ const int MAXQUERY=100;
 const double PI=4*atan(1);
 const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
-mt19937 mt(clock()*(clock()%2?(clock()-1):(clock()+1)));
+mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
