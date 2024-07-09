@@ -200,7 +200,7 @@ inline void yn(bool b){
     if(b)yes;
     else no;
 }
-#define ASSERT(condition, message)\
+#define ASSERT(condition,message)\
 if(condition){\
     debug("Assertion failed:", message, "at", __FILE__ + str(":") + to_string(__LINE__));\
     abort();\
@@ -219,17 +219,60 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,dp[20][5][2],num;
+vi v;
+
+inline int nod(int x){
+    int ans=0;
+    while(x){
+        x/=10;
+        ans++;
+    }
+    return ans;
+}
+
+inline int nld(int x,int dig){
+    vi v;
+    while(x){
+        v.pb(x%10);
+        x/=10;
+    }
+    reverse(all(v));
+    ASSERT(v.size()<=dig || dig<0,"invalid nthleftmostdigit call");
+    return v[dig];
+}
+
+inline int f(int dig=0,int cnt=0,int tight=1){
+    if(num<=0)return 1;
+    if(cnt>3)return 0;
+    if(nod(num)==dig)return 1;
+    if(dp[dig][cnt][tight]!=-1)return dp[dig][cnt][tight];
+    if(tight==0)return dp[dig][cnt][tight]=9*f(dig+1,cnt+1,0)+f(dig+1,cnt,0);
+
+    int t=0;
+                        t+=f(dig+1,cnt+(nld(num,dig)!=0),1);//tight case;
+    if(nld(num,dig)>1)  t+=(nld(num,dig)-1)*f(dig+1,cnt+1,0);
+    if(nld(num,dig)!=0) t+=f(dig+1,cnt,0);//zero case;
+
+    return dp[dig][cnt][tight]=t;
+}
 
 inline void solve(void){
-    input(n);
+    input(a,b);
+    mset(dp,-1);
+    num=b;
+    int ans=f();
+    debug("f(b):",ans);
+    mset(dp,-1);
+    num=a-1;
+    print(ans-f());
 }
 
 signed main(void){
+    debug(nod(59),nld(59,0),nld(59,1));
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

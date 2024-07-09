@@ -219,11 +219,35 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,c,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    input(n);
+    input(a,b,c);
+    int ta=a,tb=c,tc=c;
+    if(a>b)swap(a,b);
+    if(b>c)swap(c,b);
+    if(a>b)swap(a,b);
+
+    int mn=-1,val=INF;
+    for(int i=1;i<=10000;i++){
+        int t=0;
+        t+=abs(a-i);
+        t+=min(b%i,i-b%i);
+        t+=min(c%i,i-c%i);
+        if(t<val)mn=i,val=t;
+    }
+
+    a=ta,b=tb,c=tc;
+    if(min({a,b,c})==a){
+                    ans=abs(a-mn),a=mn; 
+       if(b%mn<mn/2)ans+=b%mn,    b-=b%mn;
+       else         ans+=mn-b%mn, b+=mn-b%mn;
+       if(c%mn<mn/2)ans+=c%mn,    c-=c%mn;
+       else         ans+=mn-c%mn, c+=mn-c%mn;
+    }
+    else if(min({a,b,c})==b){
+    }
 }
 
 signed main(void){
