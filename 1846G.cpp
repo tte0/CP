@@ -202,7 +202,7 @@ inline void yn(bool b){
 }
 #define ASSERT(condition, message)\
 if(condition){\
-    cerr<<"Assertion failed: "<<message<<" at "<<__FILE__<<":"<<to_string(__LINE__)<<endl;\
+    debug("Assertion failed:", message, "at", __FILE__ + str(":") + to_string(__LINE__));\
     abort();\
 }\
 ///////////////////////////////////////////////////////////////////
@@ -223,13 +223,16 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    input(n);
+    input(n,m);
+    for(int i=0;i<e2(n);i++){
+        
+    }
 }
 
 signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

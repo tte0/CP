@@ -219,11 +219,69 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,dp[20][11][2],num;
+vi v;
+
+inline int nod(int x){
+    int ans=0;
+    while(x){
+        x/=10;
+        ans++;
+    }
+    return ans;
+}
+
+inline int nld(int x,int dig){
+    vi v;
+    while(x){
+        v.pb(x%10);
+        x/=10;
+    }
+    reverse(all(v));
+    ASSERT(v.size()<=dig || dig<0,"invalid nthleftmostdigit call");
+    return v[dig];
+}
+
+inline int f(int dig=0,int last=10,int tight=1){
+    //debug("f:",dig,last,tight);
+    if(num<11)return num+1;
+    if(dig==nod(num))return dp[dig][last][tight]=1;
+    if(dp[dig][last][tight]!=-1)return dp[dig][last][tight];
+
+    if(tight==0){
+        int t=0;
+        for(int i=0;i<10;i++){
+            if(i==last)continue;
+            if(i==0 && last==10)t+=f(dig+1,10,0);
+            else                t+=f(dig+1,i,0);
+            
+        }
+        return dp[dig][last][tight]=t;
+    }
+
+    int t=0;
+    if(nld(num,dig)!=last)t+=f(dig+1,nld(num,dig),1);
+    for(int i=0;i<nld(num,dig);i++){
+        if(i==last)continue;
+        if(i==0 && last==10)t+=f(dig+1,10,0);
+        else                t+=f(dig+1,nld(num,dig),0);
+    }
+    return dp[dig][last][tight]=t;
+}
 
 inline void solve(void){
-    input(n);
+    input(a,b);
+    mset(dp,-1);
+    num=b;
+    int ans=f();
+    //debug("ans:",ans);
+    /*for(int i=0;i<=2;i++){
+        for(int j=0;j<=10;j++)cerr<<dp[i][j][0]<<" ";
+        cerr<<endl;
+    }*/
+    mset(dp,-1);
+    num=a-1;
+    print(ans-f());
 }
 
 signed main(void){
