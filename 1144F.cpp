@@ -23,8 +23,8 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
 #include <bits/stdc++.h>
-//#include <ext/pb_ds/assoc_container.hpp>
-//#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 #define int ll
 #define ff first
 #define ss second
@@ -52,7 +52,7 @@ SOFTWARE.
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
 using namespace std;
-//using namespace __gnu_pbds;
+using namespace __gnu_pbds;
 typedef int_fast32_t i32;
 typedef int_fast64_t ll;
 typedef long double ldouble;
@@ -219,11 +219,34 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans[N],vis[N];
 vi v,adj[N];
 
+inline bool dfs(int node=0,int d=0){
+    if(vis[node]++)return ans[node]==d;
+    ans[node]=d;
+    for(int i:adj[node])if(!dfs(i,1-d))return false;
+    return true;
+}
+
 inline void solve(void){
-    input(n);
+    input(n,m);
+    vii edges;
+    for(int i=0;i<m;i++){
+        input(x,y);
+        x--,y--;
+        edges.pb({x,y});
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+
+    if(!dfs())print("NO"),exit(0);
+    else print("YES");
+    
+    for(ii i:edges){
+        ASSERT(ans[i.ff]==ans[i.ss],"wtf");
+        cout<<1-ans[i.ff];
+    }
 }
 
 signed main(void){
