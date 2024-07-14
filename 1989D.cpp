@@ -23,8 +23,8 @@ SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
 #include <bits/stdc++.h>
-//#include <ext/pb_ds/assoc_container.hpp>
-//#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 #define int ll
 #define ff first
 #define ss second
@@ -52,7 +52,7 @@ SOFTWARE.
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
 #define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
 using namespace std;
-//using namespace __gnu_pbds;
+using namespace __gnu_pbds;
 typedef int_fast32_t i32;
 typedef int_fast64_t ll;
 typedef long double ldouble;
@@ -206,7 +206,7 @@ if(condition){\
     abort();\
 }\
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e6+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -219,84 +219,28 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans,st[3*N],lazy[3*N];
-bitset<3*N> lazy2;
-vi v;
-#define mid ((l+r)/2)
-inline int build(int l=1,int r=n,int node=1){
-    return st[node]=(l==r)?v[l-1]:(build(l,mid,2*node)+build(mid+1,r,2*node+1));
-}
+int n,m,k,t,q,a,b,x,y,w,ans,dp[N];
+vii v,c;
 
-inline void push(int l=1,int r=n,int node=1){
-    if(l==r){
-        st[node]=lazy[node]+(lazy2[node]?0:st[node]);
-        lazy[node]=lazy2[node]=0;
-        return;
-    }
-    if(lazy2[node]){
-        st[node]=(r-l+1)*lazy[node];
-        lazy[2*node]=lazy[2*node+1]=lazy[node];
-        lazy2[2*node]=lazy2[2*node+1]=1;
-    }
-    else{
-        st[node]+=(r-l+1)*lazy[node];
-        lazy[2*node]+=lazy[node];
-        lazy[2*node+1]+=lazy[node];
-    }
-    lazy[node]=lazy2[node]=0;
-}
-
-inline int query(int l=1,int r=n,int node=1){
-    push(l,r,node);
-    if(x<=l && r<=y)return st[node];
-    if(r<x || y<l)return 0;
-    return query(l,mid,node*2)+query(mid+1,r,node*2+1);
-}
-
-inline int inc_update(int l=1,int r=n,int node=1){
-    push(l,r,node);
-    if(r<x || y<l)return st[node];
-    if(x<=l && r<=y){
-        lazy[node]=w;
-        push(l,r,node);
-        return st[node];
-    }
-    return st[node]=inc_update(l,mid,node*2)+inc_update(mid+1,r,node*2+1);
-}
-
-inline int set_update(int l=1,int r=n,int node=1){
-    push(l,r,node);
-    if(r<x || y<l)return st[node];
-    if(x<=l && r<=y){
-        lazy[node]=w;
-        lazy2[node]=1;
-        push(l,r,node);
-        return st[node];
-    }
-    return st[node]=set_update(l,mid,node*2)+set_update(mid+1,r,node*2+1);
+inline bool cmp(const ii& a,const ii& b){
+    return a.ff<b.ff;
 }
 
 inline void solve(void){
-    input(n,q);
+    input(n,m);
     v.resize(n);
-    input(v);
-    
-    build();
-    while(q--){
-        input(x);
-        if(x==1){
-            input(x,y,w);
-            inc_update();
-        }
-        else if(x==2){
-            input(x,y,w);
-            set_update();
-        }
-        else{
-            input(x,y);
-            print(query());
-        }
-    }
+    c.resize(m);
+    for(ii& i:v)input(i.ff);
+    for(ii& i:v)input(i.ss);
+    input(c);
+
+    sort(all(v),cmp);
+    vii t;
+    for(int i=0;i<n;i++){
+        if(t.empty() || v[i].ff-v[i].ss<t.back().ss)t.pb({v[i].ff,v[i].ff-v[i].ss});
+    }v=t;
+
+
 }
 
 signed main(void){
