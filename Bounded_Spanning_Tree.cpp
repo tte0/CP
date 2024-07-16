@@ -213,7 +213,7 @@ if(condition){\
     abort();\
 }\
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=5e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -226,17 +226,52 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,fa[N];
+vii adj[N];
+
+inline int dsu(int x){
+    return (fa[x]==-1)?(x):(fa[x]=dsu(fa[x]));
+}
+
+inline bool merge(int x,int y){
+    x=dsu(x),y=dsu(y);
+    if(x==y)return false;
+    fa[x]=y;
+    return true;
+}
+
+inline void subtask1(){
+    input(n,m);
+    vi cnt(m,0);
+    vector<iiii> edges;
+    for(int i=0;i<n;i++)fa[i]=-1;
+    for(int i=0;i<n;i++)adj[i].clear();
+    for(int i=0;i<m;i++){
+        input(x,y,w);
+        x--,y--,w--;
+        edges.pb({{w,i},{x,y}});
+        cnt[w]=1;
+        input(w);
+    }
+    if(accumulate(all(cnt))<m)return print("NO");
+
+    sort(all(edges));
+    cnt.assign(m,0);
+    for(auto _:edges){
+        int w=_.ff.ff,ind=_.ff.ss,x=_.ss.ff,y=_.ss.ss;
+        if(!merge(x,y))
+    }
+
+}
 
 inline void solve(void){
-    input(n);
+    subtask1();
 }
 
 signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

@@ -94,13 +94,6 @@ inline int fp(int b,int p,int mod=1e9+7){
     }
     return ans;
 }
-template<typename InputIterator,typename T = int>
-T accumulate(InputIterator first,InputIterator last,T init = T{}) {
-    for (; first != last; ++first) {
-        init += *first;
-    }
-    return init;
-}
 template<typename T> inline void maxs(T& x,const T& y){return void(x=max(x,y));}
 template<typename T> inline void mins(T& x,const T& y){return void(x=min(x,y));}
 template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
@@ -227,16 +220,34 @@ const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+vi v;
 
 inline void solve(void){
     input(n);
+    v.resize(n);
+    input(v);
+    
+    mii mp;
+    for(int& i:v){
+        if(mp[i])i=mp[i];
+        else i=mp[i]=mp.size();
+    }
+    debug(v);
+    m=mp.size();
+
+    if(m==2)return print(0);
+    if(m==3){
+
+    }
+    if(m>3){
+        
+    }
 }
 
 signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

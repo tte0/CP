@@ -213,7 +213,7 @@ if(condition){\
     abort();\
 }\
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=5e2+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -229,8 +229,34 @@ mt19937 mt(clock());
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
+inline bool query(int l,int r){
+    print("?",r-l,vi(v.begin()+l,v.begin()+r));
+    cout.flush();
+    str res;
+    input(res);
+    return res=="YES";
+}
+
 inline void solve(void){
     input(n);
+    for(int i=1;i<n;i++){
+        input(x,y);
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+    for(int i=1;i<=n;i++)if(adj[i].size()==1)v.pb(i);
+    for(int i=1;i<=n;i++)if(adj[i].size()>1)v.pb(i);
+
+    int l=2,r=n,ans=2;
+    while(l<=r){
+        int m=(l+r)/2;
+        if(query(0,m))r=m-1, ans=m;
+        else l=m+1;
+    }
+    l = ans;
+    if(l>2)return print("!",v[l-1]);
+    if(query(1,3))print("!",v[1]);
+    else print("!",v[0]);
 }
 
 signed main(void){
