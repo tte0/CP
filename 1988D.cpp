@@ -206,7 +206,7 @@ if(condition){\
     abort();\
 }\
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=3e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -219,17 +219,47 @@ const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,dp[N][21],suffix[21];
 vi v,adj[N];
+
+inline int f(int node=0,int p=-1){
+    debug("f:",node,p);
+    for(int i=1;i<21;i++)dp[node][i]=i*v[i];
+    for(const int& i:adj[node]){
+        if(i==p)continue;
+        f(i,node);
+
+        suffix[20]=dp[i][20];
+        for(int j=19;j>0;j--)suffix[j]=min(suffix[j+1],dp[i][j]);
+        int mn=INFL;
+        for(int j=1;j<21;j++){
+            dp[node][j]+=min(mn,suffix[j+1]);
+            mins(mn,dp[i][j]);
+        }
+    }
+}
 
 inline void solve(void){
     input(n);
+    v.resize(n);
+    for(int i=0;i<=n;i++)adj[i].clear();
+    input(v);
+    for(int i=1;i<n;i++){
+        input(x,y);
+        x--,y--;
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+    f();
+    int ans=INFL;
+    for(int i=0;i<21;i++)mins(ans,dp[0][i]);
+    print(ans);
 }
 
 signed main(void){
-    fastio;
+    //fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

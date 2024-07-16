@@ -110,7 +110,7 @@ inline ostream& operator<<(ostream& os,const vector<T>& a) {
 }
 template<typename T>
 inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
-    for(const vector<T>& _:a)os<<_;
+    for(const vector<T>& _:a)os<<_<<endl;
     return os;
 }
 template<typename T>
@@ -223,13 +223,15 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    input(n);
+    double n,k;
+    input(n,k);
+    print(ceil((n-1)/(k-1)));
 }
 
 signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

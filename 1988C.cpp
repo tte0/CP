@@ -110,7 +110,7 @@ inline ostream& operator<<(ostream& os,const vector<T>& a) {
 }
 template<typename T>
 inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
-    for(const vector<T>& _:a)os<<_;
+    for(const vector<T>& _:a)os<<_<<endl;
     return os;
 }
 template<typename T>
@@ -224,12 +224,21 @@ vi v,adj[N];
 
 inline void solve(void){
     input(n);
+    if(e2(lg(n))==n)return void(cout<<"1\n"<<n<<endl);
+    vi v;
+    for(int bit=62;bit>=0;bit--){
+        if(n&e2(bit))v.pb(n^e2(bit));
+    }
+    v.pb(n);
+
+    print(v.size());
+    print(v);
 }
 
 signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }

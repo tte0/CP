@@ -110,7 +110,7 @@ inline ostream& operator<<(ostream& os,const vector<T>& a) {
 }
 template<typename T>
 inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
-    for(const vector<T>& _:a)os<<_;
+    for(const vector<T>& _:a)os<<_<<endl;
     return os;
 }
 template<typename T>
@@ -221,15 +221,20 @@ mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
-
+str s;
 inline void solve(void){
-    input(n);
+    input(n,s);
+    str q;mci mp;
+    for(int i=0;i<n;i++){
+        if(i==0 || s[i]=='1' || (s[i-1]=='1' && s[i]=='0'))mp[s[i]]++;
+    }
+    if(mp['1']>mp['0'])print("Yes");
+    else print("No");
 }
-
 signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
