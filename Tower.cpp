@@ -237,10 +237,10 @@ inline void solve(void){
 
     vi v;
     int x=e2(ans-1)-n;
-    for(int i=ans-1;i>=0;i--){
+    for(int i=ans-2;i>=0;i--){
         if(x>=e2(i))v.pb(2),x-=e2(i);
         else v.pb(1);
-    }
+    }v.pb(1);
     
     for(int i=0;i<ans;i++)print(v[i],i+1);
 }
