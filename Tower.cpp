@@ -1,5 +1,25 @@
 /*
-Author: Teoman Ata Korkmaz
+MIT License
+
+Copyright (c) 2024 tte0 (teomana,teoata17)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
 #include <bits/stdc++.h>
@@ -191,7 +211,7 @@ inline void yn(bool b){
 if(condition){\
     cerr<<"Assertion failed: "<<message<<" at "<<__FILE__<<":"<<to_string(__LINE__)<<endl;\
     abort();\
-}
+}\
 ///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
 const int A=1e9+5;
@@ -202,7 +222,7 @@ const int BLOCK=320;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
-const int dx[4]={-1,0,1,0};
+const int dx[4]={1,0,-1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
@@ -211,12 +231,24 @@ vi v,adj[N];
 
 inline void solve(void){
     input(n);
+    if(n==1)return print("0");
+    int ans=ceil(log2l(n))+1;
+    print(ans);
+
+    vi v;
+    int x=e2(ans-1)-n;
+    for(int i=ans-1;i>=0;i--){
+        if(x>=e2(i))v.pb(2),x-=e2(i);
+        else v.pb(1);
+    }
+    
+    for(int i=0;i<ans;i++)print(v[i],i+1);
 }
 
 signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
 }
