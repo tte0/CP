@@ -28,25 +28,25 @@ inline int fp(int b,int p,int mod=1e9+7){
     return ans;
 }
 template<typename T> inline istream& operator>>(istream& is,vector<T>& a) {
-    for(T& _:a)is>>_;
+for(T& _:a)is>>_;
     return is;
 }
 inline void print(){cout<<endl;}
 template<typename... Args> inline void print(const Args&... args){
-    ((cout<<args<<' '),...)<<endl;
+((cout<<args<<' '),...)<<endl;
 }
 inline void input(){}
 template<typename... Args> inline void input(Args&... args){
-    (cin>>...>>args);
+(cin>>...>>args);
 }
 #ifdef ONLINE_JUDGE
 template<typename... Args> inline void debug(const Args&... args){
-    return void("59");
+return void("59");
 }
 #else
 inline void debug(){cerr<<endl;}
 template<typename... Args> inline void debug(const Args&... args){
-    ((cerr<<args<<' '),...)<<endl;
+((cerr<<args<<' '),...)<<endl;
 }
 #endif
 const int N=2e5+5;
@@ -68,7 +68,7 @@ inline int preorder(int node=0,int d=0,int lr=0){
     int r=preorder(rchild[node],d+1,1);
     range[node]={l,r};
     if(lr==0)return l;
-    else     return r;
+    else return r;
 }
 
 inline ii _max(ii a,ii b){
@@ -81,7 +81,7 @@ inline ii _max(ii a,ii b){
 
 #define mid ((l+r)/2)
 inline ii build(int l=0,int r=n,int node=1){
-    if(l==r)return st[node]={depth[tb[l]],v[tb[l]]};
+    if(l==r)return st[node]={depth[bt[l]],v[bt[l]]};
     return st[node]=_max(build(l,mid,node*2),build(mid+1,r,node*2+1));
 }
 
@@ -137,11 +137,11 @@ inline void solve(void){
         else{//query
             input(w);
             w--;
-            x=bt[range[w].ff],y=bt[range[w].ss];
+            x=tb[range[w].ff],y=tb[range[w].ss];
             //debug("query range:",x,y);
             ii ans=query();
-            ans.ff-=sdepth[w],
-            print((fp(2,ans.ff,MOD)*ans.ss)%MOD);
+            ans.ff-=sdepth[w];
+            cout<<(fp(2,ans.ff,MOD)*ans.ss)%MOD<<endl;
         }
     }
 }
