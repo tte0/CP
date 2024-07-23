@@ -207,11 +207,41 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans,st[2*N],d[N],h;
+vi v;
+
+inline void build(){
+    for(int i=0;i<n;i++)st[i+n]=v[i];
+    for(int i=n-1;i;i++)st[i]=st[i<<1]+st[i<<1|1];
+}
+
+inline void push(int p){
+
+}
+
+inline int query(int l,int r){
+    l+=n,r+=n;
+    push(l);
+    push(r-1);
+}
 
 inline void solve(void){
-    input(n);
+    input(n,q);
+    h=sizeof(int)*8-clz(n);
+    v.resize(n);
+    input(v);
+    build();
+
+    while(q--){
+        input(x);
+        if(x==1){//update
+            input(x,y,w);
+        }
+        else{//query
+            input(x);
+            print(query(x,x+1));
+        }
+    }   
 }
 
 signed main(void){

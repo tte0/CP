@@ -1,27 +1,7 @@
 /*
-MIT License
-
-Copyright (c) 2024 tte0 (teomana,teoata17)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Author: Teoman Ata Korkmaz
 */
-#pragma GCC optimize("O3,fast-math,unroll-all-loops")
+#pragma GCC optimize("-fipa-sra,-fgcse-lm,-fgcse,inline,unroll-all-loops,no-stack-protector,O3,fast-math,Ofast")
 #include <bits/stdc++.h>
 #define int ll
 #define ff first
@@ -29,90 +9,79 @@ SOFTWARE.
 #define endl '\n'
 #define spc ' '
 #define pb push_back
-#define e2(x) (1LL<<(x))
-#define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x/gcd(x,y))*y)
-#define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
-#define ssum(x) ((x)*((x)+1)/2)
-#define isint(x) (ceil((x))==floor((x)))
-#define no cout<<"NO"<<endl
-#define yes cout<<"YES"<<endl
-#define cendl cout<<endl
-#define mset(x,y) memset(x,y,sizeof(x))
-#define popcnt(x) __builtin_popcountll(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
-#define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
-#define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
-#define wait while(clock()-start<=0.585*CLOCKS_PER_SEC);
+#define clock() (chrono::high_resolution_clock::now().time_since_epoch().count())
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 using namespace std;
+typedef int_fast32_t i32;
 typedef int_fast64_t ll;
-typedef long double ldouble;
-typedef string str;
-typedef pair<int,int> ii;
-typedef pair<int,ii> iii;
 typedef vector<int> vi;
-typedef vector<ii> vii;
-typedef vector<iii> viii;
-typedef vector<vi> vvi;
-typedef vector<vvi> vvvi;
-typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
-typedef map<char,int> mci;
-typedef map<str,int> msi;
-typedef set<int> sti;
-typedef set<char> stc;
-typedef set<str> sts;
-typedef multiset<int> msti;
-typedef multiset<char> mstc;
-typedef multiset<str> msts;
-const int N=200005;
-const int MOD=1000000007;
-const ll  INF=4e18;
-const double PI=4*atan(1);
-inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
+typedef unordered_map<int,int> umii;
+template<typename T>
+inline istream& operator>>(istream& is,vector<T>& a) {
+    for(T& _:a)is>>_;
+    return is;
+}
+inline void print(){cout<<endl;}
+template<typename... Args>
+inline void print(const Args&... args){
+    ((cout<<args<<' '),...)<<endl;
+}
+inline void input(){}
+template<typename... Args>
+inline void input(Args&... args){
+    (cin>>...>>args);
+}
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+mt19937 mt(clock());
+///////////////////////////////////////////////////////////////////
+int n,k,ans;
+vi v;
 
 inline void solve(void){
-    cin>>n>>k;
-    for(int i=0;i<n;i++){
-        cin>>x;
-        v.pb(x);
-    }
-    unordered_map<int,int> mp,mp2,mp_old,mp2_old;
-    mp[0]=mp2[0]=1;
+    input(n,k);
+    v.resize(n);
+    input(v);
+    shuffle(all(v),mt);
+
+    vi a,b;
+    a.pb(0),b.pb(0);
     for(int i=0;i<n/2;i++){
-        mp_old=mp;
-        mp.clear();
-        for(auto j:mp_old){
-            mp[j.ff]+=j.ss;
-            mp[j.ff+v[i]]+=j.ss;
-        }
+        vi _a;
+        for(int& j:a)_a.pb(j),_a.pb(v[i]+j);
+        swap(a,_a);
     }
     for(int i=n/2;i<n;i++){
-        mp2_old=mp2;
-        mp2.clear();
-        for(auto j:mp2_old){
-            mp2[j.ff]+=j.ss;
-            mp2[j.ff+v[i]]+=j.ss;
+        vi _b;
+        for(int& j:b)_b.pb(j),_b.pb(v[i]+j);
+        swap(b,_b);
+    }
+
+    sort(all(a));
+    sort(rall(b));
+
+    int p=0,p2=0;
+
+    while(p<a.size() && p2<b.size()){
+        if(a[p]+b[p2]<k)p++;
+        else if(a[p]+b[p2]>k)p2++;
+        else{
+            int x=a[p],cnt=0,cnt2=0;
+            while(p<a.size() && a[p]==x)cnt++,p++;
+            while(p2<b.size() && b[p2]==k-x)cnt2++,p2++;
+            ans+=cnt*cnt2;
         }
     }
 
-    //for(auto i:mp)cerr<<"mp: "<<i.ff<<" "<<i.ss<<endl;cerr<<endl;
-    //for(auto i:mp2)cerr<<"mp2: "<<i.ff<<" "<<i.ss<<endl;cerr<<endl;
+    //debug("mp:",mp);
+    //debug("mp2:",mp2);
 
-    for(auto i:mp){
-        ans+=i.ss*mp2[k-i.ff];
-    }
-    cout<<ans<<endl;
+    print(ans);
 }
 
-int32_t main(void){
+signed main(void){
     fastio;
-    t=1;
-    //cin>>t;
-    while(t--)solve();
+    solve();
 }

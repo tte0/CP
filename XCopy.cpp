@@ -207,11 +207,44 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,x,y,w,ans;
+vi a,b,adj[N];
+
+inline vi grey(int n){
+    vi ans,vis(n,0);
+    ans.pb(n-1);
+    for(int i=1;i<n;i++){
+        //debug("i:",i);
+        int x=ans.back();
+        vi t;
+        for(int bit=20;bit>=0;bit--){
+            //debug("bit:",bit);
+            int y=x^e2(bit);
+            if(y>=n-1)continue;
+            if(!vis[y]){
+                t.pb(y);
+            }
+        }
+        ASSERT(t.empty(),"grey");
+        int y=*max_element(all(t));
+        vis[y]=1;
+        ans.pb(y);
+    }
+    return ans;
+}
 
 inline void solve(void){
-    input(n);
+    input(n,m);
+    a=grey(n);
+    b=grey(m);
+    int bit=n?e2(lg(m-1)+1):0;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cout<<a[i]*bit+b[j]<<" ";
+        }
+        cendl;
+    }
 }
 
 signed main(void){

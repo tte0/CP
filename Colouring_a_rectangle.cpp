@@ -23,7 +23,6 @@ Author: Teoman Ata Korkmaz
 #define cendl cout<<endl
 #define mset(x,y) memset(x,y,sizeof(x))
 #define popcnt(x) __builtin_popcountll(x)
-#define clz(x) __builtin_clz(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define clock() (chrono::high_resolution_clock::now().time_since_epoch().count())
@@ -207,11 +206,14 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,x,y,w,ans;
+vi a,b;
 
 inline void solve(void){
-    input(n);
+    input(n,m);
+    a.resize(n+m-1);
+    b.resize(n+m-1);
+    input(a,b);
 }
 
 signed main(void){
