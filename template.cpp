@@ -82,42 +82,39 @@ T accumulate(InputIterator first,InputIterator last,T init = T{}) {
     }
     return init;
 }
+template<typename T,typename T2>inline pair<T,T2> operator+(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff+b.ff,a.ss+b.ss};}
+template<typename T,typename T2>inline pair<T,T2> operator-(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff-b.ff,a.ss-b.ss};}
+template<typename T,typename T2>inline pair<T,T2> operator*(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff*b.ff,a.ss*b.ss};}
+template<typename T,typename T2>inline pair<T,T2> operator/(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff/b.ff,a.ss/b.ss};}
 template<typename T> inline void maxs(T& x,const T& y){return void(x=max(x,y));}
 template<typename T> inline void mins(T& x,const T& y){return void(x=min(x,y));}
 template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
 template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
-template<typename T,typename T2>
-inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
+template<typename T,typename T2>inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
     os<<"["<<p.ff<<","<<p.ss<<"]";
     return os;
 }
-template<typename T>
-inline ostream& operator<<(ostream& os,const vector<T>& a) {
+template<typename T>inline ostream& operator<<(ostream& os,const vector<T>& a) {
     for(const T& _:a)os<<_<<' ';
     return os;
 }
-template<typename T>
-inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
+template<typename T>inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
     for(const vector<T>& _:a)os<<_;
     return os;
 }
-template<typename T>
-inline ostream& operator<<(ostream& os,const set<T>& a) {
+template<typename T>inline ostream& operator<<(ostream& os,const set<T>& a) {
     for(const T& _:a)os<<_<<' ';
     return os;
 }
-template<typename T,typename T2>
-inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
+template<typename T,typename T2>inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
     for(const auto& _:a)os<<_<<' ';
     return os;
 }
-template<typename T,typename T2>
-inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
+template<typename T,typename T2>inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
     for(const auto& _:a)os<<_<<' ';
     return os;
 }
-template<typename T>
-inline ostream& operator<<(ostream& os,const queue<T>& b) {
+template<typename T>inline ostream& operator<<(ostream& os,const queue<T>& b) {
     queue<T> a=b;
     while(a.size()){
         os<<a.front()<<" ";
@@ -125,8 +122,7 @@ inline ostream& operator<<(ostream& os,const queue<T>& b) {
     }
     return os;
 }
-template<typename T>
-inline ostream& operator<<(ostream& os,const stack<T>& b) {
+template<typename T>inline ostream& operator<<(ostream& os,const stack<T>& b) {
     stack<T> a=b;
     while(a.size()){
         os<<a.top()<<" ";
@@ -134,8 +130,7 @@ inline ostream& operator<<(ostream& os,const stack<T>& b) {
     }
     return os;
 }
-template<typename T>
-inline ostream& operator<<(ostream& os,const priority_queue<T>& b) {
+template<typename T>inline ostream& operator<<(ostream& os,const priority_queue<T>& b) {
     priority_queue<T> a=b;
     while(a.size()){
         os<<a.top()<<" ";
@@ -143,8 +138,7 @@ inline ostream& operator<<(ostream& os,const priority_queue<T>& b) {
     }
     return os;
 }
-template<typename T>
-inline ostream& operator<<(ostream& os,const priority_queue<T,vector<T>,greater<T>>& b) {
+template<typename T>inline ostream& operator<<(ostream& os,const priority_queue<T,vector<T>,greater<T>>& b) {
     priority_queue<T,vector<T>,greater<T>> a=b;
     while(a.size()){
         os<<a.top()<<" ";
@@ -152,13 +146,11 @@ inline ostream& operator<<(ostream& os,const priority_queue<T,vector<T>,greater<
     }
     return os;
 }
-template<typename T,typename T2>
-inline istream& operator>>(istream& is,pair<T,T2>& p){
+template<typename T,typename T2>inline istream& operator>>(istream& is,pair<T,T2>& p){
     is>>(p.ff)>>(p.ss);
     return is;
 }
-template<typename T>
-inline istream& operator>>(istream& is,vector<T>& a) {
+template<typename T>inline istream& operator>>(istream& is,vector<T>& a) {
     for(T& _:a)is>>_;
     return is;
 }
