@@ -43,10 +43,9 @@ SOFTWARE.
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
 #define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
-#define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
 using namespace std;
 typedef int32_t i32;
 typedef int_fast64_t ll;
@@ -54,6 +53,7 @@ typedef long double ldouble;
 typedef string str;
 typedef pair<int,int> ii;
 typedef pair<int,ii> iii;
+typedef pair<ii,ii> iiii;
 typedef vector<int> vi;
 typedef vector<ii> vii;
 typedef vector<iii> viii;
@@ -63,42 +63,146 @@ typedef vector<pair<char,int>> vci;
 typedef map<int,int> mii;
 typedef map<char,int> mci;
 typedef map<str,int> msi;
+typedef map<int,vi> miv;
 typedef unordered_map<int,int> umii;
 typedef unordered_map<char,int> umci;
 typedef unordered_map<str,int> umsi;
+typedef unordered_map<int,vi> umiv;
 typedef set<int> sti;
 typedef set<char> stc;
 typedef set<str> sts;
 typedef multiset<int> msti;
 typedef multiset<char> mstc;
 typedef multiset<str> msts;
+inline int segsum(int start,int end,int step){
+    if(end<start)return 0;
+    return (((end-start)/step+1)*(start+end))>>1;
+}
+inline int fp(int b,int p,int mod=1e9+7){
+    int ans=1;
+    while(p){
+        if(p&1)ans=(ans*b)%mod;
+        p>>=1;
+        b=(b*b)%mod;
+    }
+    return ans;
+}
+template<typename T> inline void maxs(T& x,const T& y){return void(x=max(x,y));}
+template<typename T> inline void mins(T& x,const T& y){return void(x=min(x,y));}
+template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
+template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
+template<typename T,typename T2>
+inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
+    os<<p.ff<<","<<p.ss<<endl;
+    return os;
+}
+template<typename T>
+inline ostream& operator<<(ostream& os,const vector<T>& a) {
+    for(const T& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T>
+inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
+    for(const vector<T>& _:a)os<<_<<endl;
+    return os;
+}
+template<typename T>
+inline ostream& operator<<(ostream& os,const set<T>& a) {
+    for(const T& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>
+inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
+    for(const auto& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>
+inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
+    for(const auto& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>
+inline istream& operator>>(istream& is,pair<T,T2>& p){
+    is>>(p.ff)>>(p.ss);
+    return is;
+}
+template<typename T>
+inline istream& operator>>(istream& is,vector<T>& a) {
+    for(T& _:a)is>>_;
+    return is;
+}
+inline void print(){cout<<endl;}
+template<typename... Args>
+inline void print(const Args&... args){
+    ((cout<<args<<' '),...)<<endl;
+}
+inline void input(){}
+template<typename... Args>
+inline void input(Args&... args){
+    (cin>>...>>args);
+}
+#ifdef ONLINE_JUDGE
+template<typename... Args>
+inline void debug(const Args&... args){
+    return void("59");
+}
+#else
+inline void debug(){cerr<<endl;}
+template<typename... Args>
+inline void debug(const Args&... args){
+    ((cerr<<args<<' '),...)<<endl;
+}
+#endif
+inline void yn(bool b){
+    if(b)yes;
+    else no;
+}
+#define ASSERT(condition, message)\
+while(0){\
+    if(condition){\
+        debug("Assertion failed:", message, "at", __FILE__ + str(":") + to_string(__LINE__));\
+        abort();\
+    }\
+}
+///////////////////////////////////////////////////////////////////
 const int N=2e5+5;
+const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
+const int BLOCK=320;
+const ldouble EPS=1e-9;
 const int MAXQUERY=100;
-const double PI=4*atan(1);
-inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
-inline void maxs(int& x,const int& y){return void(x=max(x,y));}
-inline void mins(int& x,const int& y){return void(x=min(x,y));}
+const ldouble PI=4*atan(1);
+const int dx[4]={1,0,-1,0};
+const int dy[4]={0,1,0,-1};
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,x,y,w,ans;
+vi a,b;
 
 inline void solve(void){
-    cin>>n>>m>>k;
-    vi v(n),v2(m);
-    for(int& i:v)cin>>i;
-    for(int& i:v2)cin>>i;
-    ans=0;for(int i:v)ans+=i;
-    //cerr<<"ans: "<<ans<<endl;
-    if(k%2) ans=ans-*min_element(all(v))+*max_element(all(v2));
-    else    ans=ans-*max_element(all(v))+*min_element(all(v2));
-    cout<<ans<<endl;
+    input(n,m,k);
+    a.resize(n);
+    b.resize(m);
+    input(a,b);
+    k=(k-1)%2;
+    
+    int mx=0,mn=0;
+    for(int i=1;i<n;i++)if(a[i]<a[mn])mn=i;
+    for(int i=1;i<m;i++)if(b[i]>b[mx])mx=i;
+    if(a[mn]<b[mx])swap(a[mn],b[mx]);
+    if(k){
+        int mx=0,mn=0;
+        for(int i=1;i<n;i++)if(a[i]>a[mx])mx=i;
+        for(int i=1;i<m;i++)if(b[i]<b[mn])mn=i;
+        if(a[mx]>b[mn])swap(a[mx],b[mn]);
+    }
+    print(accumulate(all(a),0LL));
 }
 
 i32 main(void){
     fastio;
+    //usacoio("59");
     t=1;
     cin>>t;
     while(t--)solve();
