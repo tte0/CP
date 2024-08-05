@@ -207,7 +207,7 @@ inline int rand(int l,int r){
 
 signed main(void){
     freopen("testcase.in","w",stdout);
-    n=200000,q=200000,a=1e9;
+    n=5,q=2,a=10;
     print(n,q);
     for(int i=0;i<n;i++)cout<<(rand(1,a))<<" ";cendl;
     for(int i=2;i<=n;i++){

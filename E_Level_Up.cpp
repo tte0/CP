@@ -201,9 +201,34 @@ mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
+vvi arr(1);
 
 inline void solve(void){
-    input(n);
+    input(n,q);
+    v.resize(n);
+    input(v);
+
+    int _cnt=1;
+    for(int i=0;i<n;i++){
+        if(v[i]>=_cnt){
+            _cnt++;
+            arr[0].pb(i);
+        }
+    }
+    debug("arr:",arr);
+    for(int i=1;i<n;i++){
+        arr.pb({});
+        int ind=0;
+        for(offset;arr[i-1][ind]+offset<n;){
+            debug("offset,ind:",offset,ind);
+            if(v[arr[i-1][ind]+offset]>=ind){
+                arr[i].pb(arr[i-1][ind]+offset);
+            }
+        }
+        debug("arr:",arr);
+    }
+
+    //debug("arr:",arr);
 }
 
 signed main(void){

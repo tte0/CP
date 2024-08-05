@@ -7,7 +7,7 @@
 #define se second
 #define pb push_back
 #define endl "\n"
-//~ #define int long long
+#define int long long
 typedef long long ll;
 
 using namespace std;
@@ -30,8 +30,7 @@ int dfsdepth(int node, int par, int d){
 void dfslca(int node, int par){
 	lca[node][0] = par;
 	for(int i=1;i<=19;i++){
-		if(depth[node] < (1<<i))break;
-		lca[node][i] = lca[i-1][i-1];
+		lca[node][i] = lca[lca[node][i-1]][i-1];
 	}
 	for(auto it: graph[node]){
 		if(it == par)continue;
@@ -45,30 +44,41 @@ int go(int node, int d){
 	return node;
 }
 int LCA(int node1, int node2){
-	if(depth[node1]>depth[node2]){
+	if(depth[node1]<depth[node2]){
 		int temp= node1;
 		node1 = node2;
 		node2 = temp;
 	}
-	int dif = depth[node2] - depth[node1];
+	int dif = depth[node1] - depth[node2];
 	node1 = go(node1, dif);
 	if(node1 == node2) return node1;
-	int l = 1, r = depth[node1];
-	while(l<=r){
-		int m =(l+r)/2;
-		if( go(node1, m) == go(node2, m)){
-			r = m-1;
+	int ans = 0;
+	for (int i = 19;i>=0; i--){
+		if(lca[node1][i] == lca[node2][i]){
+			ans = lca[node1][i];
 		}
-		else l = m+1;
+		else{
+			node1 = lca[node1][i], node2 = lca[node2][i];
+		}
 	}
-	return go(node1, l);
+	//~ int l = 1, r = depth[node1];
+	//~ while(l<=r){
+		//~ int m =(l+r)/2;
+		//~ if( go(node1, m) == go(node2, m)){
+			//~ r = m-1;
+		//~ }
+		//~ else l = m+1;
+	//~ }
+	//~ if(node1 == node2)return node1;
+	//~ else return lca[node1][0];
+	return ans;
 }	
-void dfsgrp(int node, int par, bool b){
+void dfsgrp(int node, int par, bool c){
 	ind[node] = no;
 	unind[ind[node]] = node;
 	grp[ind[node]] = group;
-	if(b)frst[group] = ind[node];
-	b = false;
+	if(c)frst[group] = ind[node];
+	bool b = false;
 	bool control = true;
 	for(auto it: graph[node]){
 		if(it == par)continue;
@@ -76,18 +86,19 @@ void dfsgrp(int node, int par, bool b){
 			group++;
 			b = true;
 		}
+		//~ cout<<it<<" :: "<<node<<" :: "<<group<<" :: "<<b<<" :: "<<endl;
 		control = false;
 		no++;
 		dfsgrp(it, node, b);
-		b = false;
+		b = true;
 	}
 	if(control){
-		lst[grp[node]] = ind[node];
+		lst[grp[ind[node]]] = ind[node];
 	}
 }
 void init(int ind, int l, int r, int g){
 	if(l==r){
-		ST[g][ind] = val[l+frst[g]-1];
+		ST[g][ind] = val[unind[l+frst[g]-1]];
 		return;
 	}
 	int m= (l+r)/2;
@@ -110,7 +121,7 @@ void update(int	ind, int l, int r, int v, int u, int g){
 }
 int query(int ind, int l, int r, int s, int f, int g){
 	if(l>f || r<s){
-		return -1;
+		return -1000000000;
 	}
 	if(l>=s && r<=f){
 		return ST[g][ind];
@@ -119,25 +130,32 @@ int query(int ind, int l, int r, int s, int f, int g){
 	return max(query(ind*2, l, m, s, f, g), query(ind*2+1, m+1, r, s, f, g));
 }
 int adapt(int a, int b, int c){
-	int ans = -1;
+	int ans = -1000000000;
 	int g = grp[a];
-	while(frst[g] != frst[c]){
-		ans = max(ans, query(1, 1, n, 1, a-frst[g]+1, g));
-		a = lca[unind[frst[a]]][0];
+	while(g != grp[c]){
+		ans = max(ans, query(1, 1, lst[g]-frst[g]+1, 1, a-frst[g]+1, g));
+		//~ cout <<":"<< ans << endl;
+		a = ind[lca[unind[frst[g]]][0]];
 		g = grp[a];
 	}
-	ans = max(ans, query(1, 1, n, c, a-frst[g]+1, g));
+	ans = max(ans, query(1, 1, lst[g]-frst[g]+1, c-frst[g]+1, a-frst[g]+1, g));
+	//~ ans = max(ans, query(1, 1, lst[g]-frst[g]+1, a-frst[g]+1, c-frst[g]+1, g));
+	//~ cout <<"::"<< ans << endl;
 	g = grp[b];
-	while(frst[g] != frst[c]){
-		ans = max(ans, query(1, 1, n, 1, b-frst[g]+1, g));
-		b = lca[unind[frst[b]]][0];
+	while(g != grp[c]){
+		ans = max(ans, query(1, 1, lst[g]-frst[g]+1, 1, b-frst[g]+1, g));
+		//~ cout <<":::"<< ans << endl;
+		b = lca[unind[frst[g]]][0];
+		b = ind[b];
 		g = grp[b];
 	}
-	ans = max(ans, query(1, 1, n, c, b-frst[g]+1, g));
+	ans = max(ans, query(1, 1, lst[g]-frst[g]+1, c-frst[g]+1, b-frst[g]+1, g));
+	//~ ans = max(ans, query(1, 1, lst[g]-frst[g]+1, b-frst[g]+1, c-frst[g]+1, g));
+	//~ cout <<"::::"<< ans << " :: " << g<< " :: "<< grp[c]<<endl;
 	return ans;
 }
 int32_t main(){
-	fileio;
+    fileio;
 	cin>>n>>q;
 	graph.assign(n+5, vector<int>());
 	for(int i=1;i<=n;i++){
@@ -164,8 +182,17 @@ int32_t main(){
 	}
 	dfslca(1, 1);
 	dfsgrp(1, 1, true);
+	//~ for(int i=1;i<=n;i++){
+		//~ cout<<ind[i]<<" :: "<<i<<endl;
+	//~ }
+	//~ for(int i=1;i<=n;i++){
+		//~ cout<<unind[i]<<" :: "<<i<<endl;
+	//~ }
+	//~ for(int i=1;i<=n;i++){
+		//~ cout<<grp[i]<<" :: "<<i<<endl;
+	//~ }
 	for(int i=1;i<=group;i++){
-		ST[i].assign(group, 4*(lst[i]-frst[i]+1)+5);
+		ST[i].assign(4*(lst[i]-frst[i]+1)+5, 0);
 		init(1, 1, lst[i]-frst[i]+1, i);
 	}
 	while(q--){
@@ -184,16 +211,22 @@ int32_t main(){
 			int a, b;
 			cin>>a>>b;
 			int c = LCA(a, b);
-			cout<<adapt(ind[a], ind[b], ind[c])<<" ";
+			//~ cout<<"dırırın dırırın"<<endl;
+			//~ cout<<a<<" :: "<<b<<" :: "<<c<<endl;
+			//~ cout<<query(1, 1, n, ind[4], ind[5], grp[ind[4]];
+			cout<< 	adapt(ind[a], ind[b], ind[c])<<" ";
 		}
 	}
 	cout<<endl;
 	return 0;
 	//~ cout<<" debug "<<endl;
-	cout<<flush;
-}
-		
-		
+}	
+//~ 4 1
+//~ 3 4 10 7
+//~ 1 2
+//~ 2 3
+//~ 1 4
+//~ 2 2 4
 		
 		
 		

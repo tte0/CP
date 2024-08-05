@@ -143,8 +143,6 @@ inline void solve(void){
  
 int32_t main(void){
     fileio;
-    freopen("testcase.in","r",stdin);
-    //fileio;
     clock_t start=clock();
     solve();
     //cerr<<"Execution Time: "<<(double)(clock()-start)/CLOCKS_PER_SEC<<endl;

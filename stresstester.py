@@ -1,3 +1,9 @@
+"""
+#define fileio freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin)
+#define fileio freopen("user_output.txt","w",stdout);freopen("testcase.in","r",stdin)
+
+"""
+
 import subprocess
 import time
 import random
@@ -48,7 +54,7 @@ while True:
         # Check the results
         if correct_proc.returncode != 0:
             fail_output(index, f"Correct program failed with return code {correct_proc.returncode}.")
-            continue
+            exit(0)
 
         # Run the user program with input redirection
         debug(f"Running user program with input redirection...")
@@ -66,8 +72,11 @@ while True:
 
         if user_proc.returncode != 0:
             fail_output(index, f"User program failed with return code {user_proc.returncode}.")
+            exit(0)
         elif correct_output != user_output:
-            wa_output(index, f"Test case failed. Correct output: {correct_output}, user output: {user_output}.")
+            wa_output(index, f"Test case failed.")
+            exit(0)
+            
         else:
             pass_output(index)
 
@@ -75,4 +84,4 @@ while True:
     except Exception as e:
         fail_output(index, f"Error: {e}")
         debug(f"Exception details: {traceback.format_exc()}")
-        continue
+        exit(0)
