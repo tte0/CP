@@ -158,7 +158,6 @@ inline void print(){cout<<endl;}
 template<typename... Args>
 inline void print(const Args&... args){
     ((cout<<args<<' '),...)<<endl;
-    cout.flush();
 }
 inline void input(){}
 template<typename... Args>
@@ -187,7 +186,7 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=1e4+5;
+const int N=2e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -200,63 +199,42 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans,color[N];
+int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
-inline void dfs(int node=0,int d=0){
-    if(color[node]!=-1)return;
-    color[node]=d%2;
-    for(auto i:adj[node])dfs(i,d+1);
-}
-
 inline void solve(void){
-    mset(color,-1);
-    input(n,m);
-    for(int i=0;i<n;i++)adj[i].clear();
-    for(int i=0;i<m;i++){
+    input(n,q);
+    v.resize(n);
+    input(v);
+
+    while(q--){
         input(x,y);
         x--,y--;
-        adj[x].pb(y);
-        adj[y].pb(x);
-    }
-    dfs();
+        if(y-x+1>=50){
+            print("YES");
+            continue;
+        }
 
-    bool ok=true;
-    vi v,v2;
-    for(int i=0;i<n;i++){
-        if(color[i])v.pb(i+1);
-        else        v2.pb(i+1);
-        for(auto j:adj[i])ok&=color[i]!=color[j];
-    }
-
-    if(ok){
-        print("Bob");
-
-        for(int i=0;i<n;i++){
-            input(x,y);
-            if(y<x)swap(x,y);
-
-            if(x==1 && v.size()){
-                print(v.back(),1);
-                v.pop_back();
-            }
-            else if(x==2 && v2.size()){
-                print(v2.back(),2);
-                v2.pop_back();
-            }
-            else if(v.empty()){
-                print(v2.back(),x==1?y:x);
-                v2.pop_back();
-            }
-            else{
-                print(v.back(),x==2?y:x);
-                v.pop_back();
+        bool flag=0;
+        vi v(::v.begin()+x,::v.begin()+y+1);
+        sort(all(v));
+        for(int i=0;i+5<v.size() && !flag;i++){
+            if(v[i+0]+v[i+1]>v[i+3] && v[i+2]+v[i+4]>v[i+5]){flag=1;break;}
+            if(v[i+0]+v[i+1]>v[i+4] && v[i+2]+v[i+3]>v[i+5]){flag=1;break;}
+            if(v[i+0]+v[i+1]>v[i+5] && v[i+2]+v[i+3]>v[i+4]){flag=1;break;}
+            if(v[i+0]+v[i+2]>v[i+3] && v[i+1]+v[i+4]>v[i+5]){flag=1;break;}
+            if(v[i+0]+v[i+2]>v[i+4] && v[i+1]+v[i+3]>v[i+5]){flag=1;break;}
+            if(v[i+0]+v[i+2]>v[i+5] && v[i+1]+v[i+3]>v[i+4]){flag=1;break;}
+            if(v[i+0]+v[i+3]>v[i+4] && v[i+1]+v[i+2]>v[i+5]){flag=1;break;}
+            if(v[i+0]+v[i+3]>v[i+5] && v[i+1]+v[i+2]>v[i+4]){flag=1;break;}
+            if(v[i+0]+v[i+4]>v[i+5] && v[i+1]+v[i+2]>v[i+3]){flag=1;break;}
+        }
+        for(int i=0;i+5<v.size() && !flag;i++){
+            for(int j=i+3;j+2<v.size() && !flag;j++){
+                if(v[i]+v[i+1]>v[i+2] && v[j]+v[j+1]>v[j+2]){flag=1;break;}
             }
         }
-    }
-    else{
-        print("Alice");
-        for(int i=0;i<n;i++)print("1 2"),input(x,y);
+        yn(flag);
     }
 }
 
@@ -264,6 +242,6 @@ signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--)solve();
 }

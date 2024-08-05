@@ -158,7 +158,6 @@ inline void print(){cout<<endl;}
 template<typename... Args>
 inline void print(const Args&... args){
     ((cout<<args<<' '),...)<<endl;
-    cout.flush();
 }
 inline void input(){}
 template<typename... Args>
@@ -187,7 +186,7 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=1e4+5;
+const int N=1e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -200,69 +199,42 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans,color[N];
-vi v,adj[N];
-
-inline void dfs(int node=0,int d=0){
-    if(color[node]!=-1)return;
-    color[node]=d%2;
-    for(auto i:adj[node])dfs(i,d+1);
-}
+int n,m,k,t,q,a,b,x,y,w,ans,dp[N];
+vi v,heaps,adj[N];
 
 inline void solve(void){
-    mset(color,-1);
-    input(n,m);
-    for(int i=0;i<n;i++)adj[i].clear();
-    for(int i=0;i<m;i++){
-        input(x,y);
-        x--,y--;
-        adj[x].pb(y);
-        adj[y].pb(x);
-    }
-    dfs();
-
-    bool ok=true;
-    vi v,v2;
+    input(n);
+    int ans=0;
     for(int i=0;i<n;i++){
-        if(color[i])v.pb(i+1);
-        else        v2.pb(i+1);
-        for(auto j:adj[i])ok&=color[i]!=color[j];
+        input(x);
+        ans^=dp[x];
     }
+    cout<<(ans?"W":"L");
+}
 
-    if(ok){
-        print("Bob");
+inline int mex(vi v){
+    compress(v);
+    for(int i=0;i<v.size();i++)if(v[i]!=i)return i;
+    return v.size();
+}
 
-        for(int i=0;i<n;i++){
-            input(x,y);
-            if(y<x)swap(x,y);
-
-            if(x==1 && v.size()){
-                print(v.back(),1);
-                v.pop_back();
-            }
-            else if(x==2 && v2.size()){
-                print(v2.back(),2);
-                v2.pop_back();
-            }
-            else if(v.empty()){
-                print(v2.back(),x==1?y:x);
-                v2.pop_back();
-            }
-            else{
-                print(v.back(),x==2?y:x);
-                v.pop_back();
-            }
-        }
-    }
-    else{
-        print("Alice");
-        for(int i=0;i<n;i++)print("1 2"),input(x,y);
+inline void _init(){
+    input(n);
+    v.resize(n);
+    input(v);
+    sort(all(v));
+    
+    for(int i=0;i<N-1;i++){
+        vi t;
+        for(int j=0;j<v.size() && i-v[j]>=0;j++)t.pb(dp[i-v[j]]);
+        dp[i]=mex(t);
     }
 }
 
 signed main(void){
     fastio;
     //usacoio("59");
+    _init();
     int t=1;
     cin>>t;
     while(t--)solve();
