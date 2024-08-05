@@ -38,6 +38,7 @@
 !.gitignore
 !LICENSE
 !README.md
+!stresstester*
 
 leetcode.cpp
 tempCodeRunnerFile.cpp
