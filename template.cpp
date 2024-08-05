@@ -2,7 +2,7 @@
 Author: Teoman Ata Korkmaz
 */
 #pragma GCC optimize("O3,fast-math,unroll-all-loops")
-#include <bits/stdc++.h>
+#include <bits/stdc++.h> 
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
 #define int ll
@@ -186,7 +186,7 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e9;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -200,16 +200,27 @@ const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+bitset<N> sieve;
+
+constexpr void _sieve(){
+    for(int i=4;i<N;i+=2)sieve[i]=true;
+    for(int i=3;i*i<N;i+=2){
+        if(!sieve[i]){
+            for(int j=i*i;j<N;j+=(i<<1))sieve[j]=true;
+        }
+    }
+}
 
 inline void solve(void){
-    input(n);
+    _sieve();
 }
 
 signed main(void){
+    int start=clock();
     fastio;
     //usacoio("59");
     int t=1;
     //cin>>t;
     while(t--)solve();
+    debug("Time elapsed:",(clock()-start)/(1e6),"ms");
 }
