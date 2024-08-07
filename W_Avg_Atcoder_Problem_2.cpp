@@ -203,7 +203,10 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    input(n);
+    input(n,k);
+    if(k==n || k%2==0)return print("No");
+    print("Yes");
+
 }
 
 signed main(void){

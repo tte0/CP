@@ -191,7 +191,7 @@ const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
 const ll  INFL=INT64_MAX;
-const int BLOCK=320;
+const int BLOCK=448;
 const ldouble EPS=1e-9;
 const int MAXQUERY=100;
 const double PI=4*atan(1);
@@ -199,11 +199,32 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+int n,m,k,t,q,a,b,x,y,w,ans[N];
+vi v;
+
+inline bool cmp(const iii& a,const iii& b){
+    if(a.ss.ff/BLOCK!=b.ss.ff/BLOCK)return a.ss.ff<b.ss.ff;
+    return a.ss.ss<b.ss.ss;
+}
 
 inline void solve(void){
-    input(n);
+    input(n,q);
+    v.resize(n);
+    input(v);
+
+    viii querys;
+    for(int i=0;i<q;i++){
+        input(x,y);
+        x--,y--;
+        querys.pb({i,{x,y}});
+    }
+
+    sort(rall(querys),cmp);
+    sort(all(querys),cmp);
+
+    for(iii& _:querys){
+        int ind=
+    }
 }
 
 signed main(void){

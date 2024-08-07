@@ -1,6 +1,6 @@
 """
-#define fileio freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin)
-#define fileio freopen("user_output.txt","w",stdout);freopen("testcase.in","r",stdin)
+    freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
+    freopen("user_output.txt","w",stdout);freopen("testcase.in","r",stdin);
 
 """
 

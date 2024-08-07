@@ -204,6 +204,9 @@ vi v,adj[N];
 
 inline void solve(void){
     input(n);
+    v.resize(n);
+    input(v);
+    yn(v[0]<v.back());
 }
 
 signed main(void){
@@ -211,7 +214,7 @@ signed main(void){
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
     debug("Time elapsed:",(clock()-start)/(1e6),"ms");
 }

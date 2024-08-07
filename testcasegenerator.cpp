@@ -207,17 +207,9 @@ inline int rand(int l,int r){
 
 signed main(void){
     freopen("testcase.in","w",stdout);
-    n=5,q=2,a=10;
-    print(n,q);
-    for(int i=0;i<n;i++)cout<<(rand(1,a))<<" ";cendl;
-    for(int i=2;i<=n;i++){
-        print(rand(1,i-1),i);
-    }
-    for(int i=0;i<q;i++){
-        if(rand(0,1))print(1,rand(1,n),rand(1,a));
-        else         print(2,rand(1,n),rand(1,n));
-        
-    }
+    n=5,m=4;
+    print(n,m);
+    for(int i=0;i<2*n;i++)cout<<(rand(0,m-1))<<" ";cendl;
     cout<<flush;
     return 0;
 }

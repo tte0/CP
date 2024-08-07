@@ -203,7 +203,25 @@ int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
 inline void solve(void){
-    input(n);
+    input(n,m);
+    v.resize(2*n);
+    input(v);
+    mii mp;
+    for(auto i:v)mp[i]++;
+    v.clear();
+    for(auto i:mp)if(i.ss%2)v.pb(i.ff);
+    n=v.size();
+    if(n==0)return print("Bob");
+    if(n%4 || m%2)return print("Alice");
+
+    auto it=v.begin();
+    auto it2=lower_bound(all(v),m/2);
+    if(it+n/2!=it2)return print("Alice");
+    while(it2!=v.end()){
+        if(*it2-*it!=m/2)return print("Alice");
+        it++,it2++;
+    }
+    return print("Bob");
 }
 
 signed main(void){

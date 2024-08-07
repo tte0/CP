@@ -204,6 +204,15 @@ vi v,adj[N];
 
 inline void solve(void){
     input(n);
+    v.resize(n);
+    input(v);
+    bool b=1;
+    for(int i=0;i<n-2;i++){
+        b&=(v[i]%2)==(i%2);
+    }
+    b&=(v[n-2]%2)==((n-2)%2);
+    b&=(v[n-1]%2)==((n-1)%2);
+    print(!b?"Alice":"Bob");
 }
 
 signed main(void){
