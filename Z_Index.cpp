@@ -5,7 +5,6 @@ Author: Teoman Ata Korkmaz
 #include <bits/stdc++.h> 
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
-#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -199,31 +198,88 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans[N];
+int n,m,k,t,q,a,b,x,y,w;
 vi v;
 
-inline bool cmp(const iii& a,const iii& b){
-    if(a.ss.ff/BLOCK!=b.ss.ff/BLOCK)return a.ss.ff<b.ss.ff;
-    return a.ss.ss<b.ss.ss;
+struct Node{
+    int val;
+    Node* left;
+    Node* right;
+    Node(int x=0):val(x),left(NULL),right(NULL){}
+    Node(Node* x):val(x->val),left(x->left),right(x->right){}
+    Node(Node* l,Node* r){
+        left=l,right=r,val=0;
+        if(l)val+=l->val;
+        if(r)val+=r->val;
+    }
+};
+
+#define mid ((l+r)>>1)
+
+inline Node* build(int l=1,int r=n){
+    if(l==r)return new Node(1);
+    else    return new Node(build(l,mid),build(mid+1,r));
 }
 
+inline Node* update(Node* node,int l=1,int r=n){
+    //debug("u! l,r,x:",l,r,x);
+    if(l==r)       return new Node(int(0));
+    if(x<=mid)return new Node(update(node->left,l,mid),node->right);
+    else      return new Node(node->left,update(node->right,mid+1,r));
+}
+
+inline int query(Node* node,int l=1,int r=n){
+    if(x<=l && r<=y)return node->val;
+    if(r<x || y<l)return 0;
+    return query(node->left,l,mid)+query(node->right,mid+1,r);
+}
+
+inline void _debug(Node* root){
+    queue<Node*> q;
+    q.push(root);
+    while(q.size()){
+        Node* node=q.front();q.pop();
+        if(node==NULL)continue;
+        cerr<<(node->val)<<" ";
+        q.push(node->left);
+        q.push(node->right);
+    }
+    debug();
+}
+
+#undef mid
+
 inline void solve(void){
+    Node* root[N];
     input(n,q);
     v.resize(n);
     input(v);
 
-    viii querys;
-    for(int i=0;i<q;i++){
-        input(x,y);
-        x--,y--;
-        querys.pb({i,{x,y}});
+    vvi arr(*max_element(all(v))+2);
+    for(int i=0;i<n;i++)arr[v[i]].pb(i+1);
+
+    root[1]=build();
+    //_debug(root[1]);
+    //debug("build ok");
+    for(int i=2;i<arr.size();i++){
+        root[i]=new Node(root[i-1]);
+        for(auto j:arr[i-1]){
+            x=j;
+            root[i]=update(root[i]);
+        }
+        //debug("update",i,"ok");,
+        //_debug(root[i]);
     }
-
-    sort(rall(querys),cmp);
-    sort(all(querys),cmp);
-
-    for(iii& _:querys){
-        int ind=
+    //debug("updates ok");
+    while(q--){
+        input(x,y);
+        int l=1,r=y-x+2;
+        while(l<r){
+            int m=(l+r)>>1;
+            if(query(root[m])>=m)l=m+1;
+            else r=m;
+        }
+        print(l-1);
     }
 }
 
