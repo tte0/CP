@@ -202,11 +202,44 @@ mt19937 mt(clock());
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
+inline void f(){
+    vvi v(e2(n));
+    for(int i=0;i<n;i++){
+        int cnt=0;
+        while(cnt<e2(n)){
+            for(int j=0;j<1*(e2(i));j++){
+                if(cnt>=e2(n))break;
+                v[cnt++].pb(0);
+            }
+            for(int j=0;j<2*(e2(i));j++){
+                if(cnt>=e2(n))break;
+                v[cnt++].pb(1);
+ 
+            }
+            for(int j=0;j<1*(e2(i));j++){
+                if(cnt>=e2(n))break;
+                v[cnt++].pb(0);
+ 
+            }
+        }
+    }
+    //debug("ok");
+    vi ans;
+    for(auto i:v){
+        int x=0;
+        reverse(all(i));
+        for(auto j:i)x=((x<<1)|j);
+        ans.pb(x);
+    }
+    //debug("ok");
+    cout<<"Yes"<<endl<<ans;
+    //debug("ok");
+}
+
 inline void solve(void){
     input(n,k);
-    if(k==n || k%2==0)return print("No");
-    print("Yes");
-
+    if(k!=1)return print("No");
+    f();
 }
 
 signed main(void){
@@ -216,5 +249,4 @@ signed main(void){
     int t=1;
     //cin>>t;
     while(t--)solve();
-    debug("Time elapsed:",(clock()-start)/(1e6),"ms");
 }

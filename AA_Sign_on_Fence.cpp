@@ -2,10 +2,7 @@
 Author: Teoman Ata Korkmaz
 */
 #pragma GCC optimize("O3,fast-math,unroll-loops")
-#include <bits/stdc++.h> 
-//#include <ext/pb_ds/assoc_container.hpp>
-//#include <ext/pb_ds/tree_policy.hpp>
-#define int ll
+#include <bits/stdc++.h>
 #define ff first
 #define ss second
 #define endl '\n'
@@ -186,7 +183,7 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
+const int N=1e5+5;
 const int A=1e9+5;
 const int MOD=1e9+7;
 const i32 INF=INT32_MAX;
@@ -199,15 +196,79 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,st[2*N];
 vi v,adj[N];
+
+inline void mnbuild(){
+    for(int i=0;i<n;i++)st[i+n]=v[i];
+    for(int i=n-1;i;i--)st[i]=min(st[i<<1],st[i<<1|1]);
+}
+inline int mnquery(int l,int r){
+    int ans=INF;
+    for(l+=n,r+=n;l<r;l>>=1,r>>=1){
+        if(l&1)mins(ans,st[l++]);
+        if(r&1)mins(ans,st[--r]);
+    }
+    return ans;
+}
+
+
+struct Node{
+    int val;
+    Node* left;
+    Node* right;
+    Node(int x=-1):val(x),left(NULL),right(NULL){}
+    Node(Node* x):val(x->val),left(x->left),right(x->right){}
+    Node(Node* l,Node* r){
+        left=l,right=r,val=-1;
+        if(l)maxs(val,l->val);
+        if(r)maxs(val,r->val);
+    }
+};
+
+#define mid ((l+r)>>1)
+
+inline Node* build(int l=1,int r=n){
+    if(l==r)return new Node(v[l-1]);
+    else    return new Node(build(l,mid),build(mid+1,r));
+}
+
+inline Node* update(Node* node,int l=1,int r=n){
+    //debug("u! l,r,x:",l,r,x);
+    if(l==r)       return new Node(int(0));
+    if(x<=mid)return new Node(update(node->left,l,mid),node->right);
+    else      return new Node(node->left,update(node->right,mid+1,r));
+}
+
+inline int query(Node* node,int l=1,int r=n){
+    if(x<=l && r<=y)return node->val;
+    if(r<x || y<l)return 0;
+    return query(node->left,l,mid)+query(node->right,mid+1,r);
+}
+
+inline void _debug(Node* root){
+    queue<Node*> q;
+    q.push(root);
+    while(q.size()){
+        Node* node=q.front();q.pop();
+        if(node==NULL)continue;
+        cerr<<(node->val)<<" ";
+        q.push(node->left);
+        q.push(node->right);
+    }
+    debug();
+}
+
+#undef mid
 
 inline void solve(void){
     input(n);
+    Node* root[n+5];
     v.resize(n);
     input(v);
-    if(v[n-2]+2<=v[n-1])return print("Alice");
-    print((v[n-1]%2==n%2)?"Alice":"Bob");
+    mnbuild();
+
+    root[1]=build();
 }
 
 signed main(void){
