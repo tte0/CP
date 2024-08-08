@@ -1,11 +1,11 @@
 /*
 Author: Teoman Ata Korkmaz
 */
-#pragma GCC optimize("O3,fast-math,unroll-loops")
-#include <bits/stdc++.h> 
+#pragma GCC optimize("O3,fast-math,unroll-all-loops")
+#include <bits/stdc++.h>
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
-#define int i32
+#define int ll
 #define ff first
 #define ss second
 #define endl '\n'
@@ -99,7 +99,7 @@ template<typename T>inline ostream& operator<<(ostream& os,const vector<T>& a) {
     return os;
 }
 template<typename T>inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
-    for(const vector<T>& _:a)os<<_<<endl;
+    for(const vector<T>& _:a)os<<_;
     return os;
 }
 template<typename T>inline ostream& operator<<(ostream& os,const set<T>& a) {
@@ -186,118 +186,41 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-constexpr int N=1e5+5;
-constexpr int A=1e9+5;
-constexpr int MOD=1e9+7;
-constexpr i32 INF=INT32_MAX;
-constexpr ll  INFL=INT64_MAX;
-constexpr int BLOCK=320;
-constexpr ldouble EPS=1e-9;
-constexpr int MAXQUERY=100;
-constexpr int dx[4]={-1,0,1,0};
-constexpr int dy[4]={0,1,0,-1};
+const int N=2e5+5;
+const int A=1e9+5;
+const int MOD=1e9+7;
+const i32 INF=INT32_MAX;
+const ll  INFL=INT64_MAX;
+const int BLOCK=320;
+const ldouble EPS=1e-9;
+const int MAXQUERY=100;
+const double PI=4*atan(1);
+const int dx[4]={-1,0,1,0};
+const int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans,depth[N],st[2*N][19],ind[N],dist[N];
-vi v,adj[N],bt;
-
-inline void dfs(int node=0,int p=-1,int d=0){
-    depth[node]=d,ind[node]=bt.size();
-    bt.pb(node);
-    for(auto i:adj[node])if(i!=p)dfs(i,node,d+1);
-    bt.pb(node);
-}
-
-inline void sparsetable(){
-    int n=bt.size();
-    for(int i=0;i<n;i++)st[i][0]=bt[i];
-    for(int j=1;j<19;j++){
-        for(int i=0;i<n;i++){
-            st[i][j]=st[i][j-1];
-            if(i+e2(j-1)<n && depth[st[i][j]] > depth[st[i+e2(j-1)][j-1]])
-                st[i][j]=st[i+e2(j-1)][j-1];
-        }
-    }
-}
-
-inline void bfs(){
-    queue<ii> q;
-    for(auto i:bt)q.push({0,i});
-    while(q.size()){
-        int d=q.front().ff,node=q.front().ss;q.pop();
-        if(dist[node]<=d && dist[node]!=-1)continue;
-        dist[node]=d;
-        for(auto i:adj[node])q.push({d+1,i});
-    }
-}
-
-inline int lca(int x,int y){
-    x=ind[x],y=ind[y];
-    if(x>y)swap(x,y);
-    int j=lg(y-x+1);
-    return depth[st[x][j]]<depth[st[y-e2(j)+1][j]]?st[x][j]:st[y-e2(j)+1][j];
-}
+int n,m,k,t,q,a,b,x,y,w,ans;
+vi v,adj[N];
+str s;
 
 inline void solve(void){
-    mset(dist,-1);
-    input(n,q);
+    input(n,s);
+    vci v={{s[0],1}};
     for(int i=1;i<n;i++){
-        input(x,y);
-        x--,y--;
-        adj[x].pb(y);
-        adj[y].pb(x);
+        if(v.back().ff!=s[i])v.pb({s[i],1});
+        else v.back().ss++;
     }
-    dfs();
-    sparsetable();
-    bt={0};
-    bfs();
-
-    for(int round=0;round*BLOCK<q;round++){
-        for(int i=round*BLOCK;i<min(q,(round+1)*BLOCK);i++){
-        	bt.clear();
-            input(x);
-            if(x==1){
-                input(x);
-                x--;
-                bt.pb(x);
-            }
-            else{
-                input(x);
-                x--;
-                int ans=dist[x];
-                for(auto i:bt){
-                    int _lca=lca(x,i);
-                    //debug("x,i,lca:",x,i,_lca);
-                    mins(ans,depth[x]+depth[i]-2*depth[_lca]);
-                }
-                print(ans);
-            }
-        	bfs();
-        }
-    }
-
-    /*cerr<<"ind: ";for(int i=0;i<n;i++)cerr<<ind[i]<<" ";cerr<<endl;
-
-    for(int j=0;j<4;j++){
-        cerr<<"st: ";
-        for(int i=0;i<2*n;i++)cerr<<st[i][j]+1<<" ";
-        cerr<<endl;
-    }
-
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            debug(i+1,"-",j+1,":",lca(i,j)+1);
-        }
-    }*/
+    //debug(v);
+    bool ans=0;
+    for(int i=0;i<v.size();i++)ans^=(v[i].ff=='U' && (v[i].ss&1));
+    yn(ans);
 }
 
 signed main(void){
     freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
-    int start=clock();
     fastio;
     //usacoio("59");
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)solve();
-    debug("Time elapsed:",(clock()-start)/(1e6),"ms");
 }
