@@ -202,44 +202,43 @@ mt19937 mt(clock());
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
-inline void f(){
-    vvi v(e2(n));
-    for(int i=0;i<n;i++){
-        int cnt=0;
-        while(cnt<e2(n)){
-            for(int j=0;j<1*(e2(i));j++){
-                if(cnt>=e2(n))break;
-                v[cnt++].pb(0);
-            }
-            for(int j=0;j<2*(e2(i));j++){
-                if(cnt>=e2(n))break;
-                v[cnt++].pb(1);
- 
-            }
-            for(int j=0;j<1*(e2(i));j++){
-                if(cnt>=e2(n))break;
-                v[cnt++].pb(0);
- 
-            }
-        }
-    }
-    //debug("ok");
-    vi ans;
-    for(auto i:v){
-        int x=0;
-        reverse(all(i));
-        for(auto j:i)x=((x<<1)|j);
-        ans.pb(x);
-    }
-    //debug("ok");
-    cout<<"Yes"<<endl<<ans;
-    //debug("ok");
+inline vi gray(int n){
+    if(n==0)return {0};
+    vi ans=gray(n-1);
+    ans.insert(ans.end(),rall(ans));
+    for(int i=ans.size()/2;i<ans.size();i++)ans[i]|=e2(n-1);
+    return ans;
+}
+
+inline str to_bit(int x,int n){
+    str ans;
+    for(int i=n-1;i>=0;i--)ans.pb('0'+bool(x&e2(i)));
+    return ans;
 }
 
 inline void solve(void){
     input(n,k);
-    if(k!=1)return print("No");
-    f();
+    if(n==1)return print("Yes\n0 1");
+    if(k%2==0 || n==k)return print("No");
+    print("Yes");
+    if(k==1)return print(gray(n));
+
+    vi t2=gray(k-1),t=gray(n-k+1),ans;
+    int x=0;
+    for(int i=0;i<t2.size();i++){
+        for(int j=0;j<t.size();j++){
+            int a = x ^ ((t2[i] << (n-k+1)) | t[j] );
+            cout<<a<<" ";
+            //debug(to_bit(a,4));
+            //ans.pb(a);
+            x^=(e2(k-1)-1)<<(n-k+1);
+        }
+        x^=1;
+    }
+    
+    /*for(int i=0;i<ans.size()-1;i++)debug(popcnt(ans[i]^ans[i+1]));
+    sort(all(ans));
+    debug(ans);*/
 }
 
 signed main(void){
@@ -249,4 +248,5 @@ signed main(void){
     int t=1;
     //cin>>t;
     while(t--)solve();
+    debug("Time elapsed:",(clock()-start)/(1e6),"ms");
 }

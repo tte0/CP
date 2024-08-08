@@ -1,47 +1,303 @@
-#include <bits/stdc++.h>
-using namespace std;
-#define rep(i,a,n) for (int i=a;i<n;i++)
-#define per(i,a,n) for (int i=n-1;i>=a;i--)
+/*
+Author: Teoman Ata Korkmaz
+*/
+#pragma GCC optimize("O3,fast-math,unroll-loops")
+#include <bits/stdc++.h> 
+//#include <ext/pb_ds/assoc_container.hpp>
+//#include <ext/pb_ds/tree_policy.hpp>
+#define int i32
+#define ff first
+#define ss second
+#define endl '\n'
+#define spc ' '
 #define pb push_back
-#define eb emplace_back
-#define mp make_pair
-#define all(x) (x).begin(),(x).end()
-#define fi first
-#define se second
-#define SZ(x) ((int)(x).size())
-typedef vector<int> VI;
-typedef basic_string<int> BI;
-typedef long long ll;
-typedef pair<int,int> PII;
-typedef double db;
-mt19937 mrand(random_device{}()); 
-const ll mod=998244353;
-int rnd(int x) { return mrand() % x;}
-ll powmod(ll a,ll b) {ll res=1;a%=mod; assert(b>=0); for(;b;b>>=1){if(b&1)res=res*a%mod;a=a*a%mod;}return res;}
-ll gcd(ll a,ll b) { return b?gcd(b,a%b):a;}
-// head
+#define e2(x) (1LL<<(x))
+#define lg(x) (__lg(x))
+#define gcd(x,y) __gcd(x,y)
+#define lcm(x,y) ((x/gcd(x,y))*y)
+#define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
+#define ssum(x) ((x)*((x)+1)/2)
+#define isint(x) (ceil((x))==floor((x)))
+#define no cout<<"NO"<<endl
+#define yes cout<<"YES"<<endl
+#define cendl cout<<endl
+#define mset(x,y) memset(x,y,sizeof(x))
+#define popcnt(x) __builtin_popcountll(x)
+#define clz(x) __builtin_clz(x)
+#define all(x) x.begin(),x.end()
+#define rall(x) x.rbegin(),x.rend()
+#define clock() (chrono::high_resolution_clock::now().time_since_epoch().count())
+#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
+#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
+#define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
+#define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
+#define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update> 
+using namespace std;
+//using namespace __gnu_pbds;
+typedef int_fast32_t i32;
+typedef int_fast64_t ll;
+typedef long double ldouble;
+typedef string str;
+typedef pair<int,int> ii;
+typedef pair<int,ii> iii;
+typedef pair<ii,ii> iiii;
+typedef vector<int> vi;
+typedef vector<ii> vii;
+typedef vector<iii> viii;
+typedef vector<vi> vvi;
+typedef vector<vvi> vvvi;
+typedef vector<pair<char,int>> vci;
+typedef vector<str> vstr;
+typedef map<int,int> mii;
+typedef map<char,int> mci;
+typedef map<str,int> msi;
+typedef map<int,vi> miv;
+typedef unordered_map<int,int> umii;
+typedef unordered_map<char,int> umci;
+typedef unordered_map<str,int> umsi;
+typedef unordered_map<int,vi> umiv;
+typedef set<int> sti;
+typedef set<char> stc;
+typedef set<str> sts;
+typedef multiset<int> msti;
+typedef multiset<char> mstc;
+typedef multiset<str> msts;
+inline int segsum(int start,int end,int step){
+    if(end<start)return 0;
+    return (((end-start)/step+1)*(start+end))>>1;
+}
+inline int fp(int b,int p,int mod=1e9+7){
+    int ans=1;
+    while(p){
+        if(p&1)ans=(ans*b)%mod;
+        p>>=1;
+        b=(b*b)%mod;
+    }
+    return ans;
+}
+template<typename InputIterator,typename T = int>
+T accumulate(InputIterator first,InputIterator last,T init = T{}) {
+    for (; first != last; ++first) {
+        init += *first;
+    }
+    return init;
+}
+template<typename T,typename T2>inline pair<T,T2> operator+(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff+b.ff,a.ss+b.ss};}
+template<typename T,typename T2>inline pair<T,T2> operator-(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff-b.ff,a.ss-b.ss};}
+template<typename T,typename T2>inline pair<T,T2> operator*(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff*b.ff,a.ss*b.ss};}
+template<typename T,typename T2>inline pair<T,T2> operator/(const pair<T,T2>&a,const pair<T,T2>& b){return {a.ff/b.ff,a.ss/b.ss};}
+template<typename T> inline void maxs(T& x,const T& y){return void(x=max(x,y));}
+template<typename T> inline void mins(T& x,const T& y){return void(x=min(x,y));}
+template<typename T> inline void gcds(T& x,const T& y){return void(x=gcd(x,y));}
+template<typename T> inline void lcms(T& x,const T& y){return void(x=lcm(x,y));}
+template<typename T,typename T2>inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
+    os<<"["<<p.ff<<","<<p.ss<<"]";
+    return os;
+}
+template<typename T>inline ostream& operator<<(ostream& os,const vector<T>& a) {
+    for(const T& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T>inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
+    for(const vector<T>& _:a)os<<_<<endl;
+    return os;
+}
+template<typename T>inline ostream& operator<<(ostream& os,const set<T>& a) {
+    for(const T& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
+    for(const auto& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T,typename T2>inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
+    for(const auto& _:a)os<<_<<' ';
+    return os;
+}
+template<typename T>inline ostream& operator<<(ostream& os,const queue<T>& b) {
+    queue<T> a=b;
+    while(a.size()){
+        os<<a.front()<<" ";
+        a.pop();
+    }
+    return os;
+}
+template<typename T>inline ostream& operator<<(ostream& os,const stack<T>& b) {
+    stack<T> a=b;
+    while(a.size()){
+        os<<a.top()<<" ";
+        a.pop();
+    }
+    return os;
+}
+template<typename T>inline ostream& operator<<(ostream& os,const priority_queue<T>& b) {
+    priority_queue<T> a=b;
+    while(a.size()){
+        os<<a.top()<<" ";
+        a.pop();
+    }
+    return os;
+}
+template<typename T>inline ostream& operator<<(ostream& os,const priority_queue<T,vector<T>,greater<T>>& b) {
+    priority_queue<T,vector<T>,greater<T>> a=b;
+    while(a.size()){
+        os<<a.top()<<" ";
+        a.pop();
+    }
+    return os;
+}
+template<typename T,typename T2>inline istream& operator>>(istream& is,pair<T,T2>& p){
+    is>>(p.ff)>>(p.ss);
+    return is;
+}
+template<typename T>inline istream& operator>>(istream& is,vector<T>& a) {
+    for(T& _:a)is>>_;
+    return is;
+}
+inline void print(){cout<<endl;}
+template<typename... Args>
+inline void print(const Args&... args){
+    ((cout<<args<<' '),...)<<endl;
+}
+inline void input(){}
+template<typename... Args>
+inline void input(Args&... args){
+    (cin>>...>>args);
+}
+#ifdef ONLINE_JUDGE
+template<typename... Args>
+inline void debug(const Args&... args){
+    return void("59");
+}
+#else
+inline void debug(){cerr<<endl;}
+template<typename... Args>
+inline void debug(const Args&... args){
+    ((cerr<<args<<' '),...)<<endl;
+}
+#endif
+inline void yn(bool b){
+    if(b)yes;
+    else no;
+}
+#define ASSERT(condition, message)\
+if(condition){\
+    cerr<<"Assertion failed: "<<message<<" at "<<__FILE__<<":"<<to_string(__LINE__)<<endl;\
+    abort();\
+}
+///////////////////////////////////////////////////////////////////
+constexpr int N=1e5+5;
+constexpr int A=1e9+5;
+constexpr int MOD=1e9+7;
+constexpr i32 INF=INT32_MAX;
+constexpr ll  INFL=INT64_MAX;
+constexpr int BLOCK=320;
+constexpr ldouble EPS=1e-9;
+constexpr int MAXQUERY=100;
+constexpr int dx[4]={-1,0,1,0};
+constexpr int dy[4]={0,1,0,-1};
+mt19937 mt(clock());
+///////////////////////////////////////////////////////////////////
+int n,m,k,t,q,a,b,x,y,w,ans,depth[N],st[2*N][19],ind[N],dist[N];
+vi v,adj[N],bt;
 
-const int N=401000;
-int n,m,a[N];
-int main() {
+inline void dfs(int node=0,int p=-1,int d=0){
+    depth[node]=d,ind[node]=bt.size();
+    bt.pb(node);
+    for(auto i:adj[node])if(i!=p)dfs(i,node,d+1);
+    bt.pb(node);
+}
+
+inline void sparsetable(){
+    int n=bt.size();
+    for(int i=0;i<n;i++)st[i][0]=bt[i];
+    for(int j=1;j<19;j++){
+        for(int i=0;i<n;i++){
+            st[i][j]=st[i][j-1];
+            if(i+e2(j-1)<n && depth[st[i][j]] > depth[st[i+e2(j-1)][j-1]])
+                st[i][j]=st[i+e2(j-1)][j-1];
+        }
+    }
+}
+
+inline void bfs(){
+    queue<ii> q;
+    for(auto i:bt)q.push({0,i});
+    while(q.size()){
+        int d=q.front().ff,node=q.front().ss;q.pop();
+        if(dist[node]<=d && dist[node]!=-1)continue;
+        dist[node]=d;
+        for(auto i:adj[node])q.push({d+1,i});
+    }
+}
+
+inline int lca(int x,int y){
+    x=ind[x],y=ind[y];
+    if(x>y)swap(x,y);
+    int j=lg(y-x+1);
+    return depth[st[x][j]]<depth[st[y-e2(j)+1][j]]?st[x][j]:st[y-e2(j)+1][j];
+}
+
+inline void solve(void){
+    mset(dist,-1);
+    input(n,q);
+    for(int i=1;i<n;i++){
+        input(x,y);
+        x--,y--;
+        adj[x].pb(y);
+        adj[y].pb(x);
+    }
+    dfs();
+    sparsetable();
+    bt={0};
+    bfs();
+
+    for(int round=0;round*BLOCK<q;round++){
+        for(int i=round*BLOCK;i<min(q,(round+1)*BLOCK);i++){
+        	bt.clear();
+            input(x);
+            if(x==1){
+                input(x);
+                x--;
+                bt.pb(x);
+            }
+            else{
+                input(x);
+                x--;
+                int ans=dist[x];
+                for(auto i:bt){
+                    int _lca=lca(x,i);
+                    //debug("x,i,lca:",x,i,_lca);
+                    mins(ans,depth[x]+depth[i]-2*depth[_lca]);
+                }
+                print(ans);
+            }
+        	bfs();
+        }
+    }
+
+    /*cerr<<"ind: ";for(int i=0;i<n;i++)cerr<<ind[i]<<" ";cerr<<endl;
+
+    for(int j=0;j<4;j++){
+        cerr<<"st: ";
+        for(int i=0;i<2*n;i++)cerr<<st[i][j]+1<<" ";
+        cerr<<endl;
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            debug(i+1,"-",j+1,":",lca(i,j)+1);
+        }
+    }*/
+}
+
+signed main(void){
     freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
-	scanf("%d%d",&n,&m);
-	int s=0;
-	rep(i,0,2*n) scanf("%d",a+i),s=(s+a[i])%m;
-	sort(a,a+2*n);
-	if (m%2==1) {
-		bool sm=1;
-		rep(i,0,2*n) sm&=(a[i]==a[i^1]);
-		puts(sm?"Bob":"Alice");
-	} else {
-		if (s%2!=0) puts("Alice");
-		else {
-			int par=0;
-			rep(i,0,2*n) par^=(a[i]<m/2),a[i]%=m/2;
-			sort(a,a+2*n);
-			bool sm=1;
-			rep(i,0,2*n) sm&=a[i]==a[i^1];
-			puts(sm&&(par==0)?"Bob":"Alice");
-		}
-	}
+    int start=clock();
+    fastio;
+    //usacoio("59");
+    int t=1;
+    //cin>>t;
+    while(t--)solve();
+    debug("Time elapsed:",(clock()-start)/(1e6),"ms");
 }

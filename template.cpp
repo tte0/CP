@@ -26,7 +26,7 @@ Author: Teoman Ata Korkmaz
 #define clz(x) __builtin_clz(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define clock() (chrono::high_resolution_clock::now().time_since_epoch().count())
+#define clock() uint64_t(chrono::high_resolution_clock::now().time_since_epoch().count())
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
@@ -186,17 +186,17 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
-const int A=1e9+5;
-const int MOD=1e9+7;
-const i32 INF=INT32_MAX;
-const ll  INFL=INT64_MAX;
-const int BLOCK=320;
-const ldouble EPS=1e-9;
-const int MAXQUERY=100;
-const double PI=4*atan(1);
-const int dx[4]={-1,0,1,0};
-const int dy[4]={0,1,0,-1};
+constexpr int N=2e5+5;
+constexpr int A=1e9+5;
+constexpr int MOD=1e9+7;
+constexpr i32 INF=INT32_MAX;
+constexpr ll  INFL=INT64_MAX;
+constexpr int BLOCK=320;
+constexpr ldouble EPS=1e-9;
+constexpr int MAXQUERY=100;
+constexpr ldouble PI=M_PI;
+constexpr int dx[4]={-1,0,1,0};
+constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
@@ -213,5 +213,5 @@ signed main(void){
     int t=1;
     //cin>>t;
     while(t--)solve();
-    debug("Time elapsed:",(clock()-start)/(1e6),"ms");
+    debug("Time elapsed:",(clock()-start)/uint64_t(1e6),"ms");
 }

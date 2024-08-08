@@ -5,7 +5,7 @@ Author: Teoman Ata Korkmaz
 #include <bits/stdc++.h> 
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
-#define int ll
+#define int i32
 #define ff first
 #define ss second
 #define endl '\n'
@@ -186,27 +186,25 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=1e5+5;
-const int A=1e9+5;
-const int MOD=1e9+7;
-const i32 INF=INT32_MAX;
-const ll  INFL=INT64_MAX;
-const int BLOCK=320;
-const ldouble EPS=1e-9;
-const int MAXQUERY=100;
-const double PI=4*atan(1);
-const int dx[4]={-1,0,1,0};
-const int dy[4]={0,1,0,-1};
+constexpr int N=1e5+5;
+constexpr int A=1e9+5;
+constexpr int MOD=1e9+7;
+constexpr i32 INF=INT32_MAX;
+constexpr ll  INFL=INT64_MAX;
+constexpr int BLOCK=320;
+constexpr ldouble EPS=1e-9;
+constexpr int MAXQUERY=100;
+constexpr int dx[4]={-1,0,1,0};
+constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans,depth[N],st[2*N][19];
+int n,m,k,t,q,a,b,x,y,w,ans,depth[N],st[2*N][19],ind[N],dist[N];
 vi v,adj[N],bt;
 
 inline void dfs(int node=0,int p=-1,int d=0){
+    depth[node]=d,ind[node]=bt.size();
     bt.pb(node);
-    depth[node]=d;
-    for(auto i:adj[node])if(i!=p)dfs(i,node,d+1);
-    bt.pb(node);
+    for(auto i:adj[node])if(i!=p){dfs(i,node,d+1);bt.pb(node);}
 }
 
 inline void sparsetable(){
@@ -215,16 +213,35 @@ inline void sparsetable(){
     for(int j=1;j<19;j++){
         for(int i=0;i<n;i++){
             st[i][j]=st[i][j-1];
-            if(i+e2(j-1)<n && depth[st[i][j]]>depth[st[i+e2(j-1)][j-1]])st[i][j]=st[i+e2(j-1)][j-1];
+            if(i+e2(j-1)<n && depth[st[i][j]] > depth[st[i+e2(j-1)][j-1]])
+                st[i][j]=st[i+e2(j-1)][j-1];
         }
     }
 }
 
-inline int lca(){
-    
+inline void bfs(){
+    queue<ii> q;
+    for(auto i:bt)q.push({0,i});
+    while(q.size()){
+        int d=q.front().ff,node=q.front().ss;q.pop();
+        if(dist[node]<=d && dist[node]!=-1)continue;
+        dist[node]=d;
+        for(auto i:adj[node])q.push({d+1,i});
+    }
+}
+
+inline int lca(int x,int y){
+    //debug("lca:",x+1,y+1);
+    x=ind[x],y=ind[y];
+    //debug("lca:",x,y);
+    if(x>y)swap(x,y);
+    //debug("lca:",x,y);
+    int j=lg(y-x+1);
+    return depth[st[x][j]]<depth[st[y-e2(j)+1][j]]?st[x][j]:st[y-e2(j)+1][j];
 }
 
 inline void solve(void){
+    mset(dist,-1);
     input(n,q);
     for(int i=1;i<n;i++){
         input(x,y);
@@ -232,7 +249,49 @@ inline void solve(void){
         adj[x].pb(y);
         adj[y].pb(x);
     }
+    dfs();
+    sparsetable();
+    bt={0};
+    bfs();
 
+    for(int round=0;round*BLOCK<q;round++){
+        bt.clear();
+        for(int i=round*BLOCK;i<min(q,(round+1)*BLOCK);i++){
+            input(x);
+            if(x==1){
+                input(x);
+                x--;
+                bt.pb(x);
+            }
+            else{
+                input(x);
+                x--;
+                int ans=dist[x];
+                for(auto i:bt){
+                    int _lca=lca(x,i);
+                    //debug("x,i,lca:",x+1,i+1,_lca+1);
+                    //debug("d:",depth[x],depth[i],depth[_lca]);
+                    mins(ans,depth[x]+depth[i]-2*depth[_lca]);
+                }
+                print(ans);
+            }
+        }
+        bfs();
+    }
+
+    /*cerr<<"ind: ";for(int i=0;i<n;i++)cerr<<ind[i]<<" ";cerr<<endl;
+
+    for(int j=0;j<4;j++){
+        cerr<<"st: ";
+        for(int i=0;i<2*n;i++)cerr<<st[i][j]+1<<" ";
+        cerr<<endl;
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            debug(i+1,"-",j+1,":",lca(i,j)+1);
+        }
+    }*/
 }
 
 signed main(void){
