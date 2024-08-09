@@ -194,6 +194,7 @@ constexpr ll  INFL=INT64_MAX;
 constexpr int BLOCK=320;
 constexpr ldouble EPS=1e-9;
 constexpr int MAXQUERY=100;
+constexpr ldouble PI=M_PI;
 constexpr int dx[4]={-1,0,1,0};
 constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
@@ -201,8 +202,21 @@ mt19937 mt(clock());
 int n,m,k,t,q,a,b,x,y,w,ans;
 vi v,adj[N];
 
+inline vvi itov(int x){
+    int sum=ssum(x);
+    vvi ans(3,vi(3));
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            
+        }
+    }
+}
+inline int vtoi(vvi v){
+
+}
+
 inline void solve(void){
-    input(n);
+
 }
 
 signed main(void){

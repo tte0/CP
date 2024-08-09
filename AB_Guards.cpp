@@ -199,10 +199,42 @@ constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+vi v,dp,dp_new;
+
+inline int C(int l,int r){
+    return (r-l+1)*(v[r+1]-v[l]);
+}
+
+#define mid ((l+r)>>1)
+inline void f(int l=0,int r=n-1,int optl=0,int optr=n-1){
+    debug("f:",l,r,optl,optr);
+    if(l>r)return;
+    ii mn={INFL,-1};
+    for(int j=optl;j<=min(mid,optr);j++){
+        mins(mn,{(j?dp[j-1]:0)+C(j,mid),j});
+    }
+    dp_new[mid]=mn.ff;
+    int opt=mn.ss;
+    f(l,mid-1,optl,opt);
+    f(mid+1,r,opt,optr);
+}
+#undef mid
 
 inline void solve(void){
-    input(n);
+    input(n,k);
+    v.resize(n);
+    input(v);
+    v.insert(v.begin(),0);
+    for(int i=0;i<n;i++)v[i+1]+=v[i];
+
+    dp.assign(n,0);
+    dp_new.assign(n,0);
+    for(int i=0;i<n;i++)dp[i]=C(0,i);
+    for(int i=1;i<k;i++){
+        f();
+        dp=dp_new;
+    }
+    print(dp[n-1]);
 }
 
 signed main(void){
