@@ -85,3 +85,9 @@ while True:
         fail_output(index, f"Error: {e}")
         debug(f"Exception details: {traceback.format_exc()}")
         exit(0)
+
+"""
+    freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
+    freopen("user_output.txt","w",stdout);freopen("testcase.in","r",stdin);
+
+"""

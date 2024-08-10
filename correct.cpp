@@ -1,8 +1,8 @@
 /*
 Author: Teoman Ata Korkmaz
 */
-#pragma GCC optimize("O3,fast-math,unroll-all-loops")
-#include <bits/stdc++.h>
+#pragma GCC optimize("O3,fast-math,unroll-loops")
+#include <bits/stdc++.h> 
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
 #define int ll
@@ -26,7 +26,7 @@ Author: Teoman Ata Korkmaz
 #define clz(x) __builtin_clz(x)
 #define all(x) x.begin(),x.end()
 #define rall(x) x.rbegin(),x.rend()
-#define clock() (chrono::high_resolution_clock::now().time_since_epoch().count())
+#define clock() uint64_t(chrono::high_resolution_clock::now().time_since_epoch().count())
 #define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
 #define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
 #define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
@@ -99,7 +99,7 @@ template<typename T>inline ostream& operator<<(ostream& os,const vector<T>& a) {
     return os;
 }
 template<typename T>inline ostream& operator<<(ostream& os,const vector<vector<T>>& a) {
-    for(const vector<T>& _:a)os<<_;
+    for(const vector<T>& _:a)os<<_<<endl;
     return os;
 }
 template<typename T>inline ostream& operator<<(ostream& os,const set<T>& a) {
@@ -186,41 +186,46 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
-const int A=1e9+5;
-const int MOD=1e9+7;
-const i32 INF=INT32_MAX;
-const ll  INFL=INT64_MAX;
-const int BLOCK=320;
-const ldouble EPS=1e-9;
-const int MAXQUERY=100;
-const double PI=4*atan(1);
-const int dx[4]={-1,0,1,0};
-const int dy[4]={0,1,0,-1};
+constexpr int N=1e3+5;
+constexpr int A=1e9+5;
+constexpr int MOD=1e9+7;
+constexpr i32 INF=INT32_MAX;
+constexpr ll  INFL=INT64_MAX;
+constexpr int BLOCK=320;
+constexpr ldouble EPS=1e-9;
+constexpr int MAXQUERY=100;
+constexpr int dx[4]={-1,0,1,0};
+constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
-str s;
+vvi dp;
+vi v;
+
+inline int f(int i,int j){
+    if(i==2*n)return 0;
+    if(dp[i][j]!=-INFL)return dp[i][j];
+    int t=(i<n?1:-1)*v[i+j]+f(i+1,j);
+    if(j<n)maxs(t,f(i,j+1));
+    return dp[i][j]=t;
+}
 
 inline void solve(void){
-    input(n,s);
-    vci v={{s[0],1}};
-    for(int i=1;i<n;i++){
-        if(v.back().ff!=s[i])v.pb({s[i],1});
-        else v.back().ss++;
-    }
-    //debug(v);
-    bool ans=0;
-    for(int i=0;i<v.size();i++)ans^=(v[i].ff=='U' && (v[i].ss&1));
-    yn(ans);
+    input(n);
+    v.resize(3*n);
+    input(v);
+    dp.assign(2*n+5,vi(n+5,-INFL));
+    print(f(0,0));
+
 }
 
 signed main(void){
     freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
+    int start=clock();
     fastio;
     //usacoio("59");
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--)solve();
+    debug("Time elapsed:",(clock()-start)/uint64_t(1e6),"ms");
 }

@@ -207,13 +207,9 @@ inline int rand(int l,int r){
 
 signed main(void){
     freopen("testcase.in","w",stdout);
-    t=100000,n=100;
-    print(t);
-    while(t--){
-        print(n);
-        for(int i=0;i<n;i++)cout<<char(rand(0,2)?'U':'D');
-        cendl;
-    }
+    n=100000,a=1000000000;
+    print(n);
+    for(int i=0;i<3*n;i++)cout<<(rand(1,a))<<" ";
     cout<<flush;
     return 0;
 }
