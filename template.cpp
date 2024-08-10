@@ -209,8 +209,8 @@ signed main(void){
     int start=clock();
     fastio;
     //usacoio("59");
-    int t=1;
-    //cin>>t;
-    while(t--)solve();
+    int _testcase=1;
+    //cin>>_testcase;
+    while(_testcase--)solve();
     debug("Time elapsed:",(clock()-start)/uint64_t(1e6),"ms");
 }
