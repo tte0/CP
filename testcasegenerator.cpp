@@ -207,11 +207,11 @@ inline int rand(int l,int r){
 
 signed main(void){
     freopen("testcase.in","w",stdout);
-    n=5000,a=1e9;
+    n=5;
     print(n,n);
-    for(int i=0;i<n;i++)cout<<(rand(1,a))<<" ";
+    for(int i=0;i<n;i++)cout<<(rand(1,n))<<" ";
     print();
-    for(int i=0;i<n;i++)cout<<(rand(1,a))<<" ";
+    for(int i=0;i<n;i++)cout<<(i+1)<<" ";
     cout<<flush;
     return 0;
 }

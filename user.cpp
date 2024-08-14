@@ -106,10 +106,6 @@ template<typename T>inline ostream& operator<<(ostream& os,const set<T>& a) {
     for(const T& _:a)os<<_<<' ';
     return os;
 }
-template<typename T>inline ostream& operator<<(ostream& os,const multiset<T>& a) {
-    for(const T& _:a)os<<_<<' ';
-    return os;
-}
 template<typename T,typename T2>inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
     for(const auto& _:a)os<<_<<' ';
     return os;
@@ -190,7 +186,7 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-constexpr int N=1e3+5;
+constexpr int N=2e5+5;
 constexpr int A=1e9+5;
 constexpr int MOD=1e9+7;
 constexpr i32 INF=INT32_MAX;
@@ -203,45 +199,36 @@ constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vi v;
+vi v,adj[N];
 
 inline void solve(void){
-    input(n);
-    v.resize(3*n);
+    input(n,q);
+    v.resize(n);
     input(v);
-    
-    int sum=0;
-    vi vl(n+1),vr(n+1);
-    msti st;
-    for(int i=0;i<n;i++)sum+=v[i],st.insert(v[i]);
-    vl[0]=sum;
-    //debug("sum:",sum);
-    //debug("st:",st);
-    for(int i=n;i<2*n;i++){
-        sum+=v[i]       ;st.insert(v[i]);
-        sum-=*st.begin();st.erase(st.begin());
-        vl[i-n+1]=sum;
-        //debug("st:",st);
+    vii sorted;
+    for(int i=0;i<n;i++)sorted.pb({v[i],i});
+    sort(rall(sorted));
+    //debug("sorted:",sorted);
+    while(q--){
+        input(x);
+        int sum=0;
+        vi vis(n);
+        for(int i=n-1;i>n-x;i--){
+            vis[sorted[i].ss]++;
+            sum+=(i%2?-1:1)*sorted[i].ff;
+        }
+        //debug("sum:",sum);
+        //debug("vis:",vis);
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            if(vis[i]++==0){
+                sum+=(cnt%2?-1:1)*v[i];
+                cnt++;
+            }
+        }
+        print(sum);
+        //debug("query ok");
     }
-
-    sum=0,st.clear();
-    for(int i=3*n-1;i>=2*n;i--)sum+=-v[i],st.insert(-v[i]);
-    vr[n]=sum;
-    //debug("sum:",sum);
-    //debug("st:",st);
-    for(int i=2*n-1;i>=n;i--){
-        sum+=-v[i]      ;st.insert(-v[i]);
-        sum-=*st.begin();st.erase(st.begin());
-        vr[i-n]=sum;
-        //debug("st:",st);
-    }
-
-    int ans=-INFL;
-    for(int i=0;i<n;i++)maxs(ans,vl[i]+vr[i]);
-    print(ans);
-
-    //debug("vl:",vl);
-    //debug("vr:",vr);
 }
 
 signed main(void){
@@ -249,8 +236,8 @@ signed main(void){
     int start=clock();
     fastio;
     //usacoio("59");
-    int t=1;
-    //cin>>t;
-    while(t--)solve();
+    int _testcase=1;
+    //cin>>_testcase;
+    while(_testcase--)solve();
     debug("Time elapsed:",(clock()-start)/uint64_t(1e6),"ms");
 }

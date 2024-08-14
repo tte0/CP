@@ -186,7 +186,7 @@ if(condition){\
     abort();\
 }
 ///////////////////////////////////////////////////////////////////
-constexpr int N=1e3+5;
+constexpr int N=2e5+5;
 constexpr int A=1e9+5;
 constexpr int MOD=1e9+7;
 constexpr i32 INF=INT32_MAX;
@@ -199,24 +199,29 @@ constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
-vvi dp;
-vi v;
+vi v,adj[N];
 
-inline int f(int i,int j){
-    if(i==2*n)return 0;
-    if(dp[i][j]!=-INFL)return dp[i][j];
-    int t=(i<n?1:-1)*v[i+j]+f(i+1,j);
-    if(j<n)maxs(t,f(i,j+1));
-    return dp[i][j]=t;
+inline int play(int p){
+    int ans=0;
+    msti st;
+    for(int i=0;i<p;i++)st.insert(v[i]);
+    for(int round=0;round<n;round++){
+        ans+=(round%2?-1:1)*(*--st.end());
+        st.erase(--st.end());
+        if(round+p<n)st.insert(v[round+p]);
+    }
+    return ans;
 }
 
 inline void solve(void){
-    input(n);
-    v.resize(3*n);
+    input(n,q);
+    v.resize(n);
     input(v);
-    dp.assign(2*n+5,vi(n+5,-INFL));
-    print(f(0,0));
-
+    
+    while(q--){
+        input(x);
+        print(play(x));
+    }
 }
 
 signed main(void){
@@ -224,8 +229,8 @@ signed main(void){
     int start=clock();
     fastio;
     //usacoio("59");
-    int t=1;
-    //cin>>t;
-    while(t--)solve();
+    int _testcase=1;
+    //cin>>_testcase;
+    while(_testcase--)solve();
     debug("Time elapsed:",(clock()-start)/uint64_t(1e6),"ms");
 }
