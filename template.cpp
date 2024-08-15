@@ -1,7 +1,7 @@
 /*
 Author: Teoman Ata Korkmaz
 */
-#pragma GCC optimize("O3,fast-math,unroll-loops")
+#pragma GCC optimize("O3,fast-math,unroll-loops,no-stack-protector")
 #include <bits/stdc++.h> 
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
