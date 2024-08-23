@@ -73,12 +73,19 @@ while True:
         if user_proc.returncode != 0:
             fail_output(index, f"User program failed with return code {user_proc.returncode}.")
             exit(0)
-        elif correct_output != user_output:
-            wa_output(index, f"Test case failed.")
-            exit(0)
-            
-        else:
-            pass_output(index)
+
+        # Compare outputs with case-insensitive comparison for "yes" or "no" lines
+        for correct_line, user_line in zip(correct_output, user_output):
+            if correct_line.lower() in ["yes", "no"] and user_line.lower() in ["yes", "no"]:
+                if correct_line.lower() != user_line.lower():
+                    wa_output(index, f"Test case failed.")
+                    exit(0)
+            elif correct_line != user_line:
+                wa_output(index, f"Test case failed.")
+                exit(0)
+
+        # If all lines match, print PASS
+        pass_output(index)
 
         index += 1
     except Exception as e:

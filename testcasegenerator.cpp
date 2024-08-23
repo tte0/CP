@@ -205,13 +205,18 @@ inline int rand(int l,int r){
     return mt()%(r-l+1)+l;
 }
 
+inline void solve(){
+    n=5,k=rand(1,n);
+    print(n,k);
+    for(int i=0;i<n;i++)cout<<rand(1,n)<<" ";
+    print();
+}
+
 signed main(void){
     freopen("testcase.in","w",stdout);
-    n=5;
-    print(n,n);
-    for(int i=0;i<n;i++)cout<<(rand(1,n))<<" ";
-    print();
-    for(int i=0;i<n;i++)cout<<(i+1)<<" ";
+    int _testcase=1;
+    print(_testcase);
+    while(_testcase--)solve();
     cout<<flush;
     return 0;
 }
