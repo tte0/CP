@@ -36,20 +36,24 @@ def wa_output(index, msg):
 
 # Run the test case generator and the correct and user programs indefinitely
 index = 1
+report_interval = 1
 while True:
     try:
         # Generate a random test case
-        debug("Generating test case...")
+        if index % report_interval == 0:
+            debug("Generating test case...")
         subprocess.run(["./testcasegenerator"])
         testcase_file = "testcase.in"
 
         # Run the correct program with input redirection
-        debug(f"Running correct program with input redirection...")
+        if index % report_interval == 0:
+            debug(f"Running correct program with input redirection...")
         correct_output_file = "correct_output.txt"
         user_output_file = "user_output.txt"
         correct_proc = subprocess.Popen(["./correct < " + testcase_file + " > " + correct_output_file], shell=True, stdout=subprocess.PIPE, universal_newlines=True)
         correct_proc.communicate()
-        debug(f"Correct program output: {correct_output_file}")
+        if index % report_interval == 0:
+            debug(f"Correct program output: {correct_output_file}")
 
         # Check the results
         if correct_proc.returncode != 0:
@@ -57,10 +61,12 @@ while True:
             exit(0)
 
         # Run the user program with input redirection
-        debug(f"Running user program with input redirection...")
+        if index % report_interval == 0:
+            debug(f"Running user program with input redirection...")
         user_proc = subprocess.Popen(["./user < " + testcase_file + " > " + user_output_file], shell=True, stdout=subprocess.PIPE, universal_newlines=True)
         user_proc.communicate()
-        debug(f"User program output: {user_output_file}")
+        if index % report_interval == 0:
+            debug(f"User program output: {user_output_file}")
 
         # Check the results
         with open(correct_output_file, "r") as f_correct:
@@ -85,7 +91,16 @@ while True:
                 exit(0)
 
         # If all lines match, print PASS
-        pass_output(index)
+        if index % report_interval == 0:
+            pass_output(index)
+
+        # Update report interval
+        if index == 20:
+            report_interval = 2
+        elif index == 50:
+            report_interval = 5
+        elif index == 100:
+            report_interval = 10
 
         index += 1
     except Exception as e:
