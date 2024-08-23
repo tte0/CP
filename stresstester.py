@@ -5,12 +5,7 @@
 """
 
 import subprocess
-import time
-import random
-import sys
-import re
 from termcolor import colored
-import os
 import traceback
 
 # Compile the C++ programs
@@ -35,24 +30,25 @@ def wa_output(index, msg):
     print(f"Testcase {index}: [{colored('WA', 'yellow')}] {msg}")
 
 # Run the test case generator and the correct and user programs indefinitely
-index = 1
+index = 0
 report_interval = 1
+debug_logs_enabled = True
 while True:
     try:
         # Generate a random test case
-        if index % report_interval == 0:
+        if debug_logs_enabled:
             debug("Generating test case...")
         subprocess.run(["./testcasegenerator"])
         testcase_file = "testcase.in"
 
         # Run the correct program with input redirection
-        if index % report_interval == 0:
+        if debug_logs_enabled:
             debug(f"Running correct program with input redirection...")
         correct_output_file = "correct_output.txt"
         user_output_file = "user_output.txt"
         correct_proc = subprocess.Popen(["./correct < " + testcase_file + " > " + correct_output_file], shell=True, stdout=subprocess.PIPE, universal_newlines=True)
         correct_proc.communicate()
-        if index % report_interval == 0:
+        if debug_logs_enabled:
             debug(f"Correct program output: {correct_output_file}")
 
         # Check the results
@@ -61,11 +57,11 @@ while True:
             exit(0)
 
         # Run the user program with input redirection
-        if index % report_interval == 0:
+        if debug_logs_enabled:
             debug(f"Running user program with input redirection...")
         user_proc = subprocess.Popen(["./user < " + testcase_file + " > " + user_output_file], shell=True, stdout=subprocess.PIPE, universal_newlines=True)
         user_proc.communicate()
-        if index % report_interval == 0:
+        if debug_logs_enabled:
             debug(f"User program output: {user_output_file}")
 
         # Check the results
@@ -101,6 +97,10 @@ while True:
             report_interval = 5
         elif index == 100:
             report_interval = 10
+
+        # Disable debug logs after the first test case
+        if index == 0:
+            debug_logs_enabled = False
 
         index += 1
     except Exception as e:
