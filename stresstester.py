@@ -21,13 +21,13 @@ def debug(msg):
     print(colored(msg, 'grey'))
 
 def pass_output(index):
-    print(f"Testcase {index}: [{colored('PASS', 'green')}]")
+    print(f"Testcase {index}: [{colored('AC', 'green')}]")
 
 def fail_output(index, msg):
-    print(f"Testcase {index}: [{colored('FAIL', 'red')}] {msg}")
+    print(f"Testcase {index}: [{colored('RTE', 'yellow')}] {msg}")
 
 def wa_output(index, msg):
-    print(f"Testcase {index}: [{colored('WA', 'yellow')}] {msg}")
+    print(f"Testcase {index}: [{colored('WA', 'red')}] {msg}")
 
 # Run the test case generator and the correct and user programs indefinitely
 index = 0
