@@ -243,6 +243,7 @@ inline void solve(void){
 }
 
 signed main(void){
+    freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
     fastio;
     //usacoio("59");
     int t=1;

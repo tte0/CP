@@ -206,7 +206,7 @@ inline int rand(int l,int r){
 }
 
 inline void solve(){
-    n=5,k=rand(1,n);
+    n=500000,k=rand(1,n);
     print(n,k);
     for(int i=0;i<n;i++)cout<<rand(1,n)<<" ";
     print();
@@ -214,7 +214,7 @@ inline void solve(){
 
 signed main(void){
     freopen("testcase.in","w",stdout);
-    int _testcase=1;
+    int _testcase=10;
     print(_testcase);
     while(_testcase--)solve();
     cout<<flush;
