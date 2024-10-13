@@ -214,8 +214,8 @@ inline void solve(){
 
 signed main(void){
     freopen("testcase.in","w",stdout);
-    int _testcase=10;
-    print(_testcase);
+    int _testcase=1;
+    //print(_testcase);
     while(_testcase--)solve();
     cout<<flush;
     return 0;
