@@ -198,12 +198,13 @@ constexpr int dx[4]={-1,0,1,0};
 constexpr int dy[4]={0,1,0,-1};
 mt19937 mt(clock());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,a,b,x,y,w;
+int n,m,k,t,a,b,x,y,w,ans;
 vi v;
 
 
 inline void solve(void){
     input(n);
+
 }
 
 signed main(void){
