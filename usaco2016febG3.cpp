@@ -30,6 +30,7 @@ signed main(void){
     for(auto& i:a)cin>>i;
     for(auto& i:b)cin>>i;
 
+    for(int i=0;i<1000000000;i++);
     sort(a.begin(),a.end());
     sort(b.begin(),b.end());
     a.insert(a.begin(),0);a.push_back(A);
