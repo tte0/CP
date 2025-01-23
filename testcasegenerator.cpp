@@ -206,14 +206,18 @@ inline int rand(int l,int r){
 }
 
 inline void solve(){
-    n=500000,k=rand(1,n);
-    print(n,k);
-    for(int i=0;i<n;i++)cout<<rand(1,n)<<" ";
-    print();
+    n=200000-50;
+    vector<int> a(n),h(n);
+    iota(h.begin(),h.end(),1);
+    for(int i=0;i<n;i++)a[i]=rand(1,1e9);
+    shuffle(h.begin(),h.end(),mt);
+
+    print(n);
+    print(h);
+    print(a);
 }
 
 signed main(void){
-    freopen("testcase.in","w",stdout);
     int _testcase=1;
     //print(_testcase);
     while(_testcase--)solve();

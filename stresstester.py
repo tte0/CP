@@ -8,8 +8,8 @@ correct_code   = "correct.cpp"
 user_code      = "user.cpp"
 
 testcase_input = "testcase.txt"
-correct_output = "correct_output.txt"
-user_output    = "user_output.txt"
+correct_output = "correct.txt"
+user_output    = "user.txt"
 
 def debug(msg):
     print(colored(msg, 'grey'))
@@ -32,6 +32,7 @@ os.system("touch "+ testcase_input)
 os.system("touch "+ correct_output)
 os.system("touch "+ user_output)
 
+debug("Compiling programs...")
 os.system("g++ -o correct correct.cpp")
 os.system("g++ -o user user.cpp")
 os.system("g++ -o testcasegenerator testcasegenerator.cpp")
