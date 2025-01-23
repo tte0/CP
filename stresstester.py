@@ -1,22 +1,16 @@
-"""
-    freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
-    freopen("user_output.txt","w",stdout);freopen("testcase.in","r",stdin);
-
-"""
-
+import os
 import subprocess
 from termcolor import colored
 import traceback
 
-# Compile the C++ programs
-subprocess.run(["g++", "-o", "correct", "correct.cpp"])
-subprocess.run(["g++", "-o", "user", "user.cpp"])
-subprocess.run(["g++", "-o", "testcasegenerator", "testcasegenerator.cpp"])
+testcase_code  = "testcasegenerator.cpp"
+correct_code   = "correct.cpp"
+user_code      = "user.cpp"
 
-# Set the time limit
-time_limit = 5
+testcase_input = "testcase.txt"
+correct_output = "correct_output.txt"
+user_output    = "user_output.txt"
 
-# Define color-coded output functions
 def debug(msg):
     print(colored(msg, 'grey'))
 
@@ -29,55 +23,50 @@ def fail_output(index, msg):
 def wa_output(index, msg):
     print(f"Testcase {index}: [{colored('WA', 'red')}] {msg}")
 
-# Run the test case generator and the correct and user programs indefinitely
 index = 0
 report_interval = 1
 debug_logs_enabled = True
+
+
+os.system("touch "+ testcase_input)
+os.system("touch "+ correct_output)
+os.system("touch "+ user_output)
+
+os.system("g++ -o correct correct.cpp")
+os.system("g++ -o user user.cpp")
+os.system("g++ -o testcasegenerator testcasegenerator.cpp")
+
 while True:
     try:
-        # Generate a random test case
         if debug_logs_enabled:
             debug("Generating test case...")
-        subprocess.run(["./testcasegenerator"])
-        testcase_file = "testcase.in"
+        os.system("./testcasegenerator > " + testcase_input)
 
-        # Run the correct program with input redirection
-        if debug_logs_enabled:
-            debug(f"Running correct program with input redirection...")
-        correct_output_file = "correct_output.txt"
-        user_output_file = "user_output.txt"
-        correct_proc = subprocess.Popen(["./correct < " + testcase_file + " > " + correct_output_file], shell=True, stdout=subprocess.PIPE, universal_newlines=True)
-        correct_proc.communicate()
-        if debug_logs_enabled:
-            debug(f"Correct program output: {correct_output_file}")
 
-        # Check the results
-        if correct_proc.returncode != 0:
-            fail_output(index, f"Correct program failed with return code {correct_proc.returncode}.")
+        if debug_logs_enabled:
+            debug(f"Running correct.cpp...")
+        correct_returncode = os.system("cat " + testcase_input + " | ./correct  > " + correct_output)
+        if correct_returncode != 0:
+            fail_output(index, f"correct.cpp return code {correct_returncode}.")
             exit(0)
 
-        # Run the user program with input redirection
-        if debug_logs_enabled:
-            debug(f"Running user program with input redirection...")
-        user_proc = subprocess.Popen(["./user < " + testcase_file + " > " + user_output_file], shell=True, stdout=subprocess.PIPE, universal_newlines=True)
-        user_proc.communicate()
-        if debug_logs_enabled:
-            debug(f"User program output: {user_output_file}")
 
-        # Check the results
-        with open(correct_output_file, "r") as f_correct:
-            correct_output = f_correct.readlines()
-            correct_output = [line.strip() for line in correct_output if line.strip()]
-        with open(user_output_file, "r") as f_user:
-            user_output = f_user.readlines()
-            user_output = [line.strip() for line in user_output if line.strip()]
-
-        if user_proc.returncode != 0:
-            fail_output(index, f"User program failed with return code {user_proc.returncode}.")
+        if debug_logs_enabled:
+            debug(f"Running correct.cpp...")
+        user_returncode = os.system("cat " + testcase_input + " | ./user  > " + user_output)
+        if user_returncode != 0:
+            fail_output(index, f"user.cpp return code {user_returncode}.")
             exit(0)
 
-        # Compare outputs with case-insensitive comparison for "yes" or "no" lines
-        for correct_line, user_line in zip(correct_output, user_output):
+
+        with open(correct_output, "r") as f_correct:
+            __correct_output = f_correct.readlines()
+            __correct_output = [line.strip() for line in __correct_output if line.strip()]
+        with open(user_output, "r") as f_user:
+            __user_output = f_user.readlines()
+            __user_output = [line.strip() for line in __user_output if line.strip()]
+
+        for correct_line, user_line in zip(__correct_output, __user_output):
             if correct_line.lower() in ["yes", "no"] and user_line.lower() in ["yes", "no"]:
                 if correct_line.lower() != user_line.lower():
                     wa_output(index, f"Test case failed.")
@@ -86,11 +75,10 @@ while True:
                 wa_output(index, f"Test case failed.")
                 exit(0)
 
-        # If all lines match, print PASS
+
         if index % report_interval == 0:
             pass_output(index)
 
-        # Update report interval
         if index == 20:
             report_interval = 2
         elif index == 50:
@@ -98,7 +86,6 @@ while True:
         elif index == 100:
             report_interval = 10
 
-        # Disable debug logs after the first test case
         if index == 0:
             debug_logs_enabled = False
 
@@ -107,9 +94,3 @@ while True:
         fail_output(index, f"Error: {e}")
         debug(f"Exception details: {traceback.format_exc()}")
         exit(0)
-
-"""
-    freopen("correct_output.txt","w",stdout);freopen("testcase.in","r",stdin);
-    freopen("user_output.txt","w",stdout);freopen("testcase.in","r",stdin);
-
-"""
