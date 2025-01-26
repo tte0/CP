@@ -2,41 +2,33 @@
 #include <bits/stdc++.h> 
 #define int int_fast64_t
 using namespace std;
-constexpr int N=200005;
-///////////////////////////////////////////////////////////
-int n;
-vector<int> a,h;
+/////////////////////////////////////////////////////////// max 18 dig
+int n,fp[21];
 
-class Segtree{
-    int st[4*N];
-    public:
-    inline void update(int x,int val){
-        for(st[x+=n]=val;x>1;x>>=1){
-            st[x>>1]=max(st[x],st[x^1]);
-        }
+inline int f(int d){
+    //cerr<<"f:"<<left<<setw(2)<<d<<"|";
+    int ans=1,x=n;
+    for(int i=0;d-i-1>i;i++){
+        int b=fp[d-i-1]-fp[i];
+        if(x/b>9)return 0;
+        ans*=10-x/b-!i;
+        x%=b;
+        //cerr<<ans<<",";
     }
-    inline int query(int l,int r){
-        int ans=0;
-        for(l+=n,r+=n;l<r;l>>=1,r>>=1){
-            if(l&1)ans=max(ans,st[l++]);
-            if(r&1)ans=max(ans,st[--r]);
-        }
-        return ans;
-    }
-};
+    if(x)return 0;
+    if(d&1)ans*=10;
+    return ans;
+}
 
 signed main(void){
+    fp[0]=1;for(int i=1;i<21;i++)fp[i]=fp[i-1]*10;
     cin>>n;
-    a.resize(n);    
-    h.resize(n);    
-    for(auto& i:h)cin>>i;
-    for(auto& i:a)cin>>i;
-    for(auto& i:h)i--;
 
-    Segtree st;
-    for(int i=0;i<n;i++){
-        st.update(h[i],a[i]+st.query(0,h[i]));
+    int ans=0;
+    for(int i=1;i<=20;i++){
+        ans+=f(i);  
+        //cerr<<"|"<<ans<<endl;
     }
 
-    cout<<st.query(0,n);
+    cout<<ans<<endl;
 }

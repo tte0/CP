@@ -206,15 +206,8 @@ inline int rand(int l,int r){
 }
 
 inline void solve(){
-    n=200000-50;
-    vector<int> a(n),h(n);
-    iota(h.begin(),h.end(),1);
-    for(int i=0;i<n;i++)a[i]=rand(1,1e9);
-    shuffle(h.begin(),h.end(),mt);
-
-    print(n);
-    print(h);
-    print(a);
+    n=1000000;
+    print(9*rand(1,n));
 }
 
 signed main(void){
