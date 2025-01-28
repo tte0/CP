@@ -7,18 +7,17 @@ constexpr int N=2e5+5;
 int n,q,x,y,w;
 vector<int> v;
 
-struct Node{
+struct segtree{
+    #define m ((l+r)>>1)
+    #define lc (node<<1)
+    #define rc ((node<<1)|1)
+    struct Node{
     int min=2e9;
     int min2=2e9;
     int sum=0;
     int cnt=1;
     int lazy=0;
-};
-
-struct segtree{
-    #define m ((l+r)>>1)
-    #define lc (node<<1)
-    #define rc ((node<<1)|1)
+    };
     Node* st=new Node[4*N];
     segtree(){
         build();

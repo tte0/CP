@@ -206,8 +206,24 @@ inline int rand(int l,int r){
 }
 
 inline void solve(){
-    n=1000000;
-    print(9*rand(1,n));
+    n=200000,q=2000,a=1000000;
+    vector<int> v;
+    for(int i=0;i<n;i++)v.push_back(rand(1,a));
+    print(n,q);
+    print(v);
+    for(int i=0;i<q-1;i++){
+        if(rand(0,1)){
+            int x=rand(1,n);
+            int y=rand(1,n);
+            print(1,min(x,y),max(x,y),rand(1,a));
+        }
+        else{
+            int x=rand(1,n);
+            int y=rand(1,n);
+            print(2,min(x,y),max(x,y));
+        }
+    }
+    print(2,1,n);
 }
 
 signed main(void){
