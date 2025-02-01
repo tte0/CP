@@ -53,7 +53,7 @@ while True:
 
 
         if debug_logs_enabled:
-            debug(f"Running correct.cpp...")
+            debug(f"Running user.cpp...")
         user_returncode = os.system("cat " + testcase_input + " | ./user  > " + user_output)
         if user_returncode != 0:
             fail_output(index, f"user.cpp return code {user_returncode}.")

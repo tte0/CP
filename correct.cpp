@@ -3,21 +3,23 @@
 #define int int_fast64_t
 using namespace std;
 ///////////////////////////////////////////////////////////
-int n,k;
-
-inline void solve(void){
-    cin>>n>>k;    
-    int l=1,r=10;
-    while(--n)l*=10,r*=10;
-    int ans=0;
-    for(int i=l;i<r;i++){
-        if(i%(1LL<<k)==0)ans++;
-    }
-    cout<<ans<<endl;
-}
+int n;
+vector<int> v;
 
 signed main(void){
-    int64_t t;
-    cin>>t;
-    while(t--)solve();
+    cin>>n;
+    v.resize(n);
+    for(auto& i:v)cin>>i;
+    
+    int ans=0;
+    for(int i=0;i<n;i++){
+        set<int> st;
+        for(int i=0;i<=n;i++)st.insert(i);
+        for(int j=i;j<n;j++){
+            st.erase(v[j]);
+            ans+=*st.begin();
+        }
+    }
+
+    cout<<ans<<endl;
 }

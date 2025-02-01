@@ -1,26 +1,45 @@
 // Author: Teoman Ata Korkmaz
 #include <bits/stdc++.h> 
-#define int __int128_t
+#define int int_fast64_t
 using namespace std;
+constexpr int N=2e5+5;
 ///////////////////////////////////////////////////////////
-int n,k;
-inline int f(int n){
-    int ans=1;
-    while(n--)ans*=10;
-    ans--;
-    return ans>>k;
-}
+int n,ans,ind[N];
+vector<int> v;
 
-void solve(void){
-    int64_t n,k;
-    cin>>n>>k;
-    ::n=n;
-    ::k=k;
-    cout<<int64_t(f(n)-f(n-1))<<endl;    
+inline int f(vector<int> v){
+    sort(v.begin(),v.end());
+    v.resize(unique(v.begin(),v.end())-v.begin());
+    for(int i=0;i<n;i++){
+        assert(i<=v[i]);
+        if(i!=v[i])return i;
+    }
+    return n;
 }
 
 signed main(void){
-    int64_t t;
-    cin>>t;
-    while(t--)solve();
+    cin>>n;
+    v.resize(n);
+    for(auto& i:v)cin>>i;
+    
+    int mex=f(v);
+    for(int i=0;i<n;i++){
+        if(v[i]<=mex)ind[v[i]]=i;
+    }
+    ind[mex]=n;
+
+    int l=n,r=0;
+    for(int i=0;i<mex;i++){
+        l=min(l,ind[i]);
+        r=max(r,ind[i]);
+        if(ind[i+1]<l){
+            ans+=(i+1)*(l-ind[i+1])*(n-r);
+        }
+        if(r<ind[i+1]){
+            ans+=(i+1)*(l+1)*(ind[i+1]-r);
+        }
+        //cerr<<ans<<endl;
+    }
+
+    cout<<ans<<endl;
 }

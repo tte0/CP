@@ -206,13 +206,17 @@ inline int rand(int l,int r){
 }
 
 inline void solve(){
-    int n=8,k=60;
-    print(n*k);
-    for(int _=1;_<=n;_++){
-        for(x=1;x<=k;x++){
-            print(_,x);
-        }
+    int n=500,a=499;
+    map<int,int> mp;
+    vector<int> v;
+    for(int i=0;i<n;i++){
+        int x=rand(0,a);
+        while(mp[x]++)x=rand(0,a);
+        v.push_back(x);
     }
+
+    print(n);
+    print(v);
 }
 
 signed main(void){
