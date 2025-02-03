@@ -3,23 +3,14 @@
 #define int int_fast64_t
 using namespace std;
 ///////////////////////////////////////////////////////////
-int n;
-vector<int> v;
+int n,ans;
+vector<int> a,b,comp;
 
 signed main(void){
     cin>>n;
-    v.resize(n);
-    for(auto& i:v)cin>>i;
-    
-    int ans=0;
-    for(int i=0;i<n;i++){
-        set<int> st;
-        for(int i=0;i<=n;i++)st.insert(i);
-        for(int j=i;j<n;j++){
-            st.erase(v[j]);
-            ans+=*st.begin();
-        }
-    }
+    vector<vector<int>> v(n,vector<int>(n));   
 
-    cout<<ans<<endl;
+    for(int i=0;i<n;i++)
+    
+
 }

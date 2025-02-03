@@ -1,7 +1,7 @@
 /*
 Author: Teoman Ata Korkmaz
 */
-#pragma GCC optimize("O3,fast-math,unroll-all-loops")
+#pragma GCC optimize("Ofast")
 #include <bits/stdc++.h>
 //#include <ext/pb_ds/assoc_container.hpp>
 //#include <ext/pb_ds/tree_policy.hpp>
@@ -206,15 +206,14 @@ inline int rand(int l,int r){
 }
 
 inline void solve(){
-    int n=500,a=499;
-    map<int,int> mp;
+    int n=2e5;
+    int a=1e9;
     vector<int> v;
     for(int i=0;i<n;i++){
-        int x=rand(0,a);
-        while(mp[x]++)x=rand(0,a);
-        v.push_back(x);
+        v.push_back(i%2);
     }
-
+    for(int i=0;i<100;i++)v[i]=i;
+    shuffle(v.begin(),v.end(),mt);
     print(n);
     print(v);
 }
