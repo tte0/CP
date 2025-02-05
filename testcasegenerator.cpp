@@ -207,12 +207,11 @@ inline int rand(int l,int r){
 
 inline void solve(){
     int n=2e5;
-    int a=1e9;
+    int a=2;
     vector<int> v;
     for(int i=0;i<n;i++){
-        v.push_back(i%2);
+        v.push_back(i%a);
     }
-    for(int i=0;i<100;i++)v[i]=i;
     shuffle(v.begin(),v.end(),mt);
     print(n);
     print(v);
