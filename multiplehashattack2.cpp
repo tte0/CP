@@ -1,194 +1,101 @@
-/*
-MIT License
-
-Copyright (c) 2024 tte0 (teomana,teoata17)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-#pragma GCC optimize("O3,fast-math,unroll-all-loops")
+#pragma GCC optimize("Ofast,no-stack-protector")
 #include <bits/stdc++.h>
+#pragma GCC target("popcnt,abm,mmx,avx,avx2,lzcnt,bmi,bmi2,fma,sse,sse2,sse3,sse4,sse4.1,sse4.2")
 #define int ll
-#define ff first
-#define ss second
-#define endl '\n'
-#define spc ' '
-#define pb push_back
-#define e2(x) (1LL<<(x))
-#define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x/gcd(x,y))*y)
-#define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
-#define ssum(x) ((x)*((x)+1)/2)
-#define isint(x) (ceil((x))==floor((x)))
-#define no cout<<"NO"<<endl
-#define yes cout<<"YES"<<endl
-#define cendl cout<<endl
-#define mset(x,y) memset(x,y,sizeof(x))
-#define popcnt(x) __builtin_popcountll(x)
-#define all(x) x.begin(),x.end()
-#define rall(x) x.rbegin(),x.rend()
-#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cerr.tie(NULL);cout<<fixed<<setprecision(0);cerr<<fixed<<setprecision(0)
-#define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
-#define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
-#define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
 using namespace std;
-typedef int32_t i32;
 typedef int_fast64_t ll;
-typedef long double ldouble;
-typedef string str;
-typedef pair<int,int> ii;
-typedef pair<int,ii> iii;
-typedef vector<int> vi;
-typedef vector<ii> vii;
-typedef vector<iii> viii;
-typedef vector<vi> vvi;
-typedef vector<vvi> vvvi;
-typedef vector<pair<char,int>> vci;
-typedef map<int,int> mii;
-typedef map<char,int> mci;
-typedef map<str,int> msi;
-typedef unordered_map<int,int> umii;
-typedef unordered_map<char,int> umci;
-typedef unordered_map<str,int> umsi;
-typedef set<int> sti;
-typedef set<char> stc;
-typedef set<str> sts;
-typedef multiset<int> msti;
-typedef multiset<char> mstc;
-typedef multiset<str> msts;
-inline int segsum(int start,int end,int step){
-    if(end<start)return 0;
-    return (((end-start)/step+1)*(start+end))>>1;
-}
-inline int fp(int b,int p,int mod=1e9+7){
-    int ans=1;
-    while(p){
-        if(p&1)ans=(ans*b)%mod;
-        p>>=1;
-        b=(b*b)%mod;
+const int LIMIT=1e10;
+vector<string> alphabet;
+
+// Create a global random engine seeded with the current time.
+std::mt19937 rng(static_cast<unsigned>(
+    std::chrono::steady_clock::now().time_since_epoch().count()));
+
+inline int hashString(const string& s,const int& base,const int& mod){
+    int ans=0,n=s.size();
+    for(int i=0;i<n;i++){
+        ans=(base*ans+(s[i]-'a'))%mod;
     }
     return ans;
 }
-inline void maxs(int& x,const int& y){return void(x=max(x,y));}
-inline void mins(int& x,const int& y){return void(x=min(x,y));}
-inline void gcds(int& x,const int& y){return void(x=gcd(x,y));}
-inline void lcms(int& x,const int& y){return void(x=lcm(x,y));}
-template<typename T,typename T2>
-inline ostream& operator<<(ostream& os, const pair<T,T2>& p){
-    os<<p.ff<<","<<p.ss<<endl;
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const vector<T>& a) {
-    for(const T& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T>
-inline ostream& operator<<(ostream& os,const set<T>& a) {
-    for(const T& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T,typename T2>
-inline ostream& operator<<(ostream& os,const map<T,T2>& a) {
-    for(const auto& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T,typename T2>
-inline ostream& operator<<(ostream& os,const unordered_map<T,T2>& a) {
-    for(const auto& _:a)os<<_<<' ';
-    return os;
-}
-template<typename T,typename T2>
-inline istream& operator>>(istream& is,pair<T,T2>& p){
-    is>>(p.ff)>>(p.ss);
-    return is;
-}
-template<typename T>
-inline istream& operator>>(istream& is,vector<T>& a) {
-    for(T& _:a)is>>_;
-    return is;
-}
-inline void print(){cout<<endl;}
-template<typename... Args>
-inline void print(const Args&... args){
-    ((cout<<args<<' '),...)<<endl;
-}
-inline void input(){}
-template<typename... Args>
-inline void input(Args&... args){
-    (cin>>...>>args);
-}
-#ifdef ONLINE_JUDGE
-template<typename... Args>
-inline void debug(const Args&... args){}
-#else
-inline void debug(){cerr<<endl;}
-template<typename... Args>
-inline void debug(const Args&... args){
-    ((cerr<<args<<' '),...)<<endl;
-}
-#endif
-///////////////////////////////////////////////////////////////////
-const int N=2e5+5;
-const int A=1e9+5;
-const int BASE=2323;
-const int MOD=1e9+7;
-const i32 INF=INT32_MAX;
-const ll  INFL=INT64_MAX;
-const int BLOCK=320;
-const ldouble EPS=1e-9;
-const int MAXQUERY=100;
-const double PI=4*atan(1);
-///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,x,y,w,ans,b[1000005];
-vvi arr(23,vi(26));
 
-inline void solve(void){
-    for(int i=0;i<23;i++){
-        for(int j=0;j<26;j++){
-            cin>>arr[i][j];
-        }
-    }
-
-    for(int first=0;first<26;first++){
-        for(int second=first+1;second<26;second++){
-            vi v,v2;
-            for(int i=0;i<23;i++)v.pb(arr[i][first]);
-            for(int i=0;i<23;i++)v2.pb(arr[i][second]);
-
-            int round;
-            for(round=2;round<=1000000 && v!=v2;round++){
-                for(int i=0;i<23;i++)v[i]=(v[i]*BASE)%MOD;
-                for(int i=0;i<23;i++)v2[i]=(v2[i]*BASE)%MOD;
-            }
-
-            if(v==v2){
-                print("FOUND:",first,second,"at size of",round);
-                return;
-            }
-            print("not found:",first,second);
-        }
+inline void generateString(const vector<string>& alphabet, string& s, const int length) {
+    s.clear();
+    s.reserve(length);  // Pre-allocate memory for the string.
+    // Set up a uniform distribution over valid indices.
+    uniform_int_distribution<int> dist(0, static_cast<int>(alphabet.size()) - 1);
+    for (int i = 0; i < length; i++) {
+        s.append(alphabet[dist(rng)]);
     }
 }
 
-i32 main(void){
-    b[0]=1;
-    for(int i=1;i<=1000000;i++)b[i]=(b[i-1]*BASE)%MOD;
-    solve();
+inline void shorten(string &s, string &q) {
+    // Remove common prefix
+    int pref = 0, n = min(s.size(), q.size());
+    while (pref < n && s[pref] == q[pref])
+        pref++;
+    // Erase the common prefix from both strings
+    s.erase(0, pref);
+    q.erase(0, pref);
+
+    // Remove common suffix
+    int suff = 0, sn = min(s.size(), q.size());
+    while (suff < sn && s[s.size() - 1 - suff] == q[q.size() - 1 - suff])
+        suff++;
+    // Erase the common suffix from both strings
+    s.erase(s.size() - suff, suff);
+    q.erase(q.size() - suff, suff);
+}
+
+inline vector<string> generateAlphabet(const vector<string>& alphabet, const int& base, const int& mod) {
+    unordered_map<int, string> mp;
+    mp.reserve(1<<16);  // Pre-reserve space to reduce rehashing overhead
+    mp.max_load_factor(0.25);
+    int n = 25, hash;
+    string s, q; 
+    while (true) {
+        s.clear();
+        generateString(alphabet, s, n);
+        hash = hashString(s, base, mod);
+        
+        auto it = mp.find(hash);
+        if (it != mp.end() && it->second != s) {
+            q = it->second;
+            break;
+        }
+        if (s.size() * mp.size() < LIMIT)
+            mp[hash] = s;
+    }
+    
+    shorten(s, q);
+    
+    return {s, q};
+}
+
+
+
+int32_t main(void){
+    string _="a";
+    for(int i=0;i<26;i++){
+        alphabet.push_back(_);
+        _[0]++;
+    }
+    //
+    int n;
+    cout<<"How many hash: ";cin>>n;
+    for(int i=0;i<n;i++){
+        int x,y;
+        cout<<"base: ";cin>>x;
+        cout<<"mod : ";cin>>y;
+        
+        alphabet=generateAlphabet(alphabet,x,y);
+    }
+
+    freopen("normal.txt","w",stdout);
+    for(auto& i:alphabet)cout<<i<<endl;
+
+    for(auto& i:alphabet)reverse(i.begin(),i.end());
+
+    freopen("reverse.txt","w",stdout);
+    for(auto& i:alphabet)cout<<i<<endl;
 }
