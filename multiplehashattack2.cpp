@@ -47,14 +47,13 @@ inline void shorten(string &s, string &q) {
     q.erase(q.size() - suff, suff);
 }
 
-inline vector<string> generateAlphabet(const vector<string>& alphabet, const int& base, const int& mod) {
+inline vector<string> generateAlphabet(const vector<string>& alphabet, const int& base, const int& mod, const int& n){
     unordered_map<int, string> mp;
     mp.reserve(1<<16);  // Pre-reserve space to reduce rehashing overhead
     mp.max_load_factor(0.25);
-    int n = 25, hash;
+    int hash;
     string s, q; 
     while (true) {
-        s.clear();
         generateString(alphabet, s, n);
         hash = hashString(s, base, mod);
         
@@ -75,6 +74,7 @@ inline vector<string> generateAlphabet(const vector<string>& alphabet, const int
 
 
 int32_t main(void){
+    clock_t start=clock();
     string _="a";
     for(int i=0;i<26;i++){
         alphabet.push_back(_);
@@ -88,7 +88,10 @@ int32_t main(void){
         cout<<"base: ";cin>>x;
         cout<<"mod : ";cin>>y;
         
-        alphabet=generateAlphabet(alphabet,x,y);
+        if(i==0)alphabet=generateAlphabet(alphabet,x,y,7);
+        if(i==1)alphabet=generateAlphabet(alphabet,x,y,20);
+        if(i==2)alphabet=generateAlphabet(alphabet,x,y,23);
+        if(i==3)alphabet=generateAlphabet(alphabet,x,y,25);
     }
 
     freopen("normal.txt","w",stdout);
@@ -98,4 +101,5 @@ int32_t main(void){
 
     freopen("reverse.txt","w",stdout);
     for(auto& i:alphabet)cout<<i<<endl;
+    cerr<<fixed<<setprecision(3)<<double(clock()-start)/double(CLOCKS_PER_SEC)<<" s"<<endl;
 }
