@@ -81,25 +81,42 @@ int32_t main(void){
         _[0]++;
     }
     //
-    int n;
-    cout<<"How many hash: ";cin>>n;
+    vector<tuple<int,int>> input={
+        {9973,1e9+9},
+    };
+    //
+    int n=input.size();
     for(int i=0;i<n;i++){
-        int x,y;
-        cout<<"base: ";cin>>x;
-        cout<<"mod : ";cin>>y;
+        cerr<<"i:"<<i<<endl;
+        auto [x,y]=input[i];
         
         if(i==0)alphabet=generateAlphabet(alphabet,x,y,7);
         if(i==1)alphabet=generateAlphabet(alphabet,x,y,20);
-        if(i==2)alphabet=generateAlphabet(alphabet,x,y,23);
-        if(i==3)alphabet=generateAlphabet(alphabet,x,y,25);
+        if(i==2)alphabet=generateAlphabet(alphabet,x,y,20);
+        if(i==3)alphabet=generateAlphabet(alphabet,x,y,20);
     }
 
-    freopen("normal.txt","w",stdout);
-    for(auto& i:alphabet)cout<<i<<endl;
+    alphabet[0].push_back('a');
+    alphabet[1].push_back('a');
+    alphabet[0].insert(alphabet[0].begin(),'a');
+    alphabet[1].insert(alphabet[1].begin(),'a');
+    
+    string s=alphabet[0];
+    string q=alphabet[1];
+    reverse(alphabet[0].begin(),alphabet[0].end());
+    reverse(alphabet[1].begin(),alphabet[1].end());
+    string _s=alphabet[0];
+    string _q=alphabet[1];
 
-    for(auto& i:alphabet)reverse(i.begin(),i.end());
+    freopen("normal.txt","w",stdout);
+    cout<<s<<endl<<q<<endl;
 
     freopen("reverse.txt","w",stdout);
-    for(auto& i:alphabet)cout<<i<<endl;
+    cout<<_s<<endl<<_q<<endl;
+
+
+    freopen("combined.txt","w",stdout);
+    cout<<s<<_s<<s<<_q<<endl<<q<<_q<<endl;
+
     cerr<<fixed<<setprecision(3)<<double(clock()-start)/double(CLOCKS_PER_SEC)<<" s"<<endl;
 }
