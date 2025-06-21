@@ -9,12 +9,10 @@ tuple<int,int> dp[69][69][2];
 
 inline constexpr auto bit=[](int x,int y){return x&(1LL<<y);};
 
-inline tuple<int,int> f(int b=61, int left=k, bool x=1){// <cnt,val>
-    //cerr<<"f:"<<b<<","<<left<<","<<x<<endl;
-    assert(b>=-1);assert(left>=0);
+inline tuple<int,int> f(int b=61, int left=k, bool x=1){
     if(left==0)return {1,0};
     if(b==-1)return {0,0};
-    if(dp[b][left][x]!=tuple<int,int>{-1,-1})return dp[b][left][x];
+    if(dp[b][left][x] != tuple<int,int>{-1,-1})return dp[b][left][x];
 
     auto [cnt0,ans0] = f(b-1,left,x&&!bit(n,b));
     auto [cnt1,ans1] = x && !bit(n,b) ? tuple<int,int>(0,0) : f(b-1,left-1,x);
@@ -26,9 +24,9 @@ inline void solve(void){
     for(int i=0;i<69;i++)
         for(int j=0;j<69;j++)
             dp[i][j][0]=dp[i][j][1]={-1,-1};
+
     cin>>n>>k;
     auto [cnt,ans]=f();
-    //cerr<<cnt<<endl;
     cout<<ans<<endl;
 }
 
