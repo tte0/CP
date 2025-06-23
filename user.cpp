@@ -1,81 +1,81 @@
-#include "bits/stdc++.h"
-#define int long long
-#define all(v) v.begin() , v.end()
-#define sz(a) (int)a.size()
+// Author: Teoman Ata Korkmaz
+#pragma GCC optimize("03,fast-math,unroll-loops,no-stack-protector")
+//#pragma GCC target("tune=native,arch=native")
+#include <bits/stdc++.h> 
+#define int int_fast64_t
+using u64 = uint64_t;
 using namespace std;
-
-void _(){
-  int n;
-  cin >> n;
-  int ans=0,cur=0;
-  int ar[n+5];
-  for(int i=1;i<=n;i++) cin >> ar[i];
-
-  set<array<int,2>> s;
-
-  auto Remove = [&](array<int,2> u){
-  	if(!s.count(u)) return;
-    auto it = s.lower_bound(u);
-    s.erase(*it);
-    array<int,2> l={-1,-1},r={-1,-1};
-    it = s.lower_bound(u);
-    if(it!=s.end()) r = *it;
-    if(it!=s.begin()) l = *(--it);
-    if(r!=array<int,2>{-1,-1}) cur -= r[0] * (r[1] - u[1]);
-    if(l!=array<int,2>{-1,-1}) cur -= u[0] * (u[1] - l[1]);
-    if(l!=array<int,2>{-1,-1} && r!=array<int,2>{-1,-1}) cur += r[0] * (r[1] - l[1]);
-  };
-
-
-  auto Add = [&](array<int,2> u){
-    auto it = s.lower_bound(u);
-    if(it!=s.begin()){
-      auto it2 = it;
-      it2--;
-      if((*it2)[1] >= u[1]) return;
-    }
-    while(it != s.end() && u[1] >= (*it)[1]){
-      Remove((*it));
-      it = s.lower_bound(u);
-    }
-    array<int,2> l={-1,-1},r={-1,-1};
-    it = s.lower_bound(u);
-    if(it!=s.end()) r = *it;
-    if(it!=s.begin()) l = *(--it);
-    if(l!=array<int,2>{-1,-1} && r!=array<int,2>{-1,-1}) cur -= r[0] * (r[1] - l[1]);
-    if(r!=array<int,2>{-1,-1}) cur += r[0] * (r[1] - u[1]);
-    if(l!=array<int,2>{-1,-1}) cur += u[0] * (u[1] - l[1]);
-    s.insert(u);
-  };
-
-  queue<int> q[n+5];
-  for(int i=1;i<=n;i++){
-    if(ar[i]>=n) continue;
-    q[ar[i]].push(i);
-  }
-
-  for(int i=n;i>=0;i--){
-    if(q[i].empty()) Add({i,n+1}); 
-    else Add({i,q[i].front()});
-  }
-  
-  for(int i=1;i<=n;i++){
-    //for(auto x : s) cout << x[0] << ' ' << x[1] << '\n';
-  	//cout << "hm: " << i << ' ' << cur << '\n';
-    ans += cur;
-    if(ar[i] >= n) continue;
-    Remove({ar[i],i});
-    q[ar[i]].pop();
-    if(q[ar[i]].empty()) Add({ar[i],n+1});
-    else Add({ar[i],q[ar[i]].front()});
-  }
-  
-  cout << ans << '\n';
+mt19937 mt(chrono::high_resolution_clock::now().time_since_epoch().count());
+constexpr u64 MOD=(1LL<<61)-1;
+u64 mod(u64 x){
+    u64 ans=(x&MOD)+(x>>61);
+    if(ans>=MOD)ans-=MOD;
+    return ans;
 }
+u64 mul(u64 a, u64 b) {
+    __uint128_t result=__uint128_t(a)*b;
+    return mod(u64(result >> 61) + u64(result & MOD));
+}
+const u64 base1=mod(mt());
+const u64 base2=mod(mt());
+struct identity_hash{
+    __uint128_t operator()(__uint128_t x) const{
+        return x;
+    }
+};
+///////////////////////////////////////////////////////////
+int q,ans,vis[500005];
+unordered_map<__uint128_t,pair<vector<int>,bool>,identity_hash> mp;
 
-int32_t main(){
-  cin.tie(0); ios::sync_with_stdio(0);
-  int tc=1;//cin >> tc;
-  while(tc--) _();
-  return 0;
+signed main(void){
+    ios_base::sync_with_stdio(false);
+    cout.tie(NULL);
+    cin.tie(NULL);
+
+    mp.max_load_factor(0.25);
+    mp.reserve(2e5);
+
+    cin>>q;
+    while(q--){
+        static int x;
+        static string s;
+        cin>>x>>s;
+        if(x==1){
+            u64 hash1=0;
+            u64 hash2=0;
+            for(auto c:s){
+                hash1=mod(mul(hash1,base1)+c);
+                hash2=mod(mul(hash2,base2)+c);
+            }
+
+            __uint128_t hash=(__uint128_t(hash1)<<64)|hash2;
+
+            if(!mp[hash].second){
+                for(auto i:mp[hash].first){
+                    ans-=!vis[i];
+                    vis[i]=1;
+                }
+
+                mp[hash].first.clear();
+                mp[hash].second=true;
+            }
+        }
+        else{
+            ans++;
+            u64 hash1=0;
+            u64 hash2=0;
+            for(auto c:s){
+                hash1=mod(mul(hash1,base1)+c);
+                hash2=mod(mul(hash2,base2)+c);
+                __uint128_t hash=(__uint128_t(hash1)<<64)|hash2;
+                if(mp[hash].second){
+                    ans--;
+                    break;
+                }
+                mp[hash].first.push_back(q);
+            }
+        }
+
+        cout<<ans<<endl;
+    }
 }

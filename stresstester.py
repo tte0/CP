@@ -71,10 +71,10 @@ while True:
         for correct_line, user_line in zip(__correct_output, __user_output):
             if correct_line.lower() in ["yes", "no"] and user_line.lower() in ["yes", "no"]:
                 if correct_line.lower() != user_line.lower():
-                    wa_output(index, f"Test case failed. (Line",str(line_count)+")")
+                    wa_output(index, f"Test case failed. (Line ",str(line_count)+")")
                     exit(0)
             elif correct_line != user_line:
-                wa_output(index, f"Test case failed. (Line"+str(line_count)+")")
+                wa_output(index, f"Test case failed. (Line "+str(line_count)+")")
                 exit(0)
             line_count+=1
 

@@ -205,22 +205,21 @@ inline int rand(int l,int r){
     return mt()%(r-l+1)+l;
 }
 
-inline void solve(){
-    int n=2e5;
-    int a=2;
-    vector<int> v;
-    for(int i=0;i<n;i++){
-        v.push_back(i%a);
-    }
-    shuffle(v.begin(),v.end(),mt);
-    print(n);
-    print(v);
+inline string rand_str(int n){
+    string s(n,'!');
+    for(auto& c:s)c=rand('a','z');
+    return s;
 }
 
 signed main(void){
-    int _testcase=1;
-    //print(_testcase);
-    while(_testcase--)solve();
-    cout<<flush;
-    return 0;
+    q=1000;
+    print(q);
+    for(int i=0;i<q;i++){
+        if(i%2==0){
+            print(1,rand_str(rand(1,4)+rand(1,4)));
+        }
+        else{
+            print(2,rand_str(rand(1,10)));
+        }
+    }
 }
