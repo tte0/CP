@@ -1,81 +1,96 @@
 // Author: Teoman Ata Korkmaz
-#pragma GCC optimize("03,fast-math,unroll-loops,no-stack-protector")
-//#pragma GCC target("tune=native,arch=native")
 #include <bits/stdc++.h> 
 #define int int_fast64_t
-using u64 = uint64_t;
+#ifdef ONLINE_JUDGE
+    #define cerr if(0)cerr
+#endif
 using namespace std;
-mt19937 mt(chrono::high_resolution_clock::now().time_since_epoch().count());
-constexpr u64 MOD=(1LL<<61)-1;
-u64 mod(u64 x){
-    u64 ans=(x&MOD)+(x>>61);
-    if(ans>=MOD)ans-=MOD;
-    return ans;
-}
-u64 mul(u64 a, u64 b) {
-    __uint128_t result=__uint128_t(a)*b;
-    return mod(u64(result >> 61) + u64(result & MOD));
-}
-const u64 base1=mod(mt());
-const u64 base2=mod(mt());
-struct identity_hash{
-    __uint128_t operator()(__uint128_t x) const{
-        return x;
+constexpr int N=3e5+5;
+///////////////////////////////////////////////////////////
+int n,q,cnt;
+vector<int> adj[N],parent;
+vector<pair<int,int>> edges,range;
+
+struct segtree{
+    int n;
+    vector<int> st;
+    segtree(int _n){
+        n=_n;
+        st.assign(2*n,0);
+        for(int i=0;i<n;i++){
+            update(i,1);
+        }
+    }
+    void update(int x,int val){
+        for(st[x+=n]+=val;x>1;x>>=1){
+            st[x>>1]=st[x]+st[x^1];
+        }
+    }
+    int query(int l,int r){//[l,r)
+        int ans=0;
+        for(l+=n,r+=n;l<r;l>>=1,r>>=1){
+            if(l&1)ans+=st[l++];
+            if(r&1)ans+=st[--r];
+        }
+        return ans;
     }
 };
-///////////////////////////////////////////////////////////
-int q,ans,vis[500005];
-unordered_map<__uint128_t,pair<vector<int>,bool>,identity_hash> mp;
+
+inline void dfs(int node=0,int p=-1){
+    parent[node]=p;
+    range[node].first=cnt++;
+    for(auto i:adj[node]){
+        if(i==parent[node])continue;
+        dfs(i,node);
+    }
+    range[node].second=cnt;
+}
+
+inline int query(int x,segtree& st){
+    auto [l,r]=range[edges[x].first];
+    return abs(st.st[1]-2*st.query(l,r));
+}
+
+inline void update(int x,int y,segtree& st){
+    st.update(x,y);
+}
 
 signed main(void){
-    ios_base::sync_with_stdio(false);
-    cout.tie(NULL);
-    cin.tie(NULL);
+    cin>>n;
+    for(int i=1;i<n;i++){
+        static int x,y;
+        cin>>x>>y;
+        x--,y--;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+        edges.push_back({x,y});
+    }
 
-    mp.max_load_factor(0.25);
-    mp.reserve(2e5);
+    parent.resize(n);
+    range.resize(n);
+    dfs();
+    for(auto& [x,y]:edges){
+        if(parent[x]!=y)swap(x,y);
+    }
 
+    cerr<<"parent:";for(auto i:parent)cerr<<i+1<<",";cerr<<endl;
+    cerr<<"range:";for(auto [a,b]:range)cerr<<"["<<a+1<<","<<b+1<<"] ";cerr<<endl;
+    cerr<<"edges:";for(auto [a,b]:edges)cerr<<"["<<a+1<<","<<b+1<<"] ";cerr<<endl;
+
+    segtree st(n);
     cin>>q;
     while(q--){
-        static int x;
-        static string s;
-        cin>>x>>s;
+        static int x,y;
+        cin>>x;
         if(x==1){
-            u64 hash1=0;
-            u64 hash2=0;
-            for(auto c:s){
-                hash1=mod(mul(hash1,base1)+c);
-                hash2=mod(mul(hash2,base2)+c);
-            }
-
-            __uint128_t hash=(__uint128_t(hash1)<<64)|hash2;
-
-            if(!mp[hash].second){
-                for(auto i:mp[hash].first){
-                    ans-=!vis[i];
-                    vis[i]=1;
-                }
-
-                mp[hash].first.clear();
-                mp[hash].second=true;
-            }
+            cin>>x>>y;
+            x--;
+            update(x,y,st);
         }
         else{
-            ans++;
-            u64 hash1=0;
-            u64 hash2=0;
-            for(auto c:s){
-                hash1=mod(mul(hash1,base1)+c);
-                hash2=mod(mul(hash2,base2)+c);
-                __uint128_t hash=(__uint128_t(hash1)<<64)|hash2;
-                if(mp[hash].second){
-                    ans--;
-                    break;
-                }
-                mp[hash].first.push_back(q);
-            }
+            cin>>x;
+            x--;
+            cout<<query(x,st)<<endl;
         }
-
-        cout<<ans<<endl;
     }
 }

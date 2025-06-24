@@ -197,7 +197,7 @@ const int MAXQUERY=100;
 const double PI=4*atan(1);
 const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
-mt19937 mt(clock());
+mt19937 mt(chrono::high_resolution_clock::now().time_since_epoch().count());
 ///////////////////////////////////////////////////////////////////
 int n,m,k,t,q,a,b,x,y,w,ans;
 
@@ -212,14 +212,21 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    q=1000;
-    print(q);
-    for(int i=0;i<q;i++){
-        if(i%2==0){
-            print(1,rand_str(rand(1,4)+rand(1,4)));
+    n=5,q=10;
+    vector<pair<int,int>> edges;
+    for(int i=2;i<=n;i++)edges.push_back({rand(1,i-1),i});
+    shuffle(edges.begin(),edges.end(),mt);
+    for(auto& [a,b]:edges)if(rand(0,1))swap(a,b);
+
+    cout<<n<<endl;
+    for(auto [a,b]:edges)cout<<a<<" "<<b<<endl;
+    cout<<q<<endl;
+    while(q--){
+        if(q && rand(0,1)){
+            cout<<"1 "<<rand(1,n)<<" "<<rand(1,2*n)<<endl;
         }
-        else{
-            print(2,rand_str(rand(1,10)));
+        else{//query
+            cout<<"2 "<<rand(1,n-1)<<endl;
         }
     }
 }

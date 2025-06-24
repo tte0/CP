@@ -1,33 +1,60 @@
 // Author: Teoman Ata Korkmaz
 #include <bits/stdc++.h> 
 #define int int_fast64_t
+#ifdef ONLINE_JUDGE
+    #define cerr if(0)cerr
+#endif
 using namespace std;
+constexpr int N=3e5+5;
 ///////////////////////////////////////////////////////////
-int q,x;
-string s;
-vector<string> a,b;
+int n,q;
+vector<int> adj[N],val;
+vector<pair<int,int>> edges;
+
+int dfs(int node,int p=-1){
+    int ans=val[node];
+    for(auto i:adj[node]){
+        if(i==p)continue;
+        ans+=dfs(i,node);
+    }
+    return ans;
+}
 
 signed main(void){
+    cin>>n;
+    val.assign(n,1);
+    for(int i=1;i<n;i++){
+        static int x,y;
+        cin>>x>>y;x--,y--;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+        edges.push_back({x,y});
+    }
+
     cin>>q;
     while(q--){
-        cin>>x>>s;
+        static int x,y;
+        cin>>x;
         if(x==1){
-            vector<string> temp;
-            for(auto i:b){
-                if(s!=string(i,0,s.size()))temp.push_back(i);
-            }
-            swap(temp,b);
-            a.push_back(s);
+            cin>>x>>y;x--;
+            val[x]+=y;
         }
         else{
-            b.push_back(s);
-            for(auto i:a){
-                if(i==string(s,0,i.size())){
-                    b.pop_back();
-                    break;
+            cin>>x;x--;
+            auto [a,b]=edges[x];
+            for(size_t i=0;i<adj[a].size();i++){
+                if(adj[a][i]==b){
+                    adj[a].erase(adj[a].begin()+i);
                 }
             }
+            for(size_t i=0;i<adj[b].size();i++){
+                if(adj[b][i]==a){
+                    adj[b].erase(adj[b].begin()+i);
+                }
+            }
+            cout<<abs(dfs(a)-dfs(b))<<endl;
+            adj[a].push_back(b);
+            adj[b].push_back(a);
         }
-        cout<<b.size()<<endl;
     }
 }

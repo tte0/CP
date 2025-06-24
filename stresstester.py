@@ -33,8 +33,8 @@ os.system("touch "+ correct_output)
 os.system("touch "+ user_output)
 
 debug("Compiling programs...")
-os.system("g++ -o correct correct.cpp")
-os.system("g++ -o user user.cpp")
+os.system("g++ -o correct -DONLINE_JUDGE correct.cpp")
+os.system("g++ -o user -DONLINE_JUDGE user.cpp")
 os.system("g++ -o testcasegenerator testcasegenerator.cpp")
 
 while True:
