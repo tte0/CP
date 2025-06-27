@@ -212,21 +212,9 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    n=5,q=10;
-    vector<pair<int,int>> edges;
-    for(int i=2;i<=n;i++)edges.push_back({rand(1,i-1),i});
-    shuffle(edges.begin(),edges.end(),mt);
-    for(auto& [a,b]:edges)if(rand(0,1))swap(a,b);
-
+    cout<<1<<endl;
+    n=20,a=20;
     cout<<n<<endl;
-    for(auto [a,b]:edges)cout<<a<<" "<<b<<endl;
-    cout<<q<<endl;
-    while(q--){
-        if(q && rand(0,1)){
-            cout<<"1 "<<rand(1,n)<<" "<<rand(1,2*n)<<endl;
-        }
-        else{//query
-            cout<<"2 "<<rand(1,n-1)<<endl;
-        }
-    }
+    for(int i=0;i<n;i++)cout<<rand(1,a)<<" ";
+    cout<<endl;
 }

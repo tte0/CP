@@ -1,96 +1,56 @@
 // Author: Teoman Ata Korkmaz
 #include <bits/stdc++.h> 
 #define int int_fast64_t
-#ifdef ONLINE_JUDGE
-    #define cerr if(0)cerr
-#endif
 using namespace std;
-constexpr int N=3e5+5;
 ///////////////////////////////////////////////////////////
-int n,q,cnt;
-vector<int> adj[N],parent;
-vector<pair<int,int>> edges,range;
+int n;
+vector<int> v;
 
-struct segtree{
-    int n;
-    vector<int> st;
-    segtree(int _n){
-        n=_n;
-        st.assign(2*n,0);
-        for(int i=0;i<n;i++){
-            update(i,1);
-        }
+inline void debug(stack<pair<int,int>> st){
+    stack<pair<int,int>> temp;
+    while(st.size()){
+        temp.push(st.top());
+        st.pop();
     }
-    void update(int x,int val){
-        for(st[x+=n]+=val;x>1;x>>=1){
-            st[x>>1]=st[x]+st[x^1];
-        }
+    while(temp.size()){
+        cerr<<"["<<temp.top().first<<","<<temp.top().second<<"] ";
+        temp.pop();
     }
-    int query(int l,int r){//[l,r)
-        int ans=0;
-        for(l+=n,r+=n;l<r;l>>=1,r>>=1){
-            if(l&1)ans+=st[l++];
-            if(r&1)ans+=st[--r];
-        }
-        return ans;
-    }
-};
-
-inline void dfs(int node=0,int p=-1){
-    parent[node]=p;
-    range[node].first=cnt++;
-    for(auto i:adj[node]){
-        if(i==parent[node])continue;
-        dfs(i,node);
-    }
-    range[node].second=cnt;
+    cerr<<endl;
 }
 
-inline int query(int x,segtree& st){
-    auto [l,r]=range[edges[x].first];
-    return abs(st.st[1]-2*st.query(l,r));
-}
+inline void solve(void){
+    cin>>n;
+    v.resize(n);
+    for(auto& i:v)cin>>i;
 
-inline void update(int x,int y,segtree& st){
-    st.update(x,y);
+    vector<int> pref(n);
+    for(int i=0;i<n;i++)pref[i]=v[i]+i;
+    for(int i=1;i<n;i++)pref[i]=max(pref[i],pref[i-1]);
+    
+    int ans=0,best=v[0]+v[1];
+    stack<pair<int,int>> st;//{val,ind}
+    if(v[0]>=v[1])st.push({v[0],0});
+    st.push({v[1],1});
+    for(int i=2;i<n;i++){
+        ans=max(ans,(v[i]-i)+best);
+        //debug(st);
+        //cerr<<"best,ans:"<<best<<","<<ans<<endl<<endl;
+
+        while(st.size() && st.top().first<v[i]){
+            st.pop();
+        }
+        best=max(best,v[i]+pref[i-1]);
+        if(st.size())best=max(best,st.top().first+v[i]+st.top().second);
+        st.push({v[i],i});
+    }
+
+    cout<<ans<<endl;
+    //cerr<<endl;
 }
 
 signed main(void){
-    cin>>n;
-    for(int i=1;i<n;i++){
-        static int x,y;
-        cin>>x>>y;
-        x--,y--;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        edges.push_back({x,y});
-    }
-
-    parent.resize(n);
-    range.resize(n);
-    dfs();
-    for(auto& [x,y]:edges){
-        if(parent[x]!=y)swap(x,y);
-    }
-
-    cerr<<"parent:";for(auto i:parent)cerr<<i+1<<",";cerr<<endl;
-    cerr<<"range:";for(auto [a,b]:range)cerr<<"["<<a+1<<","<<b+1<<"] ";cerr<<endl;
-    cerr<<"edges:";for(auto [a,b]:edges)cerr<<"["<<a+1<<","<<b+1<<"] ";cerr<<endl;
-
-    segtree st(n);
-    cin>>q;
-    while(q--){
-        static int x,y;
-        cin>>x;
-        if(x==1){
-            cin>>x>>y;
-            x--;
-            update(x,y,st);
-        }
-        else{
-            cin>>x;
-            x--;
-            cout<<query(x,st)<<endl;
-        }
-    }
+    int t;
+    cin>>t;
+    while(t--)solve();
 }

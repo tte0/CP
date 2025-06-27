@@ -7,54 +7,39 @@
 using namespace std;
 constexpr int N=3e5+5;
 ///////////////////////////////////////////////////////////
-int n,q;
-vector<int> adj[N],val;
-vector<pair<int,int>> edges;
 
-int dfs(int node,int p=-1){
-    int ans=val[node];
-    for(auto i:adj[node]){
-        if(i==p)continue;
-        ans+=dfs(i,node);
+inline void solve(void){
+    int n;
+    cin>>n;
+    vector<int> v(n);
+    for(auto& i:v)cin>>i;
+
+    int ans=0;
+    for(int i=0;i<n-2;i++){
+        int mx1=max(v[i],v[i+1]),mx2=min(v[i],v[i+1]),mx3=INT32_MIN;
+        for(int j=i+2;j<n;j++){
+            if(v[j]<=mx3);
+            else if(v[j]<=mx2){
+                mx3=v[j];
+            }
+            else if(v[j]<=mx1){
+                mx3=mx2;
+                mx2=v[j];
+            }
+            else{
+                mx3=mx2;
+                mx2=mx1;
+                mx1=v[j];
+            }
+            ans=max(ans,mx1+mx2+mx3-(j-i));
+        }
     }
-    return ans;
+
+    cout<<ans<<endl;
 }
 
 signed main(void){
-    cin>>n;
-    val.assign(n,1);
-    for(int i=1;i<n;i++){
-        static int x,y;
-        cin>>x>>y;x--,y--;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        edges.push_back({x,y});
-    }
-
-    cin>>q;
-    while(q--){
-        static int x,y;
-        cin>>x;
-        if(x==1){
-            cin>>x>>y;x--;
-            val[x]+=y;
-        }
-        else{
-            cin>>x;x--;
-            auto [a,b]=edges[x];
-            for(size_t i=0;i<adj[a].size();i++){
-                if(adj[a][i]==b){
-                    adj[a].erase(adj[a].begin()+i);
-                }
-            }
-            for(size_t i=0;i<adj[b].size();i++){
-                if(adj[b][i]==a){
-                    adj[b].erase(adj[b].begin()+i);
-                }
-            }
-            cout<<abs(dfs(a)-dfs(b))<<endl;
-            adj[a].push_back(b);
-            adj[b].push_back(a);
-        }
-    }
+    int t;
+    cin>>t;
+    while(t--)solve();
 }
