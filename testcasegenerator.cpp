@@ -212,9 +212,29 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    cout<<1<<endl;
-    n=20,a=20;
-    cout<<n<<endl;
+    n=500,q=10,a=200000;
+    print(n,q);
     for(int i=0;i<n;i++)cout<<rand(1,a)<<" ";
-    cout<<endl;
+    cendl;
+    while(q--){
+        int x,y,z;
+        x=rand(1,3);
+        cout<<x<<" ";
+        if(x==1){
+            x=rand(1,n);
+            y=rand(1,n);
+            cout<<min(x,y)<<" "<<max(x,y)<<endl;
+        }
+        else if(x==2){
+            x=rand(1,n);
+            y=rand(1,n);
+            z=rand(1,a);
+            cout<<min(x,y)<<" "<<max(x,y)<<" "<<z<<endl;
+        }
+        else{
+            x=rand(1,n);
+            y=rand(1,a);
+            cout<<x<<" "<<y<<endl;
+        }
+    }
 }

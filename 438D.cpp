@@ -1,96 +1,101 @@
-/*
-MIT License
-
-Copyright (c) 2024 tte0 (teomana,teoata17)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-#pragma GCC optimize("O3,fast-math,unroll-all-loops")
-#include <bits/stdc++.h>
-#define int ll
-#define ff first
-#define ss second
-#define endl '\n'
-#define spc ' '
-#define pb push_back
-#define e2(x) (1LL<<(x))
-#define gcd(x,y) __gcd(x,y)
-#define lcm(x,y) ((x/gcd(x,y))*y)
-#define smrt(i) (double(sqrt(8*(i)+1)-1)/2)
-#define ssum(x) ((x)*((x)+1)/2)
-#define isint(x) (ceil((x))==floor((x)))
-#define no cout<<"NO"<<endl
-#define yes cout<<"YES"<<endl
-#define cendl cout<<endl
-#define mset(x,y) memset(x,y,sizeof(x))
-#define popcnt(x) __builtin_popcountll(x)
-#define all(x) x.begin(),x.end()
-#define rall(x) x.rbegin(),x.rend()
-#define compress(x) sort(all(x));x.resize(unique(all(x))-x.begin())
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cout<<fixed<<setprecision(0)
-#define fileio freopen("out.txt","w",stdout);freopen("in.txt","r",stdin)
-#define usacoio(s) freopen((s + str(".in")).c_str(), "r", stdin);freopen((s + str(".out")).c_str(), "w", stdout)
-#define Ey_Turk_gencligi__Birinci_vazifen__bu_definei_kodunun_sonuna_eklemendir  clock_t start=clock();while(clock()-start<=0.585*CLOCKS_PER_SEC)
+// Author: Teoman Ata Korkmaz
+#pragma GCC optimize("Ofast,no-stack-protector")
+#include <bits/stdc++.h> 
+#define int int_fast64_t
 using namespace std;
-typedef int32_t i32;
-typedef int_fast64_t ll;
-typedef long double ldouble;
-typedef string str;
-typedef pair<int,int> ii;
-typedef pair<int,ii> iii;
-typedef vector<int> vi;
-typedef vector<ii> vii;
-typedef vector<iii> viii;
-typedef vector<vi> vvi;
-typedef vector<vvi> vvvi;
-typedef vector<pair<char,int>> vci;
-typedef map<int,int> mii;
-typedef map<char,int> mci;
-typedef map<str,int> msi;
-typedef unordered_map<int,int> umii;
-typedef unordered_map<char,int> umci;
-typedef unordered_map<str,int> umsi;
-typedef set<int> sti;
-typedef set<char> stc;
-typedef set<str> sts;
-typedef multiset<int> msti;
-typedef multiset<char> mstc;
-typedef multiset<str> msts;
-const int N=2e5+5;
-const int MOD=1e9+7;
-const i32 INF=INT32_MAX;
-const ll  INFL=INT64_MAX;
-const double PI=4*atan(1);
-inline int fp(int b,int p,int mod=MOD){int ans=1;while(p){if(p&1)ans=(ans*b)%mod;p>>=1;b=(b*b)%mod;}return ans;}
-inline void maxs(int& x,const int& y){return void(x=max(x,y));}
-inline void mins(int& x,const int& y){return void(x=min(x,y));}
-///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
-vi v,adj[N];
+///////////////////////////////////////////////////////////
+int n,q;
+vector<int> v;
 
-inline void solve(void){
-    cin>>n;
-}
+struct segtree{
+    int n;
+    vector<int> st,stmax,stmin,lazy;
+    segtree(vector<int>& v){
+        n=v.size();
+        st.assign(4*n,0);
+        stmax.assign(4*n,0);
+        stmin.assign(4*n,0);
+        lazy.assign(4*n,-1);
 
-i32 main(void){
-    fastio;
-    t=1;
-    //cin>>t;
-    while(t--)solve();
+        for(int i=0;i<n;i++)set(v[i],i+1,1,n,1);
+    }
+    #define m ((l+r)>>1)
+    #define lc (node<<1)
+    #define rc ((node<<1)+1)
+    void push(int l,int r,int node){
+        if(lazy[node]==-1)return;
+        st[node]=(r-l+1)*lazy[node];
+        stmax[node]=stmin[node]=lazy[node];
+        if(l<r)lazy[lc]=lazy[rc]=lazy[node];
+        lazy[node]=-1;
+    }
+    void pull(int node){
+        st[node]=st[lc]+st[rc];
+        stmax[node]=max(stmax[lc],stmax[rc]);
+        stmin[node]=min(stmin[lc],stmin[rc]);
+    }
+    void set(int x,int i,int l,int r,int node){
+        push(l,r,node);
+        if(r<i || i<l) return;
+        if(l==r){
+            st[node]=stmax[node]=stmin[node]=x;
+            lazy[node]=-1;
+            return;
+        }
+        set(x,i,l,m,lc);
+        set(x,i,m+1,r,rc);
+        pull(node);
+    }
+    void mod(int ql,int qr,int x,int l,int r,int node){
+        push(l,r,node);
+        if(r<ql || qr<l || stmax[node]<x)return;
+        if(ql<=l && r<=qr && stmax[node]==stmin[node]){
+            lazy[node]=stmax[node]%x;
+            push(l,r,node);
+            return;
+        }
+        mod(ql,qr,x,l,m,lc);
+        mod(ql,qr,x,m+1,r,rc);
+        pull(node);
+    }
+    int query(int ql,int qr,int l,int r,int node){
+        push(l,r,node);
+        if(r<ql || qr<l)return 0;
+        if(ql<=l && r<=qr)return st[node];
+        return query(ql,qr,l,m,lc)+query(ql,qr,m+1,r,rc);
+    }
+    #undef m
+    #undef lc
+    #undef rc
+};
+
+signed main(void){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin>>n>>q;
+    v.resize(n);
+    for(auto& i:v)cin>>i;
+    
+    segtree st(v);
+
+    while(q--){
+        int x,y,z;
+        cin>>x;
+        if(x==1){
+            cin>>x>>y;
+            cout<<st.query(x,y,1,n,1)<<endl;
+        }
+        else if(x==2){
+            cin>>x>>y>>z;
+            st.mod(x,y,z,1,n,1);
+        }
+        else{
+            cin>>x>>y;
+            st.set(y,x,1,n,1);
+        }
+    }
+
+    //for(int i=1;i<=n;i++)cerr<<st.query(i,i,1,n,1);
 }
