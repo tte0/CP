@@ -3,30 +3,19 @@
 #define int int_fast64_t
 using namespace std;
 ///////////////////////////////////////////////////////////
-int n,q;
+int n;
 vector<int> v;
 
 signed main(void){
-    cin>>n>>q;
+    cin>>n;
     v.resize(n);
     for(auto& i:v)cin>>i;
     
-    while(q--){
-        int x,y,z;
-        cin>>x;
-        if(x==1){
-            cin>>x>>y;
-            int ans=0;
-            for(int i=x-1;i<y;i++)ans+=v[i];
-            cout<<ans<<endl;
-        }
-        else if(x==2){
-            cin>>x>>y>>z;
-            for(int i=x-1;i<y;i++)v[i]%=z;
-        }
-        else{
-            cin>>x>>y;
-            v[x-1]=y;
-        }
+    int ans=1e18,mx=*max_element(v.begin(),v.end());
+    for(int x=0;x<=2*mx;x++){
+        int mx=0;
+        for(auto i:v)mx=max(mx,i^x);
+        ans=min(ans,mx);
     }
+    cout<<ans<<endl;
 }
