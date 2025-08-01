@@ -2,46 +2,74 @@
 #include <bits/stdc++.h> 
 #define int int_fast64_t
 using namespace std;
+constexpr int n=2e5+5;
 ///////////////////////////////////////////////////////////
-int n;
-vector<int> v;
+int q,st[4*n],lazy[4*n];
 
-inline int msb(int x){
-    x|=(x>>1);
-    x|=(x>>2);
-    x|=(x>>4);
-    x|=(x>>8);
-    x|=(x>>16);
-    return(x&~(x>>1));
+inline int range_sum(int l,int r){
+    return (r*(r+1)-l*(l-1))/2;
 }
 
-int f(int l=0,int r=n){//[l,r)
-    /*cerr<<l<<" "<<r<<endl;
-    for(auto i:v)cerr<<i<<",";
-    cerr<<endl<<endl;*/
-    if(r-l<=1)return 0;
-    int b=0;
-    for(int i=l;i<r;i++)b|=v[i];
-    if(b==0)return 0;
-    b=msb(b);
-
-    for(int i=l;i<r;i++){
-        if(v[i]&b){
-            for(int j=i;j<r;j++)v[j]&=b-1;
-            return (i==l?0:b)+min(f(l,i),f(i,r));
-        }
+struct segtree{
+    segtree(){
+        for(int i=1;i<=n;i++)set(i,i,1,n,1);
     }
-    abort();
-}
+    #define m ((l+r)>>1)
+    #define lc ((node<<1))
+    #define rc ((node<<1)|1)
+    void push(int l,int r,int node){
+        st[node]+=2*lazy[node]*range_sum(l,r);
+        if(l<r){
+            lazy[lc]+=lazy[node];
+            lazy[rc]+=lazy[node];
+        }
+        lazy[node]=0;
+    }
+    void set(int i,int x,int l,int r,int node){
+        if(r<i || i<l)return;
+        if(l==r){
+            st[node]=x;
+            return;
+        }
+        set(i,x,l,m,lc);
+        set(i,x,m+1,r,rc);
+        st[node]=st[lc]+st[rc];
+    }
+    void update(int x,int y,int l,int r,int node){
+        if(r<x || y<l)return;
+        if(x<=l && r<=y){
+            lazy[node]++;
+            push(l,r,node);
+            return;
+        }
+        push(l,r,node);
+        update(x,y,l,m,lc);
+        update(x,y,m+1,r,rc);
+        st[node]=st[lc]+st[rc];
+    }
+    int query(int x,int y,int l,int r,int node){
+        push(l,r,node);
+        if(r<x || y<l)return 0;
+        if(x<=l && r<=y)return st[node];
+        return query(x,y,l,m,lc)+query(x,y,m+1,r,rc);
+    }
+    #undef m
+    #undef lc
+    #undef rc
+};
 
 signed main(void){
-    cin>>n;
-    v.resize(n);
-    for(auto& i:v)cin>>i;
-    
-    sort(v.begin(),v.end());
-    v.resize(unique(v.begin(),v.end())-v.begin());
-    n=v.size();
+    cin>>q;
+    int ans=0;
+    segtree st;
+    //cerr<<"st:";for(int i=1;i<=10;i++)cerr<<st.query(i,i,1,n,1)<<",";cerr<<"...\n";
+    while(q--){
+        int x,y;
+        cin>>x>>y;
+        ans+=st.query(x,y,1,n,1);
+        cout<<ans<<endl;
+        st.update(x,y,1,n,1);
 
-    cout<<f();
+        //cerr<<"st:";for(int i=1;i<=10;i++)cerr<<st.query(i,i,1,n,1)<<",";cerr<<"...\n";
+    }
 }

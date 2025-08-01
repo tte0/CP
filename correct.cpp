@@ -2,20 +2,19 @@
 #include <bits/stdc++.h> 
 #define int int_fast64_t
 using namespace std;
+constexpr int N=2e5+5;
 ///////////////////////////////////////////////////////////
-int n;
-vector<int> v;
+int q;
+map<int,int> mp;
 
 signed main(void){
-    cin>>n;
-    v.resize(n);
-    for(auto& i:v)cin>>i;
-    
-    int ans=1e18,mx=*max_element(v.begin(),v.end());
-    for(int x=0;x<=2*mx;x++){
-        int mx=0;
-        for(auto i:v)mx=max(mx,i^x);
-        ans=min(ans,mx);
-    }
-    cout<<ans<<endl;
+    cin>>q;
+    while(q--){
+        int x,y;
+        cin>>x>>y;
+        for(int i=x;i<=y;i++)mp[i]++;
+        int ans=0;
+        for(auto [a,b]:mp)ans+=a*b*b;
+        cout<<ans<<endl;
+    }    
 }

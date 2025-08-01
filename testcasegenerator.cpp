@@ -212,7 +212,12 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    n=5,a=64;
-    print(n);
-    for(int i=0;i<n;i++)cout<<rand(0,a-1)<<" ";
+    q=50000,n=100;
+    print(q);
+    while(q--){
+        int x,y;
+        x=rand(1,n);
+        y=rand(1,n);
+        cout<<min(x,y)<<" "<<max(x,y)<<endl;
+    }
 }
