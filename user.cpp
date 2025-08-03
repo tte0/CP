@@ -1,75 +1,74 @@
-// Author: Teoman Ata Korkmaz
-#include <bits/stdc++.h> 
-#define int int_fast64_t
+#include<bits/stdc++.h>
+typedef long long ll;
+#define pb push_back
+#define fr first
+#define sc second
+#define endl '\n'
 using namespace std;
-constexpr int n=2e5+5;
-///////////////////////////////////////////////////////////
-int q,st[4*n],lazy[4*n];
 
-inline int range_sum(int l,int r){
-    return (r*(r+1)-l*(l-1))/2;
+const int mod=1e9+7;
+
+int sum(int x,int y){
+	if(x+y<mod)return x+y;
+	return x+y-mod;
 }
 
-struct segtree{
-    segtree(){
-        for(int i=1;i<=n;i++)set(i,i,1,n,1);
-    }
-    #define m ((l+r)>>1)
-    #define lc ((node<<1))
-    #define rc ((node<<1)|1)
-    void push(int l,int r,int node){
-        st[node]+=2*lazy[node]*range_sum(l,r);
-        if(l<r){
-            lazy[lc]+=lazy[node];
-            lazy[rc]+=lazy[node];
-        }
-        lazy[node]=0;
-    }
-    void set(int i,int x,int l,int r,int node){
-        if(r<i || i<l)return;
-        if(l==r){
-            st[node]=x;
-            return;
-        }
-        set(i,x,l,m,lc);
-        set(i,x,m+1,r,rc);
-        st[node]=st[lc]+st[rc];
-    }
-    void update(int x,int y,int l,int r,int node){
-        if(r<x || y<l)return;
-        if(x<=l && r<=y){
-            lazy[node]++;
-            push(l,r,node);
-            return;
-        }
-        push(l,r,node);
-        update(x,y,l,m,lc);
-        update(x,y,m+1,r,rc);
-        st[node]=st[lc]+st[rc];
-    }
-    int query(int x,int y,int l,int r,int node){
-        push(l,r,node);
-        if(r<x || y<l)return 0;
-        if(x<=l && r<=y)return st[node];
-        return query(x,y,l,m,lc)+query(x,y,m+1,r,rc);
-    }
-    #undef m
-    #undef lc
-    #undef rc
-};
+int sub(int x,int y){
+	if(y)y=mod-y;
+	return sum(x,y);
+}
 
-signed main(void){
-    cin>>q;
-    int ans=0;
-    segtree st;
-    //cerr<<"st:";for(int i=1;i<=10;i++)cerr<<st.query(i,i,1,n,1)<<",";cerr<<"...\n";
-    while(q--){
-        int x,y;
-        cin>>x>>y;
-        ans+=st.query(x,y,1,n,1);
-        cout<<ans<<endl;
-        st.update(x,y,1,n,1);
+int mul(ll x,ll y){
+	return (x*y)%mod;
+}
 
-        //cerr<<"st:";for(int i=1;i<=10;i++)cerr<<st.query(i,i,1,n,1)<<",";cerr<<"...\n";
-    }
+int pref[800023];
+
+int tree[800023],lazy[800023];
+int l,r=2e5;
+#define mid ((left+right)>>1)
+void push(int node,int left,int right){
+	if(lazy[node]==0)return;
+	tree[node]=sum(tree[node],mul(lazy[node],sub(pref[right],pref[left-1])));
+	if(left!=right){
+		lazy[node*2]=sum(lazy[node*2],lazy[node]);
+		lazy[node*2+1]=sum(lazy[node*2+1],lazy[node]);
+	}
+	lazy[node]=0;
+}
+
+int query(int node=1,int left=0,int right=2e5){
+	if(left>r||right<l)return 0;
+	push(node,left,right);
+	if(left>=l&&right<=r)return tree[node];
+	return sum(query(node*2,left,mid),query(node*2+1,mid+1,right));
+}
+
+void update(int node=1,int left=0,int right=2e5){
+	if(left>=l&&right<=r){
+		lazy[node]=sum(lazy[node],1);
+		push(node,left,right);
+		return;
+	}
+	push(node,left,right);
+	if(left>r||right<l)return;
+	update(node*2,left,mid);update(node*2+1,mid+1,right);
+	tree[node]=sum(tree[node*2],tree[node*2+1]);;
+}
+
+int main(){
+	ios_base::sync_with_stdio(23-23);cin.tie(NULL);
+	for(int i=1;i<=2e5;i++){
+		pref[i]=sum(pref[i-1],i);
+	}
+	int q;cin>>q;
+	int ans=0;
+	update();
+	while(q--){
+		cin>>l>>r;
+		ans=sum(ans,query());
+		update();
+		update();
+		cout<<ans<<endl;
+	}
 }

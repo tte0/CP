@@ -4,20 +4,21 @@
 #include <bits/stdc++.h> 
 #define int int_fast64_t
 using namespace std;
-constexpr int N=1000;
+constexpr int N=2e5+5;
 constexpr int MOD=1e9+7;
 ///////////////////////////////////////////////////////////
 int q,mp[N+1];
 
 signed main(void){
+    int ans=0;
     cin>>q;
     while(q--){
         int x,y;
         cin>>x>>y;
-        for(int i=x;i<=y;i++)mp[i]++;
-        int ans=0;
-        for(int i=1;i<=N;i++){
-            ans+=(((i*mp[i])%MOD)*mp[i])%MOD;
+        for(int i=x;i<=y;i++){
+            ans-=i*mp[i]*mp[i];
+            mp[i]++;
+            ans+=i*mp[i]*mp[i];
             ans%=MOD;
         }
         cout<<ans<<endl;

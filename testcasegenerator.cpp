@@ -212,7 +212,7 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    q=50000,n=100;
+    q=200000,n=200000;
     print(q);
     while(q--){
         int x,y;
