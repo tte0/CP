@@ -212,12 +212,6 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    q=200000,n=1;
-    print(q);
-    while(q--){
-        int x,y;
-        x=rand(1,n);
-        y=rand(1e9-n+1,1e9);
-        cout<<min(x,y)<<" "<<max(x,y)<<endl;
-    }
+    print(1,rand(1,1e5));
+    print(rand(1,1e3));
 }

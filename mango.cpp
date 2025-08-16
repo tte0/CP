@@ -7,27 +7,22 @@ constexpr int N=1e4+5;
 constexpr int B=1e5+5;
 ///////////////////////////////////////////////////////////
 int n,b,v[N];
-bitset<B> bt;
-
-inline void shift(int x,int mx){
-    bitset<B> res;
-    int cnt=0;
-    while(mx){
-        if(mx&1)res=(res<<(x<<cnt))|bt;
-        mx>>=1;
-        bt|=bt<<(x<<cnt);
-        cnt++;
-    }
-    bt=res;
-}
+bitset<B> bt,res;
 
 inline bool f(int mx){
     bt.reset();bt[0]=1;
     //cerr<<"mx:"<<mx<<endl;
     //cerr<<bt<<endl;
     for(int i=0;i<n;i++){
-        shift(v[i],mx);
-        //cerr<<bt<<endl;
+        res.reset();
+        int cnt=0,p=mx;
+        while(p){
+            if(p&1)res=(res<<(v[i]<<cnt))|bt;
+            p>>=1;
+            bt|=bt<<(v[i]<<cnt);
+            cnt++;
+        }
+        bt=res;
     }
     //cerr<<endl;
     return bt[b];
@@ -37,12 +32,12 @@ signed main(void){
     cin>>n>>b;
     for(int i=0;i<n;i++)cin>>v[i];
 
-    int l=0,r=b;
+    int l=0,r=b+2;
     while(l<r){
         int m=(l+r)>>1;
         if(f(m))r=m;
         else l=m+1;
     }
 
-    cout<<(l==b?-1:l-1)<<endl;
+    cout<<(l==b+2?-1:l-1)<<endl;
 }
