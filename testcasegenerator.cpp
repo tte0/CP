@@ -199,7 +199,7 @@ const int dx[4]={-1,0,1,0};
 const int dy[4]={0,1,0,-1};
 mt19937 mt(chrono::high_resolution_clock::now().time_since_epoch().count());
 ///////////////////////////////////////////////////////////////////
-int n,m,k,t,q,a,b,x,y,w,ans;
+int n,m,k,t,q,a,b,x,y,w,ans,cnt[N];
 
 inline int rand(int l,int r){
     return mt()%(r-l+1)+l;
@@ -212,6 +212,16 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    print(1,rand(1,1e5));
-    print(rand(1,1e3));
+    n=10,a=20;
+    print(n,500000,5);
+    vector<int> p(n+1);
+    for(int i=0;i<n;i++)p[i+1]=i+1;
+    shuffle(p.begin()+1,p.end(),mt);
+    for(int i=2;i<=n;i++){
+        int x=rand(1,i-1),y=i;
+        while(cnt[x]>=2+(x==1))x=rand(1,i-1);
+        print(p[x],p[y],rand(1,a));
+        cnt[x]++;
+        cnt[y]++;
+    }
 }
