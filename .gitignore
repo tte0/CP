@@ -33,17 +33,8 @@
 
 .cph/
 .vscode/
-*
-!*.cpp
-!.gitignore
-!LICENSE
-!README.md
-!stresstester*
-!Powerful_Set/
 
 leetcode.cpp
 tempCodeRunnerFile.cpp
-deneme*.cpp
-a.cpp
 temp.cpp
 STRESSTEST*.cpp
