@@ -33,6 +33,7 @@
 
 .cph/
 .vscode/
+cp-library/
 
 leetcode.cpp
 tempCodeRunnerFile.cpp
