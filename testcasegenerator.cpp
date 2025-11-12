@@ -212,16 +212,9 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    n=10,a=20;
-    print(n,500000,5);
-    vector<int> p(n+1);
-    for(int i=0;i<n;i++)p[i+1]=i+1;
-    shuffle(p.begin()+1,p.end(),mt);
-    for(int i=2;i<=n;i++){
-        int x=rand(1,i-1),y=i;
-        while(cnt[x]>=2+(x==1))x=rand(1,i-1);
-        print(p[x],p[y],rand(1,a));
-        cnt[x]++;
-        cnt[y]++;
-    }
+    n=60,m=60,k=10;
+    print(n,m,k);
+    print(1,1);
+    for(int i=0;i<k-2;i++)print(rand(1,n),rand(1,m));
+    print(n,m);
 }
