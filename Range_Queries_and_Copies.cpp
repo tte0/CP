@@ -1,7 +1,8 @@
 // Author: Teoman Ata Korkmaz
+#pragma GCC optimize("Ofast,unroll-loops,inline")
 #include <bits/stdc++.h> 
+#pragma GCC target("avx2,bmi,bmi2,popcnt")
 using namespace std;
-constexpr int N=2e5+5;
 struct segtree{
     int n;
     vector<int64_t> st;
@@ -26,8 +27,12 @@ struct segtree{
         return st.size()-1;
     }
 
-    segtree(const vector<int>& v){
+    segtree(const vector<int>& v,int query_hint=0){
         n=v.size();
+        st.reserve(4*n+query_hint*(__lg(n)+2));
+        left.reserve(4*n+query_hint*(__lg(n)+2));
+        right.reserve(4*n+query_hint*(__lg(n)+2));
+        root.reserve(query_hint);
         root.push_back(build(1,n,v));
     }
 
@@ -64,15 +69,18 @@ struct segtree{
     }
 };
 ///////////////////////////////////////////////////////////
-int n,q,cnt,root[N];
+int n,q,cnt;
 vector<int> v;
 
 signed main(void){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
     cin>>n>>q;
     v.resize(n);
     for(auto& i:v)cin>>i;
     
-    segtree st(v);
+    segtree st(v,q);
 
     while(q--){
         int x,a,b,k;
