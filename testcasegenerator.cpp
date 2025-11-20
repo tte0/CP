@@ -212,9 +212,8 @@ inline string rand_str(int n){
 }
 
 signed main(void){
-    n=60,m=60,k=10;
-    print(n,m,k);
-    print(1,1);
-    for(int i=0;i<k-2;i++)print(rand(1,n),rand(1,m));
-    print(n,m);
+    n=7,a=7;
+    print(n);
+    for(int i=0;i<n;i++)cout<<(rand(1,a))<<" ";
+    print();
 }

@@ -1,55 +1,63 @@
-// Author: Teoman Ata Korkmaz
-#pragma GCC optimize("O3,unroll-loops,no-stack-protector")
-#include <bits/stdc++.h> 
-#define int int_fast16_t
+#include <bits/stdc++.h>
 using namespace std;
-constexpr int N=1e4;
-///////////////////////////////////////////////////////////
-int n,m,k;
-int arr[N][N];
-vector<tuple<int,int>> v;
+//~ #define int long long
+#define pb push_back
+#define emb emplace_back
+#define fr first
+#define sc second
+#define all(x) x.begin(),x.end()
+#define sp << " " <<
+#define N 300000
+#define inf (int)1e9
+typedef pair<int,int> ii;
+typedef tuple<int,int,int> iii;
 
-signed main(void){
-    cin>>n>>m>>k;
-    v.resize(k);
-    for(auto& [a,b]:v)cin>>a>>b;
-
-    for(int i=0;i<k-1;i++){
-        auto [xa,ya]=v[i];
-        xa--,ya--;
-        for(int j=i+1;j<k;j++){
-            auto [xb,yb]=v[j];
-            xb--,yb--;
-            arr[i][j]=arr[j][i]=1LL<<(max(abs(xa-xb),abs(ya-yb)));
-        }
-    }
-
-    vector<bool> vis(k,false);
-    vector<int> bt(k);bt[0]=-1;
-
-    priority_queue<tuple<int,int,int>,vector<tuple<int,int,int>>,greater<tuple<int,int,int>>> q;
-    q.push({0,0,-1});
-    while(q.size()){
-        auto [c,node,_bt]=q.top();q.pop();
-        if(vis[node])continue;
-        vis[node]=1;
-        bt[node]=_bt;
-        if(node==k-1){
-            vector<int> t;
-            while(node!=-1){
-                t.push_back(node);
-                node=bt[node];
-            }
-            reverse(t.begin(),t.end());
-
-            cout<<t.size()<<endl;
-            for(auto i:t)cout<<1+i<<" ";
-            return 0;
-        }
-        for(int i=0;i<k;i++){
-            if(i==node)continue;
-            q.push({c+arr[node][i],i,node});
-        }
-    }
-    abort();
+int n;
+ii st[2*N];
+void update(int x,int val){
+	st[x+n]={val,x};
+	for(x=(x+n)>>1;x;x>>=1)
+		st[x]=max(st[x<<1],st[x<<1|1]);
+}
+int query(int l,int r){
+	ii ans={0,-1};
+	for(l+=n,r+=n+1;l<r;l>>=1,r>>=1){
+		if(l&1) ans=max(ans,st[l++]);
+		if(r&1) ans=max(ans,st[--r]);
+	}
+	return ans.sc;
+}
+void solve(){
+	cin >> n;
+	int a[n];
+	for(int i=0;i<n;i++){
+		cin >> a[i];
+		update(i,a[i]);
+	}
+	set<ii> s;
+	s.insert({0,-n});
+	for(int i=0;i<n;i++)
+		s.insert({a[i],-i});
+	int ans=0,l=0;
+	for(int i=0;i<n;i++){
+		while(l<=i)
+			s.erase({a[l],-l}),l++;
+		ans++;
+		int j=-(--s.lower_bound({a[i],-n}))->sc;
+        cerr<<"i,j: "<<i<<","<<j<<endl;
+		i=query(i,j-1);
+	}
+	cout << ans << "\n";
+}
+int32_t main(){
+	//~ freopen("hopscotch.in","r",stdin);
+	//~ freopen("hopscotch.out","w",stdout);
+	
+	cout << fixed << setprecision(0);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);cout.tie(NULL);
+	
+	int test=1;
+	//~ cin >> test;
+	while(test--) solve();
 }
