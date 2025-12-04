@@ -4,7 +4,17 @@
 using namespace std;
 constexpr int N=10;
 ///////////////////////////////////////////////////////////
-int n,k,pref[N][N];
+int n,k,pref[N][N],pref_max[N][N];
+
+inline void debug(){
+    for(int i=0;i<N;i++){
+        cerr<<"pref: ";
+        for(int j=0;j<N;j++){
+            cerr<<(pref[i][j]<0?"":" ")<<pref[i][j]<<",";
+        }
+        cerr<<endl;
+    }cerr<<endl;
+}
 
 signed main(void){
     //freopen("paintbarn.in", "r", stdin);
@@ -20,7 +30,6 @@ signed main(void){
     }    
     
     for(int i=0;i<N;i++){
-        cerr<<"pref: ";
         for(int j=0;j<N;j++){
             if(i)
                 pref[i][j]+=pref[i-1][j];
@@ -28,11 +37,10 @@ signed main(void){
                 pref[i][j]+=pref[i][j-1];
             if(i&&j)
                 pref[i][j]-=pref[i-1][j-1];
-            cerr<<pref[i][j]<<",";
         }
-        cerr<<endl;
     }
 
+    debug();
 
     int ans=0;
     for(int i=1;i<N;i++){
@@ -40,6 +48,38 @@ signed main(void){
             ans+=(pref[i][j]==k);
         }
     }
+
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+            if(pref[i][j]<k-1)pref[i][j]=0;
+            else if(pref[i][j]==k-1)pref[i][j]=1;
+            else if(pref[i][j]==k)pref[i][j]=-1;
+            else pref[i][j]=0;
+        }
+    }  
+    debug();  
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+            if(i)
+                pref[i][j]+=pref[i-1][j];
+            if(j)
+                pref[i][j]+=pref[i][j-1];
+            if(i&&j)
+                pref[i][j]-=pref[i-1][j-1];
+        }
+    }   
+    debug();
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+            if(i)
+                pref[i][j]+=pref[i-1][j];
+            if(j)
+                pref[i][j]+=pref[i][j-1];
+            if(i&&j)
+                pref[i][j]-=pref[i-1][j-1];
+        }
+    }
+
 
     cout<<ans<<endl;
 }

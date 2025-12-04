@@ -35,6 +35,7 @@
 .cph-ng/
 .vscode/
 cp-library/
+.venv/
 
 leetcode.cpp
 tempCodeRunnerFile.cpp

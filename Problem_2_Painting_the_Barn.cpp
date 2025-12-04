@@ -7,8 +7,10 @@ constexpr int N=1003;
 int n,k,pref[N][N];
 
 signed main(void){
+    #ifndef LOCAL
     freopen("paintbarn.in", "r", stdin);
     freopen("paintbarn.out", "w", stdout);
+    #endif
     cin>>n>>k;
     for(int i=0;i<n;i++){
         int xa,ya,xb,yb;
